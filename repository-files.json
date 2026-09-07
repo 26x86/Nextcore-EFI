@@ -1,0 +1,65 @@
+{
+  "schema": "26x86.repository-files/1",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 30,
+      "sha256": "9319637ee361d94b77df3b8f63b650075d6933135e97a0e9b7fdf4240fe7b95c"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 341,
+      "sha256": "36caadf171fb89ff52769a3046ec504e45c83c8fff08dc291f8eeb39c8ee4570"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 22,
+      "sha256": "2a58829f54c2e8f11df2f4f4e94b1c06962eee8a1bd17bab47a9f2221eac95c9"
+    },
+    {
+      "path": "Cargo.toml",
+      "bytes": 642,
+      "sha256": "d5b30ed8ba2e798412170b8657a0de112cb46f4372b33419de549529044d250c"
+    },
+    {
+      "path": "LICENSE.txt",
+      "bytes": 1865,
+      "sha256": "64d8c31222df29cfd8327944815b8d6b3c202a45540d49524a4617f50825a5c4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 411,
+      "sha256": "11eb3a9a79a52fc49fc1e567c6c9e52c190de0fe2c90192b1b63f39f19282282"
+    },
+    {
+      "path": "src/firmware_io.rs",
+      "bytes": 1505,
+      "sha256": "75068605c2e793cab95a9350296c17c6f93e838bbadd8ec27b5ec7d5c4552a56"
+    },
+    {
+      "path": "src/kernel.rs",
+      "bytes": 9583,
+      "sha256": "5dcffef9c9e3032e17d272e52f9ef644ecafa1d350c0d73a17e46d4c755116ae"
+    },
+    {
+      "path": "src/loaded_kernel.rs",
+      "bytes": 10349,
+      "sha256": "afa455b9303d4cab777cdfcd6487e65cd2e7ce6b0b25b6c3d9f4a2a40d5809b9"
+    },
+    {
+      "path": "src/main.rs",
+      "bytes": 8891,
+      "sha256": "16d9b2b51b35c12bc719c29ddcb8854c5130fa76b9b9af47df57914326cc707c"
+    },
+    {
+      "path": "src/test_child.rs",
+      "bytes": 2212,
+      "sha256": "03f75dc3d9f60195d4b30c78ad9c908370da1071263c74ff487f4eabfb1ab873"
+    },
+    {
+      "path": "src/transition32.rs",
+      "bytes": 3397,
+      "sha256": "42d2204ce5a7b30d29a2db3b5899a0d016ee7640017fceddf2a9229feaef46c0"
+    }
+  ]
+}
