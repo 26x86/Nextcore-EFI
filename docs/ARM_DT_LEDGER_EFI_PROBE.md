@@ -140,3 +140,9 @@ checked host spans. The checker rejects28 copied malformed controls, including
 the three formerly accepted CLI reports. Historical8-case captures are unchanged
 and record their original reader identity; fresh canonical runs use this stricter
 reader and bind raw serial SHA-256.
+
+Canonical integration now selects Core147f4c4, whose UEFI-only software SHA-256
+feature corrects an actual debug LLVM code-generation failure. The f77 ledger
+implementation and historical DT evidence above remain unchanged. Existing
+NXAPFS debug all-features CI stays enabled; final canonical replay also executes
+it before the authored firmware matrices.

@@ -19,7 +19,7 @@
     {
       "path": "Cargo.toml",
       "bytes": 2508,
-      "sha256": "b0d6290713d1e100a18255aa77280608db7560441b66a82f4cc6f49da9ddd459"
+      "sha256": "2bcf9f03bdd7c1d6b823a2a2cc4e24afa588363846f74dd93f74c14854953aa7"
     },
     {
       "path": "LICENSE.txt",
@@ -38,8 +38,8 @@
     },
     {
       "path": "docs/ARM_DT_LEDGER_EFI_PROBE.md",
-      "bytes": 8515,
-      "sha256": "4cae8ad9991f236e62387e94d1377b77f82aac04aa944bb70dcb7fe7377c8b47"
+      "bytes": 8872,
+      "sha256": "83c428f1911d2c47473c89460987fe0595254ac108f4d8bfc6eb04ed29eb018e"
     },
     {
       "path": "docs/ARM_STAGE1_EFI_PROBE.md",
@@ -74,7 +74,7 @@
     {
       "path": "repository.json",
       "bytes": 1651,
-      "sha256": "fa73b645740b824af460f9a124ca205d8213dc7f08bcd42a3d52bcf87c5a49c5"
+      "sha256": "bb84f67d4a1e46d4e28a4a0b535866692d7a3fc1329ad98c3353649ccdb08e77"
     },
     {
       "path": "src/apfs_driver.rs",
