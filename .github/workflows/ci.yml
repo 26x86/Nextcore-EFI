@@ -24,3 +24,8 @@ jobs:
         run: |
           cargo build --release --target x86_64-unknown-uefi --features arm-jit-stage1-probe --bin NXMMU
           python3 tools/verify_stage1_ovmf.py --efi-probe target/x86_64-unknown-uefi/release/NXMMU.efi --output "$RUNNER_TEMP/stage1-efi"
+      - name: Execute owned guest DeviceTree consumer
+        run: |
+          cargo build --release --target x86_64-unknown-uefi --features arm-jit-dt-probe --bin NXDT
+          python3 tools/verify_dt_ledger_ovmf.py --efi-probe target/x86_64-unknown-uefi/release/NXDT.efi --output "$RUNNER_TEMP/dt-ledger-efi"
+          python3 tools/check_dt_ledger_capture.py --report "$RUNNER_TEMP/dt-ledger-efi/report.json" --output "$RUNNER_TEMP/dt-ledger-reader.json"
