@@ -1,4 +1,4 @@
-name: Nextcore-EFI CI
+name: NextCore EFI CI
 on:
   push:
   pull_request:
@@ -11,4 +11,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: rustup target add x86_64-unknown-uefi && cargo check --target x86_64-unknown-uefi
+      - run: rustup target add x86_64-unknown-uefi
+      - run: cargo check --target x86_64-unknown-uefi --all-features

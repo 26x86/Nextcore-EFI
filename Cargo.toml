@@ -6,11 +6,16 @@ publish = false
 
 [dependencies]
 uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
-nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", tag = "26x86-Nextcore-Core-v0.1.0", default-features = false }
+nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", tag = "26x86-Nextcore-Core-v0.1.1", default-features = false }
+uefi-raw = { version = "0.16", optional = true }
 
 [features]
 test-child = []
 kernel-probe = []
+hal-tables = []
+kc-staging = []
+console-control = ["dep:uefi-raw"]
+console-probe = ["console-control"]
 
 [[bin]]
 name = "NXKERNEL"
@@ -30,3 +35,24 @@ path = "src/test_child.rs"
 test = false
 bench = false
 required-features = ["test-child"]
+
+[[bin]]
+name = "NXHAL"
+path = "src/hal_tables.rs"
+test = false
+bench = false
+required-features = ["hal-tables"]
+
+[[bin]]
+name = "NXKC"
+path = "src/kc.rs"
+test = false
+bench = false
+required-features = ["kc-staging"]
+
+[[bin]]
+name = "NXCONSOLE"
+path = "src/console_probe.rs"
+test = false
+bench = false
+required-features = ["console-probe"]

@@ -3,38 +3,63 @@
   "files": [
     {
       "path": ".gitattributes",
-      "bytes": 30,
-      "sha256": "9319637ee361d94b77df3b8f63b650075d6933135e97a0e9b7fdf4240fe7b95c"
+      "bytes": 28,
+      "sha256": "4b0f1fc438f30f25abe421b7542e9f3803b8b5c15ca3695614222e2bc547a9fe"
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 341,
-      "sha256": "36caadf171fb89ff52769a3046ec504e45c83c8fff08dc291f8eeb39c8ee4570"
+      "bytes": 352,
+      "sha256": "62e7b3d79003ae029a75fbb9bb79e1d80c3850213b4bb6cca7e0eef65c17b227"
     },
     {
       "path": ".gitignore",
-      "bytes": 22,
-      "sha256": "2a58829f54c2e8f11df2f4f4e94b1c06962eee8a1bd17bab47a9f2221eac95c9"
+      "bytes": 20,
+      "sha256": "9cc2c8cc102e0b2a0a177c8f594abc9b9776300a04473c24b45d52c1007a4119"
     },
     {
       "path": "Cargo.toml",
-      "bytes": 642,
-      "sha256": "d5b30ed8ba2e798412170b8657a0de112cb46f4372b33419de549529044d250c"
+      "bytes": 1102,
+      "sha256": "ce0890258183e5417541a322de3762deb5be36437e2041e4288913bc2fa8fbc2"
     },
     {
       "path": "LICENSE.txt",
-      "bytes": 1865,
-      "sha256": "64d8c31222df29cfd8327944815b8d6b3c202a45540d49524a4617f50825a5c4"
+      "bytes": 1851,
+      "sha256": "77c458ccb6116400cf960f8951630bc3b8b34731b56ffbd736b95c2b78449104"
     },
     {
       "path": "README.md",
-      "bytes": 411,
-      "sha256": "11eb3a9a79a52fc49fc1e567c6c9e52c190de0fe2c90192b1b63f39f19282282"
+      "bytes": 592,
+      "sha256": "2f04de5df19db77121b7ef6f2fba0eab724dafc6ad675b155bb755384c43468d"
+    },
+    {
+      "path": "src/console_control.rs",
+      "bytes": 11301,
+      "sha256": "cc3ac8f80d7e7f176525806746b7b849895e06aada19ae1a665be83aeb56b8ec"
+    },
+    {
+      "path": "src/console_probe.rs",
+      "bytes": 6437,
+      "sha256": "9f7047866f1c83d7d7d37a725310c3071fa091d7aeaab3eea11929bcaa2779ad"
+    },
+    {
+      "path": "src/exit_data.rs",
+      "bytes": 4071,
+      "sha256": "c22615140bacd656507b2a42de6aedb0fe1cc0efd9430b5552ea9f2f6808012f"
     },
     {
       "path": "src/firmware_io.rs",
       "bytes": 1505,
       "sha256": "75068605c2e793cab95a9350296c17c6f93e838bbadd8ec27b5ec7d5c4552a56"
+    },
+    {
+      "path": "src/hal_tables.rs",
+      "bytes": 12808,
+      "sha256": "305705ec2f9cbd67ad58037cc451dfc41035c2c3e2ae4f8f50e3cfe7679ca8dd"
+    },
+    {
+      "path": "src/kc.rs",
+      "bytes": 3637,
+      "sha256": "3aea2b267483ded121577274f1a3968e9a8d5de99059feeac5022ea50d36a2c1"
     },
     {
       "path": "src/kernel.rs",
@@ -47,14 +72,24 @@
       "sha256": "afa455b9303d4cab777cdfcd6487e65cd2e7ce6b0b25b6c3d9f4a2a40d5809b9"
     },
     {
+      "path": "src/loaded_kernel_collection.rs",
+      "bytes": 10830,
+      "sha256": "ed2b2581f47ddda5e4d2cfd16fdac74801d387d52dd552c8febd3bbbe1ecbe95"
+    },
+    {
       "path": "src/main.rs",
-      "bytes": 8891,
-      "sha256": "16d9b2b51b35c12bc719c29ddcb8854c5130fa76b9b9af47df57914326cc707c"
+      "bytes": 10103,
+      "sha256": "2a1198e1023b57a630fd3b87700f79c761bbdc020de5bee093b7f0942713a6e5"
+    },
+    {
+      "path": "src/picker.rs",
+      "bytes": 8357,
+      "sha256": "21559058b91cf123f5261256ec37270afecf447343d50a398d6ebd573e95f49b"
     },
     {
       "path": "src/test_child.rs",
-      "bytes": 2212,
-      "sha256": "03f75dc3d9f60195d4b30c78ad9c908370da1071263c74ff487f4eabfb1ab873"
+      "bytes": 4192,
+      "sha256": "5d1823b7ce420052742694b1a0195c90be70160741927b3e2e8ccfceb6713ae1"
     },
     {
       "path": "src/transition32.rs",
