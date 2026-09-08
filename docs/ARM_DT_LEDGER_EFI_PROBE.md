@@ -131,3 +131,18 @@ directory and run the unchanged harness. Success is the expected harness exit 1
 plus the recorded translation exception and guard output, not just any build/run
 failure. Preserve the positive source and binary. The fixture accepts no original
 OS inputs. No product boot policy or execution budget is relaxed by this probe.
+
+Independent reader review found that the initial capture checker validated rows
+but omitted the report envelope and host u64 bounds. The corrected shared reader
+requires actual raw serial, the exact ordered eight-case matrix, complete
+PASS/FAIL/entry markers, scope flags, input hash roles, recomputed row evidence and
+checked host spans. The checker rejects28 copied malformed controls, including
+the three formerly accepted CLI reports. Historical8-case captures are unchanged
+and record their original reader identity; fresh canonical runs use this stricter
+reader and bind raw serial SHA-256.
+
+Canonical integration now selects Core147f4c4, whose UEFI-only software SHA-256
+feature corrects an actual debug LLVM code-generation failure. The f77 ledger
+implementation and historical DT evidence above remain unchanged. Existing
+NXAPFS debug all-features CI stays enabled; final canonical replay also executes
+it before the authored firmware matrices.

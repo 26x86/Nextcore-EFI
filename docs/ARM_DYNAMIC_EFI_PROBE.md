@@ -225,3 +225,9 @@ python3 nextcore/crates/nextcore-efi/tools/check_dynamic_omission.py \
 A timeout, missing log, arbitrary failure or M1 translation fault cannot pass this
 negative checker. Preserve the original positive sources and binary and record
 both identities. No original Apple input is needed for any of these commands.
+
+Root canonical integration selects Core147f4c4 (UEFI software SHA-256) and the same
+ISE0d722886 revision for both native source and Rust service. BP33's corrected DT
+reader and actual debug NXAPFS CI are retained. Historical Coref77-patched release
+proofs above keep their exact binary identities; final standalone and parent
+runs have separate receipts.

@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 1777,
-      "sha256": "0b2bc1ff5caa4eff9f739bf9f7a4f53515007268803213995fa80dbf214c7301"
+      "bytes": 2244,
+      "sha256": "ac25a4cc1dfa109b14b067013a83249d5064e70bbe670c1f3b468f3ed2b29241"
     },
     {
       "path": ".gitignore",
@@ -19,7 +19,7 @@
     {
       "path": "Cargo.toml",
       "bytes": 2684,
-      "sha256": "b9dfc1d8a0f6e76935de6c8e8b5c771cf97bc3e818bf884abd4063c50c3f2108"
+      "sha256": "30e1415178dc32456ef13a99b817dd89f2169a154fc17502f412b5e91dd81fbe"
     },
     {
       "path": "LICENSE.txt",
@@ -38,13 +38,13 @@
     },
     {
       "path": "docs/ARM_DT_LEDGER_EFI_PROBE.md",
-      "bytes": 7917,
-      "sha256": "279c0b598a9591ad44de78517571745c9d86e9e52b4146c80e51c6d9bbef1bbc"
+      "bytes": 8872,
+      "sha256": "83c428f1911d2c47473c89460987fe0595254ac108f4d8bfc6eb04ed29eb018e"
     },
     {
       "path": "docs/ARM_DYNAMIC_EFI_PROBE.md",
-      "bytes": 13670,
-      "sha256": "cc74128d7864f506f1bd783c5bb49b1c36136f743c9eebe368dbd4e68212c2ef"
+      "bytes": 14026,
+      "sha256": "8eb3fcea5821416beb57a92bc4b85235542d46a155bdb2ae210fae57d9ad8ef9"
     },
     {
       "path": "docs/ARM_STAGE1_EFI_PROBE.md",
@@ -84,7 +84,7 @@
     {
       "path": "repository.json",
       "bytes": 1663,
-      "sha256": "05617e8bb1c94fedef3908865634f0198d70b9cd75794607e9ad7f994d8d3067"
+      "sha256": "0e6e624fe3756c969667c9ff375591f63b37833caf9cc3f128abfd92b18e11ca"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -228,8 +228,8 @@
     },
     {
       "path": "tools/check_dt_ledger_capture.py",
-      "bytes": 2082,
-      "sha256": "1cb6a5c1401958e86932a796614b2a81ef0292e436d576f39e17208a3158b3de"
+      "bytes": 6895,
+      "sha256": "582da32c36b9ea01341bd0fbf0995f8158ac2faf6a92485d4cc0b33727ebc43c"
     },
     {
       "path": "tools/check_dynamic_capture.py",
@@ -248,8 +248,8 @@
     },
     {
       "path": "tools/verify_dt_ledger_ovmf.py",
-      "bytes": 11090,
-      "sha256": "23d0919738640f59e3ec11a5a170d13c12efdfd3d51900452ab4ef0393c085bc"
+      "bytes": 16516,
+      "sha256": "7c281fba318c99de35fd44f0e670a1be07ffa0998347d36b85f5bd1acfb1dd5f"
     },
     {
       "path": "tools/verify_dynamic_ovmf.py",
