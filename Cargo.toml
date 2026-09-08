@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
-nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", tag = "26x86-Nextcore-Core-v0.1.2", default-features = false }
+nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "6105cd7996ef2ea4db35d7d3a1e8822d0703aae9", default-features = false }
 uefi-raw = { version = "0.16", optional = true }
 
 [features]
@@ -16,7 +16,26 @@ hal-tables = []
 kc-staging = []
 console-control = ["dep:uefi-raw"]
 console-probe = ["console-control"]
-apfs-jumpstart = []
+apfs-jumpstart = ["dep:uefi-raw"]
+arm-boot = []
+arm-kernel-probe = ["arm-boot"]
+arm-jit = []
+arm-jit-probe = ["arm-jit"]
+arm-jit-trace = ["arm-jit"]
+
+[[bin]]
+name = "NXARMJIT"
+path = "src/arm_jit.rs"
+test = false
+bench = false
+required-features = ["arm-jit"]
+
+[[bin]]
+name = "BOOTAA64"
+path = "src/arm64.rs"
+test = false
+bench = false
+required-features = ["arm-boot"]
 
 [[bin]]
 name = "NXKERNEL"
@@ -64,3 +83,13 @@ path = "src/apfs_probe.rs"
 test = false
 bench = false
 required-features = ["apfs-jumpstart"]
+
+[[bin]]
+name = "NXFSFIX"
+path = "src/apfs_fixture.rs"
+test = false
+bench = false
+required-features = ["apfs-jumpstart", "test-child"]
+
+[build-dependencies]
+nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "a6f1c46c4f0e965dbc3d9426a737e7558bac33d7" }
