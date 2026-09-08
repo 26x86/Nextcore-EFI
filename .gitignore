@@ -1,2 +1,6 @@
 /target/
 Cargo.lock
+
+# Generated Python validation bytecode is not source.
+__pycache__/
+*.py[cod]
