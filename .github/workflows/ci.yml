@@ -17,3 +17,4 @@ jobs:
       - run: cargo build --target x86_64-unknown-uefi --all-features --bin NXAPFS
       - run: cargo build --release --target x86_64-unknown-uefi --features arm-jit --bin NXARMJIT
       - run: cargo build --release --target x86_64-unknown-uefi --features arm-jit-probe --bin NXARMJIT
+      - run: cargo build --release --target x86_64-unknown-uefi --features arm-jit-memory-provider,arm-jit-tiered-trace --bin NXARMJIT
