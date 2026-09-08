@@ -8,18 +8,18 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 846,
-      "sha256": "ad5a424cae4509b6a2dcb1770a57f7c919c31cc914d43ba0dd650105aebee70c"
+      "bytes": 1318,
+      "sha256": "d06262d8ad44fadf6e21775fcebae48f963919f89cda62bfa3d8ff747ef17c87"
     },
     {
       "path": ".gitignore",
-      "bytes": 20,
-      "sha256": "9cc2c8cc102e0b2a0a177c8f594abc9b9776300a04473c24b45d52c1007a4119"
+      "bytes": 98,
+      "sha256": "1fa629759fde91345148e7b0348fc922db9293a14b9a6ddc202eec6b4a0562b7"
     },
     {
       "path": "Cargo.toml",
-      "bytes": 2175,
-      "sha256": "6db507c4d4cd6633b4511303fabcb04eef0b18b7e77d145557533f337822aa95"
+      "bytes": 2348,
+      "sha256": "445d5589cbd8666f90cb40490b1bbe89c3d68c97ad68671ae9479e4c3e360600"
     },
     {
       "path": "LICENSE.txt",
@@ -33,8 +33,13 @@
     },
     {
       "path": "build.rs",
-      "bytes": 3912,
-      "sha256": "fb89edae73118b294baf0e10e9cef025d33fbb9615a6e90a1397a1b77d4d5d05"
+      "bytes": 4219,
+      "sha256": "bf1adb4f27b7e989e7cbaf84cab32cdf3d61c5acb84c61735875f4ee94970243"
+    },
+    {
+      "path": "docs/ARM_STAGE1_EFI_PROBE.md",
+      "bytes": 7152,
+      "sha256": "9de86ccbb32b4176329a6813e51c2c3ee62e0208767759f03bb827df81e9ad42"
     },
     {
       "path": "docs/EFI_MEMORY_PROVIDER_V1.md",
@@ -47,9 +52,19 @@
       "sha256": "d8d788115eaf4a2d43102a46dd65b763069492fe69d4bfbad357ebeae07c8e3f"
     },
     {
+      "path": "docs/fixtures/stage1_pair.S",
+      "bytes": 114,
+      "sha256": "8e1a62d2a191dfc6576a70829be21e52bc30686a3a25751f1a13f4dd321c7060"
+    },
+    {
+      "path": "docs/fixtures/stage1_scalar.S",
+      "bytes": 176,
+      "sha256": "75673c3f3b0f9525bc1146e022a5265fe779e26d995013c4b774fac7577576bd"
+    },
+    {
       "path": "repository.json",
-      "bytes": 1666,
-      "sha256": "d63013a940dd879a4561559775ec422d65575815ef281351371d30ad8e9d8fdb"
+      "bytes": 1662,
+      "sha256": "82d1dea277dd3638752dcd15c6c516572af275a1ec7ff3abf94adb3ed172bab7"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -162,6 +177,11 @@
       "sha256": "07b60d8fb531efb414ac5a9deb05f5e5293e6085bc0732001e74631730ec27ab"
     },
     {
+      "path": "src/mmu_probe.rs",
+      "bytes": 20240,
+      "sha256": "f3813c51ba2c0f9fd9f89f75248b51b1a3454b815ba93cca60e67981fee9c8d7"
+    },
+    {
       "path": "src/picker.rs",
       "bytes": 8357,
       "sha256": "21559058b91cf123f5261256ec37270afecf447343d50a398d6ebd573e95f49b"
@@ -175,6 +195,16 @@
       "path": "src/transition32.rs",
       "bytes": 3397,
       "sha256": "42d2204ce5a7b30d29a2db3b5899a0d016ee7640017fceddf2a9229feaef46c0"
+    },
+    {
+      "path": "tools/test_stage1_reader.py",
+      "bytes": 2583,
+      "sha256": "5fefb30f31987722cf9f5ac4fc6a3917b3bc323927ab5a0beb9384988c1f5b77"
+    },
+    {
+      "path": "tools/verify_stage1_ovmf.py",
+      "bytes": 8735,
+      "sha256": "0a7589f66733f0403bdd5521110f1b43420e06fb7a815eb3d8af9874fed2cff9"
     }
   ]
 }

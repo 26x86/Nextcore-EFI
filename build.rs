@@ -18,6 +18,7 @@ fn main() {
         .unwrap_or_else(|| PathBuf::from(nextcore_ise::EFI_RUNTIME_DIR));
     let output = PathBuf::from(env::var_os("OUT_DIR").unwrap());
     let memory_provider = env::var_os("CARGO_FEATURE_ARM_JIT_MEMORY_PROVIDER").is_some();
+    let stage1_probe = env::var_os("CARGO_FEATURE_ARM_JIT_STAGE1_PROBE").is_some();
     let mut shared_modules = String::new();
     for module in ["pauth", "platform"] {
         if module == "platform" && env::var_os("CARGO_FEATURE_ARM_JIT_TRACE").is_none() {
@@ -34,15 +35,21 @@ fn main() {
         ));
     }
     if memory_provider {
-        let source = runtime.join("memory_boot.rs");
-        println!("cargo:rerun-if-changed={}", source.display());
-        shared_modules.push_str(&format!(
-            "#[allow(dead_code)]\n#[path = {:?}]\nmod memory_boot;\n",
-            source
-                .canonicalize()
-                .expect("missing canonical memory result ABI")
-                .to_string_lossy()
-        ));
+        for module in if stage1_probe {
+            &["memory_boot", "memory_boot_v2"][..]
+        } else {
+            &["memory_boot"][..]
+        } {
+            let source = runtime.join(format!("{module}.rs"));
+            println!("cargo:rerun-if-changed={}", source.display());
+            shared_modules.push_str(&format!(
+                "#[allow(dead_code)]\n#[path = {:?}]\nmod {module};\n",
+                source
+                    .canonicalize()
+                    .expect("missing canonical memory result ABI")
+                    .to_string_lossy()
+            ));
+        }
     }
     std::fs::write(output.join("jit_pauth.rs"), shared_modules)
         .expect("write shared runtime module paths");
@@ -58,6 +65,9 @@ fn main() {
     ];
     if memory_provider {
         sources.push("memory_boot.c");
+    }
+    if stage1_probe {
+        sources.push("memory_boot_v2.c");
     }
     for source in sources {
         let input = runtime.join(source);
@@ -87,13 +97,13 @@ fn main() {
         "platform_abi.h",
         "uefi.h",
         "gop_scanout.h",
+        "memory_abi.h",
+        "memory_boot.h",
+        "memory_abi_v2.h",
+        "memory_boot_v2.h",
+        "memory_stage1.inc",
     ] {
         println!("cargo:rerun-if-changed={}", runtime.join(header).display());
-    }
-    if memory_provider {
-        for header in ["memory_abi.h", "memory_boot.h"] {
-            println!("cargo:rerun-if-changed={}", runtime.join(header).display());
-        }
     }
     run(
         Command::new(env::var_os("NEXTCORE_LLVM_AR").unwrap_or_else(|| "llvm-ar".into()))

@@ -11,10 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: sudo apt-get update && sudo apt-get install -y clang lld llvm
+      - run: sudo apt-get update && sudo apt-get install -y clang lld llvm qemu-system-x86 ovmf
       - run: rustup target add x86_64-unknown-uefi
       - run: cargo check --target x86_64-unknown-uefi --all-features
       - run: cargo build --target x86_64-unknown-uefi --all-features --bin NXAPFS
       - run: cargo build --release --target x86_64-unknown-uefi --features arm-jit --bin NXARMJIT
       - run: cargo build --release --target x86_64-unknown-uefi --features arm-jit-probe --bin NXARMJIT
       - run: cargo build --release --target x86_64-unknown-uefi --features arm-jit-memory-provider,arm-jit-tiered-trace --bin NXARMJIT
+      - name: Check authored stage-1 result rejection
+        run: python3 -m unittest discover -s tools -p test_stage1_reader.py -v
+      - name: Build and execute native stage-1 EFI consumer
+        run: |
+          cargo build --release --target x86_64-unknown-uefi --features arm-jit-stage1-probe --bin NXMMU
+          python3 tools/verify_stage1_ovmf.py --efi-probe target/x86_64-unknown-uefi/release/NXMMU.efi --output "$RUNNER_TEMP/stage1-efi"
