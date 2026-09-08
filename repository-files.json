@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 2508,
-      "sha256": "b0d6290713d1e100a18255aa77280608db7560441b66a82f4cc6f49da9ddd459"
+      "bytes": 2581,
+      "sha256": "c2be6809f81b3c7d7d8f37c4031aae7d12489beb431c3f816a4311fd850d2636"
     },
     {
       "path": "LICENSE.txt",
@@ -45,6 +45,11 @@
       "path": "docs/ARM_STAGE1_EFI_PROBE.md",
       "bytes": 7152,
       "sha256": "9de86ccbb32b4176329a6813e51c2c3ee62e0208767759f03bb827df81e9ad42"
+    },
+    {
+      "path": "docs/DEEP_ARM_TRACE.md",
+      "bytes": 1836,
+      "sha256": "a6587ed34b47fbac79ef93c51dac525d79c861c147927094436f326feee17b8f"
     },
     {
       "path": "docs/EFI_MEMORY_PROVIDER_V1.md",
@@ -73,8 +78,8 @@
     },
     {
       "path": "repository.json",
-      "bytes": 1651,
-      "sha256": "65cff922f416ceaeff4d3988f3e6eb948c89b8ab3939c8e85c5add36b5d39082"
+      "bytes": 1653,
+      "sha256": "3b7e63fe6eeb5ee65773b42903356b6268cd38f4707ce4e6f8191768460f1446"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -113,8 +118,8 @@
     },
     {
       "path": "src/arm_jit.rs",
-      "bytes": 24649,
-      "sha256": "a78cb5be834863e4a8278be038bbd888bd0d118f3162ca336f5a6fcbe7ced7ea"
+      "bytes": 25233,
+      "sha256": "860698c11f273ef8938218de982b7e48900b7770fbc1cde1801d353813b1c3bb"
     },
     {
       "path": "src/arm_pages.rs",
