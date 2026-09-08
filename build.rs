@@ -17,6 +17,7 @@ fn main() {
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from(nextcore_ise::EFI_RUNTIME_DIR));
     let output = PathBuf::from(env::var_os("OUT_DIR").unwrap());
+    let memory_provider = env::var_os("CARGO_FEATURE_ARM_JIT_MEMORY_PROVIDER").is_some();
     let mut shared_modules = String::new();
     for module in ["pauth", "platform"] {
         if module == "platform" && env::var_os("CARGO_FEATURE_ARM_JIT_TRACE").is_none() {
@@ -32,18 +33,33 @@ fn main() {
                 .to_string_lossy()
         ));
     }
+    if memory_provider {
+        let source = runtime.join("memory_boot.rs");
+        println!("cargo:rerun-if-changed={}", source.display());
+        shared_modules.push_str(&format!(
+            "#[allow(dead_code)]\n#[path = {:?}]\nmod memory_boot;\n",
+            source
+                .canonicalize()
+                .expect("missing canonical memory result ABI")
+                .to_string_lossy()
+        ));
+    }
     std::fs::write(output.join("jit_pauth.rs"), shared_modules)
         .expect("write shared runtime module paths");
     let compiler = env::var_os("NEXTCORE_CLANG").unwrap_or_else(|| "clang".into());
     let archive = output.join("libnextcore_arm_jit.a");
     let mut objects = Vec::new();
-    for source in [
+    let mut sources = vec![
         "jit.c",
         "arch.c",
         "boot_jit.c",
         "jit_protection.c",
         "gop_scanout.c",
-    ] {
+    ];
+    if memory_provider {
+        sources.push("memory_boot.c");
+    }
+    for source in sources {
         let input = runtime.join(source);
         println!("cargo:rerun-if-changed={}", input.display());
         let object = output.join(source.replace(".c", ".obj"));
@@ -73,6 +89,11 @@ fn main() {
         "gop_scanout.h",
     ] {
         println!("cargo:rerun-if-changed={}", runtime.join(header).display());
+    }
+    if memory_provider {
+        for header in ["memory_abi.h", "memory_boot.h"] {
+            println!("cargo:rerun-if-changed={}", runtime.join(header).display());
+        }
     }
     run(
         Command::new(env::var_os("NEXTCORE_LLVM_AR").unwrap_or_else(|| "llvm-ar".into()))
