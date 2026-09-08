@@ -92,4 +92,4 @@ bench = false
 required-features = ["apfs-jumpstart", "test-child"]
 
 [build-dependencies]
-nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "88426b69fd2f9004534cc303c431ce4452bbc57d" }
+nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "1d5ffb56799f70ce622e4813be66d0592cb5a292" }
