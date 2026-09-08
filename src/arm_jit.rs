@@ -132,7 +132,7 @@ const _: [(); 64] = [(); core::mem::size_of::<JitResult>()];
 ))]
 unsafe extern "C" {
     #[cfg(feature = "arm-jit-trace")]
-    fn vf_boot_run_with_registers(
+    fn vf_boot_run_v2(
         ram: *mut u8,
         ram_size: usize,
         ram_base: u64,
@@ -151,7 +151,8 @@ unsafe extern "C" {
         opaque: *mut core::ffi::c_void,
         initial_x0_x3: *const u64,
         pauth: unsafe extern "C" fn(*mut core::ffi::c_void, u32) -> i32,
-        result: *mut JitResult,
+        options: *const platform::BootOptionsV2,
+        result: *mut platform::BootResultV2,
     ) -> i32;
     fn vf_boot_run_with_pauth(
         ram: *mut u8,
@@ -499,13 +500,37 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
     report("NXARMJIT: TRACE_STAGING_VERIFIED source_unchanged=true");
     report("NXARMJIT: TRACE_HANDOFF_UNPROVISIONED abi=unprovisioned-sptm-prefix sptm_args=false sptm_services=false platform_device_tree=false");
     let initial = [0, layout.boot_args_phys, 0, 0];
+    let mut options = platform::BootOptionsV2 {
+        abi_version: 2,
+        struct_size: core::mem::size_of::<platform::BootOptionsV2>() as u32,
+        initial_pstate: 0x3c5,
+        ..platform::BootOptionsV2::default()
+    };
+    if let Some(configuration) = trace.platform {
+        options.platform_profile = match configuration.profile {
+            nextcore_core::boot_config::Arm64PlatformProfile::NextcoreIrqCompatV1 => {
+                platform::PROFILE_IRQ_COMPAT_V1
+            }
+        };
+        options.initial_override = configuration.initial_override;
+        options.initial_pstate = configuration.initial_pstate;
+        options.vbar = configuration.vector_base;
+        options.irq_level = u64::from(configuration.irq_level);
+        options.fiq_level = u64::from(configuration.fiq_level);
+        report(&format!(
+            "NXARMJIT: TRACE_PLATFORM_PROFILE name=nextcore-irq-compat-v1 reset_origin=software_defined initial_override={:#x} initial_pstate={:#x} irq={} fiq={}",
+            options.initial_override, options.initial_pstate, options.irq_level, options.fiq_level
+        ));
+    } else {
+        report("NXARMJIT: TRACE_PLATFORM_PROFILE name=absent reset_origin=unprovided");
+    }
     report(&format!(
         "NXARMJIT: TRACE_ENTER entry={:#x} x0=0 x1={:#x} x2=0 x3=0 budget={}",
         layout.entry_phys, initial[1], trace.instruction_budget
     ));
-    let mut result = JitResult::default();
+    let mut result_v2 = platform::BootResultV2::default();
     let status = unsafe {
-        vf_boot_run_with_registers(
+        vf_boot_run_v2(
             ram.bytes_mut().as_mut_ptr(),
             memory_size,
             trace.physical_base,
@@ -519,9 +544,11 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
             opaque,
             initial.as_ptr(),
             pauth_step,
-            &mut result,
+            &options,
+            &mut result_v2,
         )
     };
+    let result = &result_v2.base;
     let restore = unsafe { vf_efi_jit_protect(code.base() as *mut _, code.bytes(), 0, opaque) };
     report(&format!(
         "NXARMJIT: TRACE_RETURN status={status} retired={} pc={:#x} blocks={} instruction={:#x}",
@@ -530,6 +557,18 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
     report(&format!(
         "NXARMJIT: TRACE_REGISTERS x0={:#x} x1={:#x} x2={:#x} x3={:#x}",
         result.x0, result.x1, result.x2, result.x3
+    ));
+    report(&format!(
+        "NXARMJIT: TRACE_PLATFORM_STATE profile={} override={:#x} pending={} pstate={:#x} sp={:#x}",
+        result_v2.platform_profile,
+        result_v2.platform_override,
+        result_v2.pending_lines,
+        result_v2.pstate,
+        result_v2.sp
+    ));
+    report(&format!(
+        "NXARMJIT: TRACE_EXCEPTION_STATE elr={:#x} spsr={:#x} vector={:#x} esr={:#x} handler_executed=false",
+        result_v2.elr, result_v2.spsr, result_v2.exception_vector, result_v2.esr
     ));
     report("NXARMJIT: TRACE_ONLY macos_boot_verified=false metal_verified=false");
     if restore != 0 {

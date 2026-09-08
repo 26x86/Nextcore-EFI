@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
-nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "757d8e668141ebc15a265f13383448bc609defb9", default-features = false }
+nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "6105cd7996ef2ea4db35d7d3a1e8822d0703aae9", default-features = false }
 uefi-raw = { version = "0.16", optional = true }
 
 [features]
@@ -92,4 +92,4 @@ bench = false
 required-features = ["apfs-jumpstart", "test-child"]
 
 [build-dependencies]
-nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "1d5ffb56799f70ce622e4813be66d0592cb5a292" }
+nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "a6f1c46c4f0e965dbc3d9426a737e7558bac33d7" }

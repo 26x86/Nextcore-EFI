@@ -17,19 +17,23 @@ fn main() {
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from(nextcore_ise::EFI_RUNTIME_DIR));
     let output = PathBuf::from(env::var_os("OUT_DIR").unwrap());
-    let pauth = runtime.join("preos/src/pauth.rs");
-    println!("cargo:rerun-if-changed={}", pauth.display());
-    std::fs::write(
-        output.join("jit_pauth.rs"),
-        format!(
-            "#[allow(dead_code)]\n#[path = {:?}]\nmod pauth;\n",
-            pauth
+    let mut shared_modules = String::new();
+    for module in ["pauth", "platform"] {
+        if module == "platform" && env::var_os("CARGO_FEATURE_ARM_JIT_TRACE").is_none() {
+            continue;
+        }
+        let source = runtime.join(format!("preos/src/{module}.rs"));
+        println!("cargo:rerun-if-changed={}", source.display());
+        shared_modules.push_str(&format!(
+            "#[allow(dead_code)]\n#[path = {:?}]\nmod {module};\n",
+            source
                 .canonicalize()
-                .expect("missing shared PAC runtime source")
+                .expect("missing shared runtime source")
                 .to_string_lossy()
-        ),
-    )
-    .expect("write PAC module path");
+        ));
+    }
+    std::fs::write(output.join("jit_pauth.rs"), shared_modules)
+        .expect("write shared runtime module paths");
     let compiler = env::var_os("NEXTCORE_CLANG").unwrap_or_else(|| "clang".into());
     let archive = output.join("libnextcore_arm_jit.a");
     let mut objects = Vec::new();
@@ -61,7 +65,13 @@ fn main() {
             .arg(&object));
         objects.push(object);
     }
-    for header in ["jit.h", "boot_jit.h", "uefi.h", "gop_scanout.h"] {
+    for header in [
+        "jit.h",
+        "boot_jit.h",
+        "platform_abi.h",
+        "uefi.h",
+        "gop_scanout.h",
+    ] {
         println!("cargo:rerun-if-changed={}", runtime.join(header).display());
     }
     run(
