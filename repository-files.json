@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 2244,
-      "sha256": "ac25a4cc1dfa109b14b067013a83249d5064e70bbe670c1f3b468f3ed2b29241"
+      "bytes": 2419,
+      "sha256": "96ad0122f982d2ac77aa15af9332911f5da0670dd5be94c10fd9a40e702286f5"
     },
     {
       "path": ".gitignore",
@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 2684,
-      "sha256": "30e1415178dc32456ef13a99b817dd89f2169a154fc17502f412b5e91dd81fbe"
+      "bytes": 2757,
+      "sha256": "edb268870e4e0de8dc68f516680a1fb5aa43092ab9cf29c1a17d9ea576c1e859"
     },
     {
       "path": "LICENSE.txt",
@@ -50,6 +50,11 @@
       "path": "docs/ARM_STAGE1_EFI_PROBE.md",
       "bytes": 7152,
       "sha256": "9de86ccbb32b4176329a6813e51c2c3ee62e0208767759f03bb827df81e9ad42"
+    },
+    {
+      "path": "docs/DEEP_ARM_TRACE.md",
+      "bytes": 2241,
+      "sha256": "85d9e39d3ac28bbdae29362bfaa35b67f61d91ca789c8351dbb0770452b590d5"
     },
     {
       "path": "docs/EFI_MEMORY_PROVIDER_V1.md",
@@ -83,8 +88,8 @@
     },
     {
       "path": "repository.json",
-      "bytes": 1663,
-      "sha256": "0e6e624fe3756c969667c9ff375591f63b37833caf9cc3f128abfd92b18e11ca"
+      "bytes": 1653,
+      "sha256": "d36fa1459ecac2f447f40e5847aa2445ccb452cd0e4d1fdbff24b1548bb521fe"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -123,8 +128,8 @@
     },
     {
       "path": "src/arm_jit.rs",
-      "bytes": 24649,
-      "sha256": "a78cb5be834863e4a8278be038bbd888bd0d118f3162ca336f5a6fcbe7ced7ea"
+      "bytes": 25233,
+      "sha256": "860698c11f273ef8938218de982b7e48900b7770fbc1cde1801d353813b1c3bb"
     },
     {
       "path": "src/arm_pages.rs",

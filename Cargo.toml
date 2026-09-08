@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
-nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "147f4c4e4969074c9dd12c63bf17c6e8c674dabb", default-features = false }
+nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "bab7ac453a0f8ceab558eca1ad069bcfaf139776", default-features = false }
 uefi-raw = { version = "0.16", optional = true }
 nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "0d722886753268ec366f068823c37ea10132fb43", optional = true }
 
@@ -24,6 +24,7 @@ arm-jit = []
 arm-jit-probe = ["arm-jit"]
 arm-jit-trace = ["arm-jit"]
 arm-jit-tiered-trace = ["arm-jit-trace", "arm-jit-probe"]
+arm-jit-deep-trace = ["arm-jit-tiered-trace", "arm-jit-memory-provider"]
 arm-jit-memory-provider = ["arm-jit-trace", "arm-jit-probe", "dep:nextcore-memory-service"]
 arm-jit-stage1-probe = ["arm-jit-memory-provider"]
 arm-jit-dt-probe = ["arm-jit-stage1-probe"]
