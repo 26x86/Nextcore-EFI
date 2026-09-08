@@ -8,7 +8,7 @@ publish = false
 uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
 nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "147f4c4e4969074c9dd12c63bf17c6e8c674dabb", default-features = false }
 uefi-raw = { version = "0.16", optional = true }
-nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "720d7c61140e39da0f457192bd88138a52017e22", optional = true }
+nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "0d722886753268ec366f068823c37ea10132fb43", optional = true }
 
 [features]
 test-child = []
@@ -27,6 +27,14 @@ arm-jit-tiered-trace = ["arm-jit-trace", "arm-jit-probe"]
 arm-jit-memory-provider = ["arm-jit-trace", "arm-jit-probe", "dep:nextcore-memory-service"]
 arm-jit-stage1-probe = ["arm-jit-memory-provider"]
 arm-jit-dt-probe = ["arm-jit-stage1-probe"]
+arm-jit-dynamic-probe = ["arm-jit-stage1-probe"]
+
+[[bin]]
+name = "NXDYN"
+path = "src/dynamic_probe.rs"
+test = false
+bench = false
+required-features = ["arm-jit-dynamic-probe"]
 
 [[bin]]
 name = "NXDT"
@@ -111,4 +119,4 @@ bench = false
 required-features = ["apfs-jumpstart", "test-child"]
 
 [build-dependencies]
-nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "720d7c61140e39da0f457192bd88138a52017e22" }
+nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "0d722886753268ec366f068823c37ea10132fb43" }

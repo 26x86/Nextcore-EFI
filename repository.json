@@ -7,12 +7,12 @@
   "crate": "nextcore-efi",
   "description": "UEFI boot selection, platform services and explicit APFS Jumpstart driver loading.",
   "development": {
-    "branch": "codex/guest-dt-efi",
+    "branch": "codex/arm64e-dynamic-efi-probe",
     "base_commit": "64a2d4ce432c2f5ccd300728309556c898317436",
-    "updated_utc": "2026-09-08T20:18:24.532685+00:00",
+    "updated_utc": "2026-09-08T20:29:45.799816+00:00",
     "dependency_revisions": {
       "https://github.com/26x86/Nextcore-Core": "147f4c4e4969074c9dd12c63bf17c6e8c674dabb",
-      "https://github.com/26x86/Nextcore-ISE": "720d7c61140e39da0f457192bd88138a52017e22"
+      "https://github.com/26x86/Nextcore-ISE": "0d722886753268ec366f068823c37ea10132fb43"
     },
     "integration": "Git submodule with an immutable gitlink; workspace source patches for local development"
   },

@@ -29,3 +29,8 @@ jobs:
           cargo build --release --target x86_64-unknown-uefi --features arm-jit-dt-probe --bin NXDT
           python3 tools/verify_dt_ledger_ovmf.py --efi-probe target/x86_64-unknown-uefi/release/NXDT.efi --output "$RUNNER_TEMP/dt-ledger-efi"
           python3 tools/check_dt_ledger_capture.py --report "$RUNNER_TEMP/dt-ledger-efi/report.json" --output "$RUNNER_TEMP/dt-ledger-reader.json"
+      - name: Execute transactional MMU activation in actual EFI
+        run: |
+          cargo build --release --target x86_64-unknown-uefi --features arm-jit-dynamic-probe --bin NXDYN
+          python3 tools/verify_dynamic_ovmf.py --efi-probe target/x86_64-unknown-uefi/release/NXDYN.efi --output "$RUNNER_TEMP/dynamic-efi"
+          python3 tools/check_dynamic_capture.py --report "$RUNNER_TEMP/dynamic-efi/report.json" --output "$RUNNER_TEMP/dynamic-reader.json"
