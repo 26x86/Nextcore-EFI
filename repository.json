@@ -9,7 +9,7 @@
   "development": {
     "branch": "codex/arm64e-boot-metal",
     "base_commit": "64a2d4ce432c2f5ccd300728309556c898317436",
-    "updated_utc": "2026-09-08T14:44:43.537897+00:00",
+    "updated_utc": "2026-09-08T14:51:37.548006+00:00",
     "dependency_revisions": {
       "https://github.com/26x86/Nextcore-Core": "6105cd7996ef2ea4db35d7d3a1e8822d0703aae9",
       "https://github.com/26x86/Nextcore-ISE": "a6f1c46c4f0e965dbc3d9426a737e7558bac33d7"

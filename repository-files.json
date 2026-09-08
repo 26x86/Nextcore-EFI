@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 706,
-      "sha256": "003c37ebddfbb5fe0b7710df32d8fc5e84d032c7462a58b521800ffff7e93628"
+      "bytes": 711,
+      "sha256": "b497ddf8ec51097110f5ce51a89f15d867f83ba0fe7881d506eea592a27afd3d"
     },
     {
       "path": ".gitignore",
@@ -39,7 +39,7 @@
     {
       "path": "repository.json",
       "bytes": 1656,
-      "sha256": "ffc92ef9e871ca9e635850069160ba9ad121d12b64df5e5e79028dbd4e0520b4"
+      "sha256": "95601a6304d93cc89f590a76e26f9940f675bef639eec8ebcb4f62b7e5cd93d1"
     },
     {
       "path": "src/apfs_driver.rs",
