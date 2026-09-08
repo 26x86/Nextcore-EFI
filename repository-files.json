@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 1777,
-      "sha256": "0b2bc1ff5caa4eff9f739bf9f7a4f53515007268803213995fa80dbf214c7301"
+      "bytes": 2244,
+      "sha256": "ac25a4cc1dfa109b14b067013a83249d5064e70bbe670c1f3b468f3ed2b29241"
     },
     {
       "path": ".gitignore",
@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 2508,
-      "sha256": "2bcf9f03bdd7c1d6b823a2a2cc4e24afa588363846f74dd93f74c14854953aa7"
+      "bytes": 2684,
+      "sha256": "30e1415178dc32456ef13a99b817dd89f2169a154fc17502f412b5e91dd81fbe"
     },
     {
       "path": "LICENSE.txt",
@@ -33,13 +33,18 @@
     },
     {
       "path": "build.rs",
-      "bytes": 4219,
-      "sha256": "bf1adb4f27b7e989e7cbaf84cab32cdf3d61c5acb84c61735875f4ee94970243"
+      "bytes": 4852,
+      "sha256": "2e63268f3e94ae728ff9451944b96d3c30c6b5bc6c5578f77d6a381089c3bd14"
     },
     {
       "path": "docs/ARM_DT_LEDGER_EFI_PROBE.md",
       "bytes": 8872,
       "sha256": "83c428f1911d2c47473c89460987fe0595254ac108f4d8bfc6eb04ed29eb018e"
+    },
+    {
+      "path": "docs/ARM_DYNAMIC_EFI_PROBE.md",
+      "bytes": 14026,
+      "sha256": "8eb3fcea5821416beb57a92bc4b85235542d46a155bdb2ae210fae57d9ad8ef9"
     },
     {
       "path": "docs/ARM_STAGE1_EFI_PROBE.md",
@@ -62,6 +67,11 @@
       "sha256": "c482a5c196fe872da49acfcfeb008fb3b0218b51093d49acc8d5f8274fb65da3"
     },
     {
+      "path": "docs/fixtures/dynamic_enable.S",
+      "bytes": 369,
+      "sha256": "ac9574aaf43bfb7b764f5ba48e58cfaac91a17ac5e493acb5aaf2c1481f854ee"
+    },
+    {
       "path": "docs/fixtures/stage1_pair.S",
       "bytes": 114,
       "sha256": "8e1a62d2a191dfc6576a70829be21e52bc30686a3a25751f1a13f4dd321c7060"
@@ -73,8 +83,8 @@
     },
     {
       "path": "repository.json",
-      "bytes": 1651,
-      "sha256": "bb84f67d4a1e46d4e28a4a0b535866692d7a3fc1329ad98c3353649ccdb08e77"
+      "bytes": 1663,
+      "sha256": "0e6e624fe3756c969667c9ff375591f63b37833caf9cc3f128abfd92b18e11ca"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -147,6 +157,11 @@
       "sha256": "e8906bf108166ca880816721ef3df1fb905a35d1d17fdf4a3b7c66f5872ba248"
     },
     {
+      "path": "src/dynamic_probe.rs",
+      "bytes": 20479,
+      "sha256": "f3a18707e53f0b112dfc195327a6b0ef8bf0ae51408679e40799b0c1c6bb2394"
+    },
+    {
       "path": "src/exit_data.rs",
       "bytes": 4071,
       "sha256": "c22615140bacd656507b2a42de6aedb0fe1cc0efd9430b5552ea9f2f6808012f"
@@ -217,6 +232,16 @@
       "sha256": "582da32c36b9ea01341bd0fbf0995f8158ac2faf6a92485d4cc0b33727ebc43c"
     },
     {
+      "path": "tools/check_dynamic_capture.py",
+      "bytes": 4681,
+      "sha256": "9e05a5aa7147989e41ad909eb0600fb8f5f8eacf5a6f7674d6fc59fd49ad75be"
+    },
+    {
+      "path": "tools/check_dynamic_omission.py",
+      "bytes": 7073,
+      "sha256": "0850af5e8a9de312c5cd5b7cbfd01fd41059b34a8525a370c96c702da6091e17"
+    },
+    {
       "path": "tools/test_stage1_reader.py",
       "bytes": 2583,
       "sha256": "5fefb30f31987722cf9f5ac4fc6a3917b3bc323927ab5a0beb9384988c1f5b77"
@@ -225,6 +250,11 @@
       "path": "tools/verify_dt_ledger_ovmf.py",
       "bytes": 16516,
       "sha256": "7c281fba318c99de35fd44f0e670a1be07ffa0998347d36b85f5bd1acfb1dd5f"
+    },
+    {
+      "path": "tools/verify_dynamic_ovmf.py",
+      "bytes": 18301,
+      "sha256": "80663e056c172e2f60c770c5dd76637038fb8080f8b4230ff66e986a76977931"
     },
     {
       "path": "tools/verify_stage1_ovmf.py",
