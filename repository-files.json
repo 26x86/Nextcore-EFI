@@ -38,8 +38,8 @@
     },
     {
       "path": "docs/ARM_STAGE1_EFI_PROBE.md",
-      "bytes": 6890,
-      "sha256": "3e58ec06547771628101036843fef14c3aa7a22357cf10f01981717bc2132033"
+      "bytes": 7152,
+      "sha256": "9de86ccbb32b4176329a6813e51c2c3ee62e0208767759f03bb827df81e9ad42"
     },
     {
       "path": "docs/EFI_MEMORY_PROVIDER_V1.md",
@@ -64,7 +64,7 @@
     {
       "path": "repository.json",
       "bytes": 1662,
-      "sha256": "cea34cd76e02bcb73a47523877eb8635b1acc8b5a223120dd5c8f346fb96349f"
+      "sha256": "82d1dea277dd3638752dcd15c6c516572af275a1ec7ff3abf94adb3ed172bab7"
     },
     {
       "path": "src/apfs_driver.rs",
