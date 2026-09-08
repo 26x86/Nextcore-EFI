@@ -7,12 +7,12 @@
   "crate": "nextcore-efi",
   "description": "UEFI boot selection, platform services and explicit APFS Jumpstart driver loading.",
   "development": {
-    "branch": "codex/conditional-compare-runtime",
+    "branch": "codex/arm64e-stage1-efi-probe",
     "base_commit": "64a2d4ce432c2f5ccd300728309556c898317436",
-    "updated_utc": "2026-09-08T17:39:10.001241+00:00",
+    "updated_utc": "2026-09-08T18:53:58.167530+00:00",
     "dependency_revisions": {
       "https://github.com/26x86/Nextcore-Core": "40833dc29d8bcd2976d0a13c2f120533d02500c4",
-      "https://github.com/26x86/Nextcore-ISE": "0aabf085fa5d9bec38c83076f766274d3006358d"
+      "https://github.com/26x86/Nextcore-ISE": "720d7c61140e39da0f457192bd88138a52017e22"
     },
     "integration": "Git submodule with an immutable gitlink; workspace source patches for local development"
   },

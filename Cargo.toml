@@ -8,7 +8,7 @@ publish = false
 uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
 nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "40833dc29d8bcd2976d0a13c2f120533d02500c4", default-features = false }
 uefi-raw = { version = "0.16", optional = true }
-nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "0aabf085fa5d9bec38c83076f766274d3006358d", optional = true }
+nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "720d7c61140e39da0f457192bd88138a52017e22", optional = true }
 
 [features]
 test-child = []
@@ -25,6 +25,14 @@ arm-jit-probe = ["arm-jit"]
 arm-jit-trace = ["arm-jit"]
 arm-jit-tiered-trace = ["arm-jit-trace", "arm-jit-probe"]
 arm-jit-memory-provider = ["arm-jit-trace", "arm-jit-probe", "dep:nextcore-memory-service"]
+arm-jit-stage1-probe = ["arm-jit-memory-provider"]
+
+[[bin]]
+name = "NXMMU"
+path = "src/mmu_probe.rs"
+test = false
+bench = false
+required-features = ["arm-jit-stage1-probe"]
 
 [[bin]]
 name = "NXARMJIT"
@@ -95,4 +103,4 @@ bench = false
 required-features = ["apfs-jumpstart", "test-child"]
 
 [build-dependencies]
-nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "0aabf085fa5d9bec38c83076f766274d3006358d" }
+nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "720d7c61140e39da0f457192bd88138a52017e22" }
