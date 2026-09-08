@@ -431,6 +431,24 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
     let path = CString16::try_from(trace.device_tree_path.as_str())
         .map_err(|_| Status::INVALID_PARAMETER)?;
     let dt = read_file(&path, 1024 * 1024)?;
+    let firmware_tree =
+        nextcore_core::firmware_dt::FirmwareDeviceTree::parse(&dt).map_err(|error| {
+            report(&format!("NXARMJIT: TRACE_DT_INVALID reason={error}"));
+            Status::LOAD_ERROR
+        })?;
+    let templates = firmware_tree.statistics().templates;
+    if templates != 0 {
+        report(&format!(
+            "NXARMJIT: TRACE_DT_UNRESOLVED templates={templates} platform_complete=false"
+        ));
+        return Err(Status::UNSUPPORTED);
+    }
+    firmware_tree.validated_runtime_bytes().map_err(|error| {
+        report(&format!("NXARMJIT: TRACE_DT_INVALID reason={error}"));
+        Status::LOAD_ERROR
+    })?;
+    drop(firmware_tree);
+    report("NXARMJIT: TRACE_DT_CHECKED templates=0 platform_complete=false");
     let plan = Arm64HandoffPlan::new(
         source,
         Arm64PlacementInput {
