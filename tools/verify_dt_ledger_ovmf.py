@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 import platform
 import re
@@ -83,6 +84,8 @@ def validate_case(case, data):
             if actual[k] != v: raise ValueError(f'{k}: actual {actual[k]} != expected {v}')
         hosts = [(actual['ram_host'],16*g),(actual['table_host'],16*g),(actual['jit_host'],65536)]
         if any(base <= 0 or base % 16384 for base,size in hosts): raise ValueError('host alignment')
+        if any(base >= 1 << 64 or size > ((1 << 64) - 1) - base for base,size in hosts):
+            raise ValueError('host span outside u64')
         for i,(a,n) in enumerate(hosts):
             for b,m in hosts[i+1:]:
                 if a < b+m and b < a+n: raise ValueError('host alias')
@@ -122,6 +125,79 @@ def parse_records(lines):
         if len(fields)!=len(pairs): errors.append('duplicate key')
         (cases if category=='CASE' else data).append(fields)
     return cases,data,errors,duplicates
+
+def validate_report(report, serial):
+    """Validate one complete capture, using its actual serial bytes.
+
+    Historical input hashes are checked as recorded role-keyed provenance. They
+    need not identify the current checker: an upgraded reader may audit an older
+    immutable capture. New captures additionally record the raw serial digest.
+    """
+    try:
+        required = {'schema','passed','host_architecture','cases','data','host_validations','markers',
+            'parse_errors','adjacent_transport_duplicate_lines','input_paths','input_sha256_before',
+            'input_sha256_after','elapsed_seconds','qemu_exit_code','normal_boot_verified','original_inputs_used'}
+        if not isinstance(report, dict) or not required <= set(report) <= required | {'serial_sha256'}:
+            raise ValueError('missing/extra report fields')
+        if report['schema'] != 'nextcore.authored-owned-dt-efi.v1' or report['passed'] is not True:
+            raise ValueError('unsuccessful or wrong report schema')
+        if report['normal_boot_verified'] is not False or report['original_inputs_used'] is not False:
+            raise ValueError('invalid scope flags')
+        if not isinstance(report['host_architecture'], str) or not report['host_architecture']:
+            raise ValueError('invalid host architecture record')
+        if type(report['elapsed_seconds']) not in (int, float) or not math.isfinite(report['elapsed_seconds']) or report['elapsed_seconds'] < 0:
+            raise ValueError('invalid elapsed time')
+        if type(report['qemu_exit_code']) is not int:
+            raise ValueError('missing process completion')
+        roles = {'efi_probe','ovmf_code','ovmf_vars','runner'}
+        for key in ('input_paths','input_sha256_before','input_sha256_after'):
+            if not isinstance(report[key], dict) or set(report[key]) != roles:
+                raise ValueError('wrong input provenance roles')
+        if any(not isinstance(p, str) or not p or '\x00' in p for p in report['input_paths'].values()):
+            raise ValueError('invalid input path record')
+        for key in ('input_sha256_before','input_sha256_after'):
+            if any(not isinstance(h, str) or not re.fullmatch('[0-9a-f]{64}', h) for h in report[key].values()):
+                raise ValueError('invalid input digest')
+        if report['input_sha256_before'] != report['input_sha256_after']:
+            raise ValueError('input changed during capture')
+        if not serial.is_file():
+            raise ValueError('missing raw serial capture')
+        raw = markers(serial)
+        if report['markers'] != raw:
+            raise ValueError('recorded markers differ from raw serial')
+        if 'serial_sha256' in report and report['serial_sha256'] != sha(serial):
+            raise ValueError('raw serial digest mismatch')
+        logical = []
+        for line in raw:
+            if not logical or logical[-1] != line:
+                logical.append(line)
+        entry = 'NXDT: ENTRY host=x86_64 authored=true profile=nextcore-stage1-fixed-nc-v1'
+        terminal = 'NXDT: PASS cases=8 macos_boot_verified=false'
+        if len(logical) != 18 or logical[0] != entry or logical[-1] != terminal:
+            raise ValueError('incomplete or unexpected marker sequence')
+        if any(not logical[1+2*i].startswith('NXDT: DATA ') or
+               not logical[2+2*i].startswith('NXDT: CASE ') for i in range(8)):
+            raise ValueError('wrong case/data marker order')
+        cases, data, errors, duplicates = parse_records(raw)
+        if errors or report['parse_errors'] != errors:
+            raise ValueError('malformed marker fields')
+        if type(report['adjacent_transport_duplicate_lines']) is not int or report['adjacent_transport_duplicate_lines'] != duplicates:
+            raise ValueError('transport duplicate count mismatch')
+        if report['cases'] != cases or report['data'] != data:
+            raise ValueError('case/data fields differ from raw serial')
+        identity = lambda row: tuple(row.get(k) for k in ('name','granule','upper'))
+        order = [(n,str(g),str(u).lower()) for g in (4096,16384) for u in (False,True) for n in NAMES]
+        if len(cases) != 8 or len(data) != 8 or list(map(identity,cases)) != order or list(map(identity,data)) != order:
+            raise ValueError('missing, duplicate or reordered matrix case')
+        validations = [validate_case(case, datum) for case, datum in zip(cases,data)]
+        if not all(v['passed'] for v in validations):
+            raise ValueError('case validation failed: ' + next(v['error'] for v in validations if not v['passed']))
+        if report['host_validations'] != validations:
+            raise ValueError('recorded host validations differ from recomputation')
+        return {'passed':True,'actual_cases_checked':8,'serial_sha256':sha(serial),
+                'input_hashes_preserved':True,'input_hashes_are_recorded_provenance':True}
+    except (ValueError, KeyError, TypeError, OSError, OverflowError) as error:
+        return {'passed':False,'error':str(error)}
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
@@ -169,7 +245,11 @@ def main():
         'cases':cases,'data':data,'host_validations':validations,'markers':lines,'parse_errors':errors,
         'adjacent_transport_duplicate_lines':duplicates,'input_paths':{k:str(v) for k,v in inputs.items()},
         'input_sha256_before':before,'input_sha256_after':after,'elapsed_seconds':round(time.monotonic()-start,3),
-        'qemu_exit_code':process.returncode,'normal_boot_verified':False,'original_inputs_used':False}
+        'qemu_exit_code':process.returncode,'normal_boot_verified':False,'original_inputs_used':False,
+        'serial_sha256':sha(serial) if serial.is_file() else None}
+    checked = validate_report(report, serial)
+    report['passed'] = passed and checked['passed']
+    passed = report['passed']
     (output/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps({'passed':passed,'cases':len(cases),'report':str(output/'report.json')}))
     return 0 if passed else 1

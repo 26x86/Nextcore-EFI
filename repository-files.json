@@ -38,8 +38,8 @@
     },
     {
       "path": "docs/ARM_DT_LEDGER_EFI_PROBE.md",
-      "bytes": 7917,
-      "sha256": "279c0b598a9591ad44de78517571745c9d86e9e52b4146c80e51c6d9bbef1bbc"
+      "bytes": 8515,
+      "sha256": "4cae8ad9991f236e62387e94d1377b77f82aac04aa944bb70dcb7fe7377c8b47"
     },
     {
       "path": "docs/ARM_STAGE1_EFI_PROBE.md",
@@ -74,7 +74,7 @@
     {
       "path": "repository.json",
       "bytes": 1651,
-      "sha256": "65cff922f416ceaeff4d3988f3e6eb948c89b8ab3939c8e85c5add36b5d39082"
+      "sha256": "fa73b645740b824af460f9a124ca205d8213dc7f08bcd42a3d52bcf87c5a49c5"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -213,8 +213,8 @@
     },
     {
       "path": "tools/check_dt_ledger_capture.py",
-      "bytes": 2082,
-      "sha256": "1cb6a5c1401958e86932a796614b2a81ef0292e436d576f39e17208a3158b3de"
+      "bytes": 6895,
+      "sha256": "582da32c36b9ea01341bd0fbf0995f8158ac2faf6a92485d4cc0b33727ebc43c"
     },
     {
       "path": "tools/test_stage1_reader.py",
@@ -223,8 +223,8 @@
     },
     {
       "path": "tools/verify_dt_ledger_ovmf.py",
-      "bytes": 11090,
-      "sha256": "23d0919738640f59e3ec11a5a170d13c12efdfd3d51900452ab4ef0393c085bc"
+      "bytes": 16516,
+      "sha256": "7c281fba318c99de35fd44f0e670a1be07ffa0998347d36b85f5bd1acfb1dd5f"
     },
     {
       "path": "tools/verify_stage1_ovmf.py",
