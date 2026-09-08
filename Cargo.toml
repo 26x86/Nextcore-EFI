@@ -27,6 +27,14 @@ arm-jit-tiered-trace = ["arm-jit-trace", "arm-jit-probe"]
 arm-jit-memory-provider = ["arm-jit-trace", "arm-jit-probe", "dep:nextcore-memory-service"]
 arm-jit-stage1-probe = ["arm-jit-memory-provider"]
 arm-jit-dt-probe = ["arm-jit-stage1-probe"]
+arm-jit-dynamic-probe = ["arm-jit-stage1-probe"]
+
+[[bin]]
+name = "NXDYN"
+path = "src/dynamic_probe.rs"
+test = false
+bench = false
+required-features = ["arm-jit-dynamic-probe"]
 
 [[bin]]
 name = "NXDT"
