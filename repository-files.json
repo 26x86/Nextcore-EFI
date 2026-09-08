@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 711,
-      "sha256": "b497ddf8ec51097110f5ce51a89f15d867f83ba0fe7881d506eea592a27afd3d"
+      "bytes": 846,
+      "sha256": "ad5a424cae4509b6a2dcb1770a57f7c919c31cc914d43ba0dd650105aebee70c"
     },
     {
       "path": ".gitignore",
@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 1878,
-      "sha256": "033ec6856112536b0ec7e6e1b1ab7998650fa3e7572124a6a74936caee01b9ad"
+      "bytes": 2175,
+      "sha256": "8f42392e6ecc95ff8e88b5dc76b20b5d07462790912fcbd2e7ac589d8e8c502e"
     },
     {
       "path": "LICENSE.txt",
@@ -33,13 +33,23 @@
     },
     {
       "path": "build.rs",
-      "bytes": 3112,
-      "sha256": "788ca007f1b438c7907944b26395e9d75e0f237ce54191a0fda2d2e923fcc771"
+      "bytes": 3912,
+      "sha256": "fb89edae73118b294baf0e10e9cef025d33fbb9615a6e90a1397a1b77d4d5d05"
+    },
+    {
+      "path": "docs/EFI_MEMORY_PROVIDER_V1.md",
+      "bytes": 4873,
+      "sha256": "236a310904533691abdcef29db8e173a1770197a7ff4cd7d57d17faee132da3b"
+    },
+    {
+      "path": "docs/TIERED_ARM_TRACE.md",
+      "bytes": 761,
+      "sha256": "d8d788115eaf4a2d43102a46dd65b763069492fe69d4bfbad357ebeae07c8e3f"
     },
     {
       "path": "repository.json",
-      "bytes": 1659,
-      "sha256": "6eab151db2838bb47aaa822e5b3cae8d406dbd7629b0f758a1accdf220b68ac6"
+      "bytes": 1658,
+      "sha256": "2c97e9a54581844f771b61d01b345a300ccc572ef3be91cf8e18d5ce8532ecc6"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -78,8 +88,8 @@
     },
     {
       "path": "src/arm_jit.rs",
-      "bytes": 20848,
-      "sha256": "f1db29a82453a1b019b7a863e06469a14a01a8e691e96ca9bebceda3ad3b67fb"
+      "bytes": 24649,
+      "sha256": "a78cb5be834863e4a8278be038bbd888bd0d118f3162ca336f5a6fcbe7ced7ea"
     },
     {
       "path": "src/arm_pages.rs",
