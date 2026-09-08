@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 352,
-      "sha256": "62e7b3d79003ae029a75fbb9bb79e1d80c3850213b4bb6cca7e0eef65c17b227"
+      "bytes": 434,
+      "sha256": "676f9633e7df8b9e6453c55f289a78fc262019634e10ef94264cbbeea53bdb92"
     },
     {
       "path": ".gitignore",
@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 1102,
-      "sha256": "ce0890258183e5417541a322de3762deb5be36437e2041e4288913bc2fa8fbc2"
+      "bytes": 1240,
+      "sha256": "6110a37302562adcd37fe00fb34629dcb37aea91de207885af647c003617d6d3"
     },
     {
       "path": "LICENSE.txt",
@@ -28,8 +28,18 @@
     },
     {
       "path": "README.md",
-      "bytes": 592,
-      "sha256": "2f04de5df19db77121b7ef6f2fba0eab724dafc6ad675b155bb755384c43468d"
+      "bytes": 718,
+      "sha256": "6f87bd8d81e4b6d0a4e800d3d9eac30d4380c1d41d14bfd320f9aaba18a89f15"
+    },
+    {
+      "path": "src/apfs_driver.rs",
+      "bytes": 9338,
+      "sha256": "d9a270d8345e12bf3703fe9c03d1a7aeebc7b9c47c0c050fbfd46fbcd88fe894"
+    },
+    {
+      "path": "src/apfs_probe.rs",
+      "bytes": 1699,
+      "sha256": "7bf66134725679ce8bbc7f9f58794596cb95219ea7d9a93828484820b8384b2d"
     },
     {
       "path": "src/console_control.rs",

@@ -5,18 +5,18 @@
   "public": true,
   "role": "nextcore-module",
   "crate": "nextcore-efi",
-  "description": "UEFI boot selection, platform services and bounded kernel preparation",
+  "description": "UEFI boot selection, platform services and explicit APFS Jumpstart driver loading.",
   "source_path": "nextcore/crates/nextcore-efi",
-  "source_commit": "dcc90013109eac694ccbf997b1e44a7018480f78",
+  "source_commit": "65d1e85db2dfcd4e1c07656bb0bfc315d36fac83",
   "depends_on": [
     "26x86/Nextcore-Core"
   ],
   "initial_tag": "26x86-Nextcore-EFI-v0.1.0",
-  "generated_utc": "2026-09-08T06:40:19.143997+00:00",
-  "release_tag": "26x86-Nextcore-EFI-v0.1.1",
-  "previous_head": "4cec82e25fbfc1eeebd475adb25e2da308c2378c",
+  "generated_utc": "2026-09-08T07:49:35.115587+00:00",
+  "release_tag": "26x86-Nextcore-EFI-v0.1.2",
+  "previous_head": "c00f6fe6d6618f574ed193547837d675e6ca2da3",
   "dependency_tags": {
-    "26x86/Nextcore-Core": "26x86-Nextcore-Core-v0.1.1"
+    "26x86/Nextcore-Core": "26x86-Nextcore-Core-v0.1.2"
   },
   "export_method": "immutable git objects applied to existing main; manifest dependency rewrite only"
 }
