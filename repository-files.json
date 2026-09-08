@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 434,
-      "sha256": "676f9633e7df8b9e6453c55f289a78fc262019634e10ef94264cbbeea53bdb92"
+      "bytes": 706,
+      "sha256": "003c37ebddfbb5fe0b7710df32d8fc5e84d032c7462a58b521800ffff7e93628"
     },
     {
       "path": ".gitignore",
@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 1240,
-      "sha256": "6110a37302562adcd37fe00fb34629dcb37aea91de207885af647c003617d6d3"
+      "bytes": 1878,
+      "sha256": "2e3dd6076f2f27be06ee82afe5619c6b0f71fcb671f7bcc36a756b50b9b90c40"
     },
     {
       "path": "LICENSE.txt",
@@ -28,18 +28,73 @@
     },
     {
       "path": "README.md",
-      "bytes": 718,
-      "sha256": "6f87bd8d81e4b6d0a4e800d3d9eac30d4380c1d41d14bfd320f9aaba18a89f15"
+      "bytes": 1562,
+      "sha256": "8c7b42701cefe4d00b7f4391482c026a82742229d54602cff2cf483cff76d6ff"
+    },
+    {
+      "path": "build.rs",
+      "bytes": 2768,
+      "sha256": "86f47fe4a67ee4b583520df28f4147df1ac62edbeab3f81a95c6e83c1e2207d8"
+    },
+    {
+      "path": "repository.json",
+      "bytes": 1656,
+      "sha256": "4ff62bbc2c3b6e9db05507eb52d4e0568d3e50ff8555d3c8a3329603bee4cad5"
     },
     {
       "path": "src/apfs_driver.rs",
-      "bytes": 9338,
-      "sha256": "d9a270d8345e12bf3703fe9c03d1a7aeebc7b9c47c0c050fbfd46fbcd88fe894"
+      "bytes": 10024,
+      "sha256": "d1e9876243d7c4548087369f021f6231a8303cf05e447b6cc7bdf34fa9de5dbf"
+    },
+    {
+      "path": "src/apfs_filesystems.rs",
+      "bytes": 15635,
+      "sha256": "a85aa453cf6315fc7846e07cdb49e275652ea23f4b72da80d0145d96cb19367c"
+    },
+    {
+      "path": "src/apfs_fixture.rs",
+      "bytes": 9505,
+      "sha256": "f36d414af689cd92aae29efb4ec773df6214f041dc6db06e4c8d911afb3c607b"
+    },
+    {
+      "path": "src/apfs_observation.rs",
+      "bytes": 12679,
+      "sha256": "962a521d5b184669c3afadb4ecfa8a1ba41a8cd4986a992a0fd28c5067033819"
     },
     {
       "path": "src/apfs_probe.rs",
-      "bytes": 1699,
-      "sha256": "7bf66134725679ce8bbc7f9f58794596cb95219ea7d9a93828484820b8384b2d"
+      "bytes": 1966,
+      "sha256": "5d3622c9066c2a69551f5a472c92cf9292425d83039b306f8992627a2fe9bf26"
+    },
+    {
+      "path": "src/apfs_target.rs",
+      "bytes": 3347,
+      "sha256": "ed5564557e6daa87157a77db420431e4cc7efcd54ea61e399ec3601587453a74"
+    },
+    {
+      "path": "src/arm64.rs",
+      "bytes": 7124,
+      "sha256": "1c78298e797705ee182f2843e6eb7f8902d199327c8343349192396750d87c62"
+    },
+    {
+      "path": "src/arm_jit.rs",
+      "bytes": 18254,
+      "sha256": "00b0f431706a65143a2d5410dddb0b3635471f00fc6e054ad8d5480f614e9699"
+    },
+    {
+      "path": "src/arm_pages.rs",
+      "bytes": 5113,
+      "sha256": "049b9d32b2129434d955b216e49d9785aed16aa439601f46f8811070b8ec1624"
+    },
+    {
+      "path": "src/arm_transition.S",
+      "bytes": 1259,
+      "sha256": "a444e899aef7562f48df5f88d299cde7b5ca0833f1f8430bae03b3da84803cc3"
+    },
+    {
+      "path": "src/arm_transition.rs",
+      "bytes": 2531,
+      "sha256": "d3a62dbda4c2119751d6af8e115fc25d563ea3beee0ce39fe69f43652d3d30a8"
     },
     {
       "path": "src/console_control.rs",
@@ -77,6 +132,11 @@
       "sha256": "5dcffef9c9e3032e17d272e52f9ef644ecafa1d350c0d73a17e46d4c755116ae"
     },
     {
+      "path": "src/linux_handoff.rs",
+      "bytes": 1807,
+      "sha256": "e3ab8c4989063853424df7159a26cbea2aca046f7b43f943c8e2afe65100e300"
+    },
+    {
       "path": "src/loaded_kernel.rs",
       "bytes": 10349,
       "sha256": "afa455b9303d4cab777cdfcd6487e65cd2e7ce6b0b25b6c3d9f4a2a40d5809b9"
@@ -88,8 +148,8 @@
     },
     {
       "path": "src/main.rs",
-      "bytes": 10103,
-      "sha256": "2a1198e1023b57a630fd3b87700f79c761bbdc020de5bee093b7f0942713a6e5"
+      "bytes": 10809,
+      "sha256": "07b60d8fb531efb414ac5a9deb05f5e5293e6085bc0732001e74631730ec27ab"
     },
     {
       "path": "src/picker.rs",

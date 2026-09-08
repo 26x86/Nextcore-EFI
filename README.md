@@ -1,13 +1,27 @@
-# NextCore EFI
+# Nextcore-EFI
 
-UEFI boot selection, platform services and explicit APFS Jumpstart driver loading.
+Freestanding UEFI applications for the Nextcore macOS compatibility layer.
+The primary ARM64e execution target is an **x86 computer at EFI startup**:
+`NXARMJIT.efi` links the ISE ARM-to-x86 JIT and software PAC provider directly.
+Core and ISE are immutable Git dependencies, so this repository also builds
+without the integration workspace or sibling source directories.
 
-Source snapshot: [65d1e85db2dfcd4e1c07656bb0bfc315d36fac83](https://github.com/26x86/26x86/commit/65d1e85db2dfcd4e1c07656bb0bfc315d36fac83).
+```sh
+rustup target add x86_64-unknown-uefi
+cargo build --release --target x86_64-unknown-uefi --features arm-jit --bin NXARMJIT
+cargo build --release --target x86_64-unknown-uefi --features arm-jit-probe --bin NXARMJIT
+```
 
-Repository release: `26x86-Nextcore-EFI-v0.1.2`. Cargo package version is preserved from source.
+Install Clang and LLD before building. The first command produces the default
+staging/provider boundary. The second opts into independently authored fixtures:
+ARM64e translated execution, PAC/AUT and GOP readback have passed in x86 OVMF.
+The `arm-jit-trace` diagnostic requires an explicit startup ABI and instruction
+budget. The original macOS 27 kernel reached four translated instructions before
+an unsupported system register; SPTM arguments/services and a resolved platform
+device tree are not provided, so this is not a valid macOS cold-boot result.
 
-Public source only; no Apple firmware, filesystem driver payload, operating-system image or private research input is bundled. Module checks establish their stated source/build boundary; they do not establish installed macOS boot, guest Metal or physical hardware support.
-
-## Fixed dependencies
-
-- [Core](https://github.com/26x86/Nextcore-Core/tree/26x86-Nextcore-Core-v0.1.2)
+The BOOTX64 picker and existing x86 diagnostics remain separate entry points.
+BOOTAA64 is an optional native-ARM diagnostic, not a host requirement. QEMU/OVMF
+runs firmware tests during development; the EFI runtime does not spawn or depend
+on a host operating-system process. Guest Metal and sustained macOS boot remain
+unverified. Prior release provenance is preserved in `repository.json`.
