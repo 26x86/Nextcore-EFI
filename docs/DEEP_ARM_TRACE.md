@@ -9,3 +9,9 @@ The build emits `TRACE_DEEP_DIAGNOSTIC_BUILD maximum=16384`. Only a validated de
 The authored actual x86 EFI gate requires16384 retired instructions/fetches/native entries, exact arithmetic/PC readback, no data transfers or exception, and input preservation. A separate externally clamped4096 binary must fail that16384 expectation through actual lower retirement, not a build failure or timeout. The same image separately exercises old4096 and64 budgets; normal firmware rejects the new selected config before guest entry.
 
 Original diagnostic execution follows the separately reviewed explicit CLI only after that authored gate. An earlier fault remains a real bounded stop; a budget stop is never called an unsupported opcode or full macOS startup. This feature does not enable the BP34 dynamic profile, mutable guest page tables, a normal SPTM provider, or guest Metal.
+
+Canonical integration selects Corebab7ac4 (the explicit parser plus UEFI software
+SHA-256 correction) and ISE0d722886. BP33 DT and BP34 dynamic-MMU consumers remain
+separate opt-in capabilities. The earlier Core development patch/ISE720 authored
+proof and original diagnostic retain their distinct binary/source identities.
+Final canonical builds and actual deep/lower-tier replay are separate evidence.

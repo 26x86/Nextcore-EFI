@@ -19,6 +19,7 @@ fn main() {
     let output = PathBuf::from(env::var_os("OUT_DIR").unwrap());
     let memory_provider = env::var_os("CARGO_FEATURE_ARM_JIT_MEMORY_PROVIDER").is_some();
     let stage1_probe = env::var_os("CARGO_FEATURE_ARM_JIT_STAGE1_PROBE").is_some();
+    let dynamic_probe = env::var_os("CARGO_FEATURE_ARM_JIT_DYNAMIC_PROBE").is_some();
     let mut shared_modules = String::new();
     for module in ["pauth", "platform"] {
         if module == "platform" && env::var_os("CARGO_FEATURE_ARM_JIT_TRACE").is_none() {
@@ -51,6 +52,17 @@ fn main() {
             ));
         }
     }
+    if dynamic_probe {
+        let source = runtime.join("memory_dynamic.rs");
+        println!("cargo:rerun-if-changed={}", source.display());
+        shared_modules.push_str(&format!(
+            "#[allow(dead_code)]\n#[path = {:?}]\nmod memory_dynamic;\n",
+            source
+                .canonicalize()
+                .expect("missing dynamic result ABI")
+                .to_string_lossy()
+        ));
+    }
     std::fs::write(output.join("jit_pauth.rs"), shared_modules)
         .expect("write shared runtime module paths");
     let compiler = env::var_os("NEXTCORE_CLANG").unwrap_or_else(|| "clang".into());
@@ -68,6 +80,9 @@ fn main() {
     }
     if stage1_probe {
         sources.push("memory_boot_v2.c");
+    }
+    if dynamic_probe {
+        sources.push("memory_dynamic.c");
     }
     for source in sources {
         let input = runtime.join(source);
@@ -102,6 +117,8 @@ fn main() {
         "memory_abi_v2.h",
         "memory_boot_v2.h",
         "memory_stage1.inc",
+        "memory_dynamic.h",
+        "memory_dynamic.inc",
     ] {
         println!("cargo:rerun-if-changed={}", runtime.join(header).display());
     }
