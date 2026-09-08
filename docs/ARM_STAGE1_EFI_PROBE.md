@@ -68,13 +68,13 @@ binary and failure receipt outside the module and retain the positive source.
 This is a wrong-mapping negative control, not an original-kernel modification
 or a claimed native decoder mutation.
 
-After parent integration, build and execute with:
+After parent integration, run from the parent checkout root:
 
 ```sh
-cargo build -p nextcore-efi --release --target x86_64-unknown-uefi \
+cargo build --locked --manifest-path nextcore/Cargo.toml -p nextcore-efi --release --target x86_64-unknown-uefi \
   --features arm-jit-stage1-probe --bin NXMMU
 python3 nextcore/crates/nextcore-efi/tools/verify_stage1_ovmf.py \
-  --efi-probe target/x86_64-unknown-uefi/release/NXMMU.efi \
+  --efi-probe nextcore/target/x86_64-unknown-uefi/release/NXMMU.efi \
   --output /path/to/new-stage1-replay
 ```
 
@@ -113,3 +113,5 @@ positive), `ovmf-negative-va-as-pa/report.json` (expected failure), exact comman
 records, source manifests, assembler receipt and reader tests. Root owns the
 final dependency pin and publication. This result demonstrates the stated fixed
 software profile only; normal macOS boot and target handoff remain unverified.
+
+Publication correction: the parent-root command explicitly selects nextcore/Cargo.toml and nextcore/target. This documentation change does not relabel the earlier isolated source/binary receipts.
