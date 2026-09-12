@@ -1,2 +1,3 @@
 * text=auto
 *.S text eol=lf
+docs/picker-gop-confirmation-20260912/* -text -whitespace
