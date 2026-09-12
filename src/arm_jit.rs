@@ -7,6 +7,8 @@ mod arm_pages;
 #[cfg(all(target_arch = "x86_64", feature = "arm-jit-trace"))]
 mod boot_framebuffer;
 mod firmware_io;
+#[cfg(all(target_arch = "x86_64", feature = "arm-jit-memory-observation"))]
+mod memory_observation;
 #[cfg(all(
     target_arch = "x86_64",
     any(feature = "arm-jit-probe", feature = "arm-jit-trace")
@@ -617,10 +619,20 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
     let mut memory_result = memory_boot::MemoryRunResultV1::default();
     #[cfg(feature = "arm-jit-memory-provider")]
     let (status, result_v2) = {
-        use nextcore_memory_service::{vf_memory_service_step, MemoryService};
+        use nextcore_memory_service::MemoryService;
         report("NXARMJIT: TRACE_MEMORY_PROVIDER abi=1 mode=m0-only");
-        let mut service = MemoryService::new(ram.bytes_mut(), trace.physical_base)
+        let service = MemoryService::new(ram.bytes_mut(), trace.physical_base)
             .map_err(|_| Status::INVALID_PARAMETER)?;
+        #[cfg(not(feature = "arm-jit-memory-observation"))]
+        let mut service = service;
+        #[cfg(feature = "arm-jit-memory-observation")]
+        let mut service = memory_observation::ObservedMemory::new(service);
+        #[cfg(feature = "arm-jit-memory-observation")]
+        let callback: nextcore_memory_service::abi::Callback = memory_observation::callback;
+        #[cfg(not(feature = "arm-jit-memory-observation"))]
+        let callback: nextcore_memory_service::abi::Callback =
+            nextcore_memory_service::vf_memory_service_step;
+        let owner = core::ptr::from_mut(&mut service).cast();
         // SAFETY: service owns the only mutable RAM borrow until this synchronous
         // call returns. Its address stays stable and callbacks cannot reenter.
         // Code pages, result, options, initial registers and protection storage
@@ -641,11 +653,24 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
                 initial.as_ptr(),
                 pauth_step,
                 &options,
-                vf_memory_service_step,
-                (&mut service as *mut MemoryService<'_>).cast(),
+                callback,
+                owner,
                 &mut memory_result,
             )
         };
+        #[cfg(feature = "arm-jit-memory-observation")]
+        {
+            report(&format!(
+                "NXARMJIT: TRACE_MEMORY_OBSERVATION total={} retained={}",
+                service.total(),
+                service.entries().count()
+            ));
+            for entry in service.entries() {
+                report(&format!("NXARMJIT: TRACE_MEMORY_REQUEST sequence={} operation={} pc={:#x} address={:#x} width={} count={} result={}",
+                    entry.sequence, entry.operation, entry.pc, entry.address,
+                    entry.width, entry.count, entry.result));
+            }
+        }
         (status, memory_result.execution)
     };
     #[cfg(not(feature = "arm-jit-memory-provider"))]

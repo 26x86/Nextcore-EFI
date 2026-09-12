@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 2970,
-      "sha256": "911a7915d4a22501ec98420c8f00142622a589db7519d260ecb9068c1c3f8a19"
+      "bytes": 3027,
+      "sha256": "133b53c03dceaef1945bd2203cafc735ab3d2bdfa9b97d86abdd04e981988c4b"
     },
     {
       "path": "LICENSE.txt",
@@ -72,6 +72,11 @@
       "sha256": "236a310904533691abdcef29db8e173a1770197a7ff4cd7d57d17faee132da3b"
     },
     {
+      "path": "docs/MEMORY_OBSERVATION.md",
+      "bytes": 3104,
+      "sha256": "626443a1aceaa38f575f21ab4254e4468fae23f08ce1e616cafa6f1d5a566f5f"
+    },
+    {
       "path": "docs/PICKER_DISPLAY_FALLBACK.md",
       "bytes": 5112,
       "sha256": "ee343c094892b94ad8abeab72a3ab0f93b335772e9b9ba36319cb27d56ebafbd"
@@ -114,7 +119,7 @@
     {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "6cb035a51da5dd53a41a643d9a0663ab3a3eb8fdcc64c3d1f91428c3a472e2bf"
+      "sha256": "18e26bbb9a9d44fad056b21ad91d6b69352246732e7e24720f28e203d6de9f5d"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -153,8 +158,8 @@
     },
     {
       "path": "src/arm_jit.rs",
-      "bytes": 29510,
-      "sha256": "15aa598f53e100adebd2c421ee14603230aaa20cfed9d9beb08f214f5a491cfc"
+      "bytes": 30755,
+      "sha256": "830e024be672c1b6cffa1eba099e0172560923429bbf071bfe502b7e676d7673"
     },
     {
       "path": "src/arm_pages.rs",
@@ -240,6 +245,11 @@
       "path": "src/main.rs",
       "bytes": 12094,
       "sha256": "3af1c04a6c98d8e051c189877bb63f3f6b817ba51a97329015cb338b0cf38693"
+    },
+    {
+      "path": "src/memory_observation.rs",
+      "bytes": 8740,
+      "sha256": "3ffed8c6228ff1fc8db4ab5977ce9921543b48d1a48180cb39b3155c996fbee0"
     },
     {
       "path": "src/mmu_probe.rs",
