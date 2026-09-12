@@ -7,12 +7,12 @@
   "crate": "nextcore-efi",
   "description": "UEFI boot selection, platform services and explicit APFS Jumpstart driver loading.",
   "development": {
-    "branch": "codex/deep-arm-trace",
+    "branch": "codex/physical-display-fallback-20260912",
     "base_commit": "64a2d4ce432c2f5ccd300728309556c898317436",
-    "updated_utc": "2026-09-08T20:40:00.935184+00:00",
+    "updated_utc": "2026-09-12T19:38:07.380345+00:00",
     "dependency_revisions": {
-      "https://github.com/26x86/Nextcore-Core": "bab7ac453a0f8ceab558eca1ad069bcfaf139776",
-      "https://github.com/26x86/Nextcore-ISE": "0d722886753268ec366f068823c37ea10132fb43"
+      "https://github.com/26x86/Nextcore-Core": "4ae6e9aff31be93cf570b56975b711902f3fb7e7",
+      "https://github.com/26x86/Nextcore-ISE": "3a0ed3dd39f78fc3c55415f898d7faa8f34699c2"
     },
     "integration": "Git submodule with an immutable gitlink; workspace source patches for local development"
   },

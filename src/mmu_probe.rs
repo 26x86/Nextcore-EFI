@@ -12,9 +12,9 @@ use core::ffi::c_void;
 use firmware_io::report;
 use nextcore_memory_service::{
     abi_v2,
-    stage1::{vf_memory_service_step_v2, MemoryServiceV2},
+    stage1::{MemoryServiceV2, vf_memory_service_step_v2},
 };
-use uefi::{entry, Status};
+use uefi::{Status, entry};
 
 #[global_allocator]
 static ALLOCATOR: uefi::allocator::Allocator = uefi::allocator::Allocator;
@@ -67,6 +67,10 @@ enum Kind {
     },
     Fetch {
         permission: bool,
+    },
+    Unaligned {
+        store: bool,
+        failure: u8,
     },
 }
 #[derive(Clone, Copy)]
@@ -369,6 +373,40 @@ fn run_case(case: Case, granule: usize, upper: bool) -> Result<(), Status> {
             expected_fsc = if permission { 15 } else { 7 };
             expected_far = va;
         }
+        Kind::Unaligned { store, failure } => {
+            // Split one ordinary 8-byte transfer across nonadjacent pages.
+            initial[0] = data_va + granule as u64 - 4;
+            expected_registers = initial;
+            instructions.push(if store { 0xf9000001 } else { 0xf9400001 });
+            second_descriptor = failure_descriptor(failure, second_descriptor);
+            if failure == 0 {
+                if !store {
+                    expected_registers[1] = SEED;
+                }
+            } else {
+                expected_retired = 1;
+                expected_completed = 0;
+                failure_load = !store;
+                expected_far = data_va + granule as u64;
+                if failure <= 3 {
+                    expected_status = 17;
+                    expected_reply = abi_v2::GUEST_FAULT;
+                    expected_fsc = match failure {
+                        1 => 7,
+                        2 => 11,
+                        _ => 15,
+                    };
+                } else {
+                    expected_status = 4;
+                    expected_provider = if failure == 4 { 5 } else { 1 };
+                    expected_reply = if failure == 4 {
+                        abi_v2::UNAVAILABLE
+                    } else {
+                        abi_v2::UNSUPPORTED
+                    };
+                }
+            }
+        }
     }
     instructions.push(HLT);
     for (index, word) in instructions.iter().enumerate() {
@@ -378,6 +416,10 @@ fn run_case(case: Case, granule: usize, upper: bool) -> Result<(), Status> {
     let split = 5 * granule - 8;
     ram.bytes_mut()[split..split + 8].copy_from_slice(&SEED.to_le_bytes());
     ram.bytes_mut()[9 * granule..9 * granule + 8].copy_from_slice(&VALUE.to_le_bytes());
+    if matches!(case.kind, Kind::Unaligned { .. }) {
+        ram.bytes_mut()[5 * granule - 4..5 * granule].copy_from_slice(&SEED.to_le_bytes()[..4]);
+        ram.bytes_mut()[9 * granule..9 * granule + 4].copy_from_slice(&SEED.to_le_bytes()[4..]);
+    }
     let mut expected_ram = ram.bytes_mut().to_vec();
     match case.kind {
         Kind::Scalar {
@@ -387,6 +429,13 @@ fn run_case(case: Case, granule: usize, upper: bool) -> Result<(), Status> {
         Kind::Pair { failure: 0, .. } => {
             expected_ram[split..split + 8].copy_from_slice(&PAIR0.to_le_bytes());
             expected_ram[9 * granule..9 * granule + 8].copy_from_slice(&PAIR1.to_le_bytes());
+        }
+        Kind::Unaligned {
+            store: true,
+            failure: 0,
+        } => {
+            expected_ram[5 * granule - 4..5 * granule].copy_from_slice(&VALUE.to_le_bytes()[..4]);
+            expected_ram[9 * granule..9 * granule + 4].copy_from_slice(&VALUE.to_le_bytes()[4..]);
         }
         _ => {}
     }
@@ -412,8 +461,16 @@ fn run_case(case: Case, granule: usize, upper: bool) -> Result<(), Status> {
     let controls = abi_v2::Controls {
         abi_version: 2,
         struct_size: 80,
-        profile: 1,
-        sctlr: 0x30d00803,
+        profile: if matches!(case.kind, Kind::Unaligned { .. }) {
+            abi_v2::PROFILE_FIXED_NC_UNALIGNED
+        } else {
+            abi_v2::PROFILE_FIXED_NC
+        },
+        sctlr: if matches!(case.kind, Kind::Unaligned { .. }) {
+            0x30d00801
+        } else {
+            0x30d00803
+        },
         ttbr0: TABLE_PA,
         ttbr1: TABLE_PA + granule as u64,
         tcr,
@@ -529,17 +586,45 @@ fn run_case(case: Case, granule: usize, upper: bool) -> Result<(), Status> {
         && (expected_reply == abi_v2::OK || base.last_address == expected_far)
         && ram.bytes_mut() == expected_ram
         && tables.bytes_mut() == tables_before;
-    report(&format!("NXMMU: CASE name={} granule={} upper={} status={} provider={} retired={} blocks={} fetch={} data={} completed={} esr={:#x} far={:#x} reply={} fsc={} pass={}",
-        case.name,granule,upper,status,base.provider_status,state.retired,state.compiled_blocks,
-        base.fetch_requests,base.data_requests,base.completed_data_operations,execution.esr,
-        base.guest_far,result.last_reply.result,result.last_reply.fsc,passed));
+    report(&format!(
+        "NXMMU: CASE name={} granule={} upper={} status={} provider={} retired={} blocks={} fetch={} data={} completed={} esr={:#x} far={:#x} reply={} fsc={} pass={}",
+        case.name,
+        granule,
+        upper,
+        status,
+        base.provider_status,
+        state.retired,
+        state.compiled_blocks,
+        base.fetch_requests,
+        base.data_requests,
+        base.completed_data_operations,
+        execution.esr,
+        base.guest_far,
+        result.last_reply.result,
+        result.last_reply.fsc,
+        passed
+    ));
     if !passed {
-        report(&format!("NXMMU: MISMATCH_ABI version={} size={} fault={:#x} elr={:#x} spsr={:#x} sp={:#x} last={:#x} level={} context={} restore={}",
-            base.abi_version,base.struct_size,state.fault_instruction,execution.elr,
-            execution.spsr,execution.sp,base.last_address,result.last_reply.level,
-            result.last_reply.context,restored));
-        report(&format!("NXMMU: MISMATCH pc={:#x} expected_pc={:#x} registers={actual_registers:x?} expected={expected_registers:x?} ram={} tables={}",
-            state.pc,expected_pc,ram.bytes_mut()==expected_ram,tables.bytes_mut()==tables_before));
+        report(&format!(
+            "NXMMU: MISMATCH_ABI version={} size={} fault={:#x} elr={:#x} spsr={:#x} sp={:#x} last={:#x} level={} context={} restore={}",
+            base.abi_version,
+            base.struct_size,
+            state.fault_instruction,
+            execution.elr,
+            execution.spsr,
+            execution.sp,
+            base.last_address,
+            result.last_reply.level,
+            result.last_reply.context,
+            restored
+        ));
+        report(&format!(
+            "NXMMU: MISMATCH pc={:#x} expected_pc={:#x} registers={actual_registers:x?} expected={expected_registers:x?} ram={} tables={}",
+            state.pc,
+            expected_pc,
+            ram.bytes_mut() == expected_ram,
+            tables.bytes_mut() == tables_before
+        ));
         return Err(Status::COMPROMISED_DATA);
     }
     Ok(())
@@ -606,6 +691,39 @@ fn main() -> Status {
             cases.push(Case {
                 name: "fetch-permission",
                 kind: Kind::Fetch { permission: true },
+            });
+            for (failure, store, load) in [
+                (0, "unaligned-store", "unaligned-load"),
+                (
+                    1,
+                    "unaligned-store-translation",
+                    "unaligned-load-translation",
+                ),
+                (2, "unaligned-store-af", "unaligned-load-af"),
+                (4, "unaligned-store-backing", "unaligned-load-backing"),
+                (5, "unaligned-store-attribute", "unaligned-load-attribute"),
+            ] {
+                cases.push(Case {
+                    name: store,
+                    kind: Kind::Unaligned {
+                        store: true,
+                        failure,
+                    },
+                });
+                cases.push(Case {
+                    name: load,
+                    kind: Kind::Unaligned {
+                        store: false,
+                        failure,
+                    },
+                });
+            }
+            cases.push(Case {
+                name: "unaligned-store-permission",
+                kind: Kind::Unaligned {
+                    store: true,
+                    failure: 3,
+                },
             });
             for case in cases {
                 if let Err(error) = run_case(case, granule, upper) {

@@ -1,4 +1,5 @@
 use alloc::{vec, vec::Vec};
+use core::fmt::Write;
 use uefi::proto::{
     console::serial::Serial,
     media::file::{File, FileAttribute, FileInfo, FileMode},
@@ -6,7 +7,9 @@ use uefi::proto::{
 use uefi::{boot, CStr16, Status};
 
 pub fn report(message: &str) {
-    uefi::println!("{message}");
+    uefi::system::with_stdout(|out| {
+        let _ = writeln!(out, "{message}");
+    });
     if let Ok(handle) = boot::get_handle_for_protocol::<Serial>() {
         if let Ok(mut serial) = boot::open_protocol_exclusive::<Serial>(handle) {
             let _ = serial.write_exact(message.as_bytes());

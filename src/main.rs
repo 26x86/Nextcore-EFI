@@ -2,9 +2,11 @@
 #![no_main]
 
 extern crate alloc;
+mod configuration_recovery;
+mod watchdog;
 
-mod linux_handoff;
 mod exit_data;
+mod linux_handoff;
 mod picker;
 // Shared adapters also expose diagnostic NXAPFS entry points unused by BOOTX64.
 #[cfg(feature = "apfs-jumpstart")]
@@ -27,6 +29,7 @@ use alloc::{
     vec,
     vec::Vec,
 };
+use core::fmt::Write;
 use nextcore_core::boot_config::{parse_boot_menu, BootTarget};
 use uefi::boot::LoadImageSource;
 use uefi::mem::memory_map::MemoryType;
@@ -39,7 +42,7 @@ use uefi::proto::device_path::{
 use uefi::proto::loaded_image::LoadedImage;
 use uefi::proto::media::file::{File, FileAttribute, FileInfo, FileMode};
 use uefi::proto::BootPolicy;
-use uefi::{boot, cstr16, CString16};
+use uefi::{boot, CString16};
 
 // A corrupt size field must not consume the firmware's available memory.
 const MAX_CONFIG_BYTES: u64 = 1024 * 1024;
@@ -51,42 +54,74 @@ static ALLOCATOR: uefi::allocator::Allocator = uefi::allocator::Allocator;
 fn efi_main() -> Status {
     uefi::helpers::init().expect("failed to initialize UEFI services");
 
+    match watchdog::disable() {
+        Ok(()) => report("NEXTCORE: WATCHDOG_DISABLED"),
+        Err(status) => report(&format!(
+            "NEXTCORE: WATCHDOG_DISABLE_FAILED status={status:?}"
+        )),
+    }
     report("NextCore");
     report("NEXTCORE: EFI_ENTRY");
-    match read_config() {
-        Ok(bytes) => {
-            report(&format!("NEXTCORE: CONFIG_READ bytes={}", bytes.len()));
-            match parse_boot_menu(&bytes) {
-                Ok(menu) if !menu.entries.is_empty() => {
-                    report("NEXTCORE: CONFIG_PARSED");
-                    let index = if menu.show_picker {
-                        match picker::choose(&menu.entries, report) {
-                            Ok(Some(index)) => index,
-                            Ok(None) => return Status::ABORTED,
-                            Err(status) => {
-                                report(&format!("NEXTCORE: PICKER_ERROR status={status:?}"));
+    loop {
+        let (status, reason) = match read_config() {
+            Ok(bytes) => {
+                report(&format!("NEXTCORE: CONFIG_READ bytes={}", bytes.len()));
+                match parse_boot_menu(&bytes) {
+                    Ok(menu) if !menu.entries.is_empty() => {
+                        report("NEXTCORE: CONFIG_PARSED");
+                        if !menu.show_picker {
+                            return chainload(menu.entries[0].target.clone());
+                        }
+                        loop {
+                            let index = match picker::choose(&menu.entries, report) {
+                                Ok(Some(index)) => index,
+                                Ok(None) => return Status::ABORTED,
+                                Err(status) => {
+                                    report(&format!("NEXTCORE: PICKER_ERROR status={status:?}"));
+                                    return status;
+                                }
+                            };
+                            let status = chainload(menu.entries[index].target.clone());
+                            if !status.is_error() {
                                 return status;
                             }
+                            report(&format!(
+                                "NEXTCORE: BOOT_FAILED index={index} status={status:?}"
+                            ));
+                            report("Boot failed. Press any key to return to the boot menu.");
+                            if let Err(error) = acknowledge_failure() {
+                                report(&format!("NEXTCORE: RECOVERY_INPUT_ERROR status={error:?}"));
+                                return error;
+                            }
+                            report("NEXTCORE: PICKER_RETRY");
                         }
-                    } else { 0 };
-                    let target = menu.entries[index].target.clone();
-                    drop(menu);
-                    chainload(target)
-                }
-                Ok(_) => {
-                    report("No enabled boot entries");
-                    report("NEXTCORE: NO_BOOT_TARGET");
-                    Status::NOT_FOUND
-                }
-                Err(error) => {
-                    report(&format!("NEXTCORE: CONFIG_INVALID reason={error}"));
-                    Status::INVALID_PARAMETER
+                    }
+                    Ok(_) => {
+                        report("No enabled boot entries");
+                        report("NEXTCORE: NO_BOOT_TARGET");
+                        (Status::NOT_FOUND, String::from("No enabled boot entries"))
+                    }
+                    Err(error) => {
+                        report(&format!("NEXTCORE: CONFIG_INVALID reason={error}"));
+                        (
+                            Status::INVALID_PARAMETER,
+                            format!("Invalid configuration: {error}"),
+                        )
+                    }
                 }
             }
-        }
-        Err(status) => {
-            report(&format!("NEXTCORE: CONFIG_ERROR status={status:?}"));
-            status
+            Err((status, reason)) => {
+                report(&format!("NEXTCORE: CONFIG_ERROR status={status:?}"));
+                (status, format!("{reason}: {status:?}"))
+            }
+        };
+        match configuration_recovery::choose(&reason, report) {
+            Ok(configuration_recovery::Action::Retry) => continue,
+            Ok(configuration_recovery::Action::Exit) => return status,
+            Err(error) => {
+                report(&format!("NEXTCORE: CONFIG_RECOVERY_ERROR status={error:?}"));
+                return error;
+            }
         }
     }
 }
@@ -245,7 +280,10 @@ fn load_target(target: &BootTarget) -> core::result::Result<Handle, Status> {
 }
 
 fn report(message: &str) {
-    uefi::println!("{message}");
+    // Diagnostic output must not turn an optional console failure into panic.
+    uefi::system::with_stdout(|out| {
+        let _ = writeln!(out, "{message}");
+    });
     // Use the public Serial I/O protocol, without assuming a UART I/O address.
     if let Ok(handle) = boot::get_handle_for_protocol::<Serial>() {
         if let Ok(mut serial) = boot::open_protocol_exclusive::<Serial>(handle) {
@@ -255,32 +293,61 @@ fn report(message: &str) {
     }
 }
 
-fn read_config() -> core::result::Result<Vec<u8>, Status> {
-    let mut fs = boot::get_image_file_system(boot::image_handle()).map_err(|e| e.status())?;
-    let mut root = fs.open_volume().map_err(|e| e.status())?;
+fn acknowledge_failure() -> core::result::Result<(), Status> {
+    loop {
+        let mut events = [uefi::system::with_stdin(|input| input.wait_for_key_event())
+            .map_err(|error| error.status())?];
+        boot::wait_for_event(&mut events).map_err(|error| error.status())?;
+        if uefi::system::with_stdin(|input| input.read_key())
+            .map_err(|error| error.status())?
+            .is_some()
+        {
+            return Ok(());
+        }
+    }
+}
+
+fn read_config() -> core::result::Result<Vec<u8>, (Status, &'static str)> {
+    let mut fs = boot::get_image_file_system(boot::image_handle())
+        .map_err(|e| (e.status(), "Loaded image file system unavailable"))?;
+    let mut root = fs
+        .open_volume()
+        .map_err(|e| (e.status(), "Cannot open loaded image volume"))?;
     let handle = root
         .open(
-            cstr16!("\\EFI\\OC\\config.plist"),
+            configuration_recovery::CONFIG_PATH,
             FileMode::Read,
             FileAttribute::empty(),
         )
-        .map_err(|e| e.status())?;
-    let mut file = handle
-        .into_regular_file()
-        .ok_or(Status::INVALID_PARAMETER)?;
+        .map_err(|e| (e.status(), "Cannot open configuration file"))?;
+    let mut file = handle.into_regular_file().ok_or((
+        Status::INVALID_PARAMETER,
+        "Configuration path is not a regular file",
+    ))?;
     let size = file
         .get_boxed_info::<FileInfo>()
-        .map_err(|e| e.status())?
+        .map_err(|e| (e.status(), "Cannot read configuration file information"))?
         .file_size();
-    if size == 0 || size > MAX_CONFIG_BYTES {
-        return Err(Status::BAD_BUFFER_SIZE);
+    if size == 0 {
+        return Err((Status::BAD_BUFFER_SIZE, "Configuration file is empty"));
+    }
+    if size > MAX_CONFIG_BYTES {
+        return Err((
+            Status::BAD_BUFFER_SIZE,
+            "Configuration exceeds the 1 MiB limit",
+        ));
     }
     let mut bytes = vec![0; size as usize];
     let mut position = 0;
     while position < bytes.len() {
-        let count = file.read(&mut bytes[position..]).map_err(|e| e.status())?;
+        let count = file
+            .read(&mut bytes[position..])
+            .map_err(|e| (e.status(), "Cannot read configuration contents"))?;
         if count == 0 {
-            return Err(Status::END_OF_FILE);
+            return Err((
+                Status::END_OF_FILE,
+                "Configuration ended before its reported size",
+            ));
         }
         position += count;
     }
