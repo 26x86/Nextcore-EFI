@@ -8,7 +8,7 @@ publish = false
 uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
 nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "4ae6e9aff31be93cf570b56975b711902f3fb7e7", default-features = false }
 uefi-raw = { version = "0.16", optional = true }
-nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "00243e65b934abb79c87719cd4ef06860c8489f2", optional = true }
+nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "401619acb1232a366af776bc1ecbfd04eb01631f", optional = true }
 
 [features]
 config-recovery-probe = ["dep:uefi-raw"]
@@ -145,7 +145,7 @@ bench = false
 required-features = ["apfs-jumpstart", "test-child"]
 
 [build-dependencies]
-nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "00243e65b934abb79c87719cd4ef06860c8489f2" }
+nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "401619acb1232a366af776bc1ecbfd04eb01631f" }
 
 [[bin]]
 name = "NXWATCHDOG"
