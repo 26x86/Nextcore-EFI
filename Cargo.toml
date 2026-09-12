@@ -8,7 +8,7 @@ publish = false
 uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
 nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "041ff769096bad303ebb85b98dfb083e7ea817da", default-features = false }
 uefi-raw = { version = "0.16", optional = true }
-nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "002d2eff8b262e728224b9b039b9ffe168ed4586", optional = true }
+nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "263dfb47b35a968161381b3a1145f1b23c1e35b4", optional = true }
 
 [features]
 picker-fallback-probe = ["dep:uefi-raw"]
@@ -30,6 +30,8 @@ arm-jit-deep-trace = ["arm-jit-tiered-trace", "arm-jit-memory-provider"]
 arm-jit-long-trace = ["arm-jit-deep-trace"]
 arm-jit-memory-provider = ["arm-jit-trace", "arm-jit-probe", "dep:nextcore-memory-service"]
 arm-jit-memory-observation = ["arm-jit-memory-provider"]
+arm-jit-protection-observation = ["arm-jit-trace"]
+arm-jit-provider-uncached = ["arm-jit-memory-provider"]
 arm-jit-stage1-probe = ["arm-jit-memory-provider"]
 arm-jit-dt-probe = ["arm-jit-stage1-probe"]
 arm-jit-dynamic-probe = ["arm-jit-stage1-probe"]
@@ -131,4 +133,4 @@ bench = false
 required-features = ["apfs-jumpstart", "test-child"]
 
 [build-dependencies]
-nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "002d2eff8b262e728224b9b039b9ffe168ed4586" }
+nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "263dfb47b35a968161381b3a1145f1b23c1e35b4" }
