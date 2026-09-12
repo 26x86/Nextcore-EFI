@@ -459,11 +459,18 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
         report("NXARMJIT: TRACE_TIERED_DIAGNOSTIC maximum=4096");
         nextcore_core::boot_config::parse_arm64_trace_configuration_with_limit(config, 4096)
     };
-    #[cfg(feature = "arm-jit-deep-trace")]
+    #[cfg(all(feature = "arm-jit-deep-trace", not(feature = "arm-jit-long-trace")))]
     let parsed = {
         report("NXARMJIT: TRACE_TIERED_DIAGNOSTIC maximum=4096");
         report("NXARMJIT: TRACE_DEEP_DIAGNOSTIC_BUILD maximum=16384");
         nextcore_core::boot_config::parse_arm64_trace_configuration_with_deep_tier(config)
+    };
+    #[cfg(feature = "arm-jit-long-trace")]
+    let parsed = {
+        report("NXARMJIT: TRACE_TIERED_DIAGNOSTIC maximum=4096");
+        report("NXARMJIT: TRACE_DEEP_DIAGNOSTIC_BUILD maximum=16384");
+        report("NXARMJIT: TRACE_LONG_DIAGNOSTIC_BUILD maximum=65536");
+        nextcore_core::boot_config::parse_arm64_trace_configuration_with_long_tier(config)
     };
     let trace = parsed.map_err(|error| {
         report(&format!("NXARMJIT: TRACE_CONFIG_INVALID reason={error}"));
@@ -473,6 +480,10 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
     if trace.instruction_budget == 16384 {
         // The distinct Core parser requires the exact explicit selector/profile.
         report("NXARMJIT: TRACE_DEEP_DIAGNOSTIC_SELECTED tier=16384");
+    }
+    #[cfg(feature = "arm-jit-long-trace")]
+    if trace.instruction_budget == 65536 {
+        report("NXARMJIT: TRACE_LONG_DIAGNOSTIC_SELECTED tier=65536");
     }
     let path = CString16::try_from(trace.device_tree_path.as_str())
         .map_err(|_| Status::INVALID_PARAMETER)?;

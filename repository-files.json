@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 3027,
-      "sha256": "133b53c03dceaef1945bd2203cafc735ab3d2bdfa9b97d86abdd04e981988c4b"
+      "bytes": 3071,
+      "sha256": "14cc63ec42cb584418a663e00a4736fb3734b56dc8b8910c7a25c85057803b66"
     },
     {
       "path": "LICENSE.txt",
@@ -119,7 +119,7 @@
     {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "18e26bbb9a9d44fad056b21ad91d6b69352246732e7e24720f28e203d6de9f5d"
+      "sha256": "dee2adce65432463296574ffc1a62e5346ea8a9adb05b655cd8d71da4aaf2331"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -158,8 +158,8 @@
     },
     {
       "path": "src/arm_jit.rs",
-      "bytes": 30755,
-      "sha256": "830e024be672c1b6cffa1eba099e0172560923429bbf071bfe502b7e676d7673"
+      "bytes": 31328,
+      "sha256": "70db4a1f723f8bfd83870d89294d58963d7e0f5994b74cc016a787a57285b2c9"
     },
     {
       "path": "src/arm_pages.rs",
