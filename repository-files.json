@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 3779,
-      "sha256": "609879a361f4e85d8e5603d256e40f2aff3527c76c61bdc0720e36fb6e6ff563"
+      "bytes": 3908,
+      "sha256": "b60c69c4b1d4e4facfd5f2e5ba8f01d69bc7d0f74bed6e7f2ad7112ca9811bd5"
     },
     {
       "path": "LICENSE.txt",
@@ -127,6 +127,11 @@
       "sha256": "ac9574aaf43bfb7b764f5ba48e58cfaac91a17ac5e493acb5aaf2c1481f854ee"
     },
     {
+      "path": "docs/fixtures/hierarchy_scalar.S",
+      "bytes": 274,
+      "sha256": "195af7201a437057beaeb08c82b318110f6bd04d116616e0c128495da19a20c9"
+    },
+    {
       "path": "docs/fixtures/stage1_pair.S",
       "bytes": 114,
       "sha256": "8e1a62d2a191dfc6576a70829be21e52bc30686a3a25751f1a13f4dd321c7060"
@@ -149,7 +154,7 @@
     {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "6bde5e80668cd06824440a6af361cc81e0a24f5f3966ec0e504bd29e12ec01b9"
+      "sha256": "1ac25e3e8bf0d1b5d5ff1ac3201a0e2944ed87beedce4f7e28806e0773ce0c6e"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -262,6 +267,11 @@
       "sha256": "305705ec2f9cbd67ad58037cc451dfc41035c2c3e2ae4f8f50e3cfe7679ca8dd"
     },
     {
+      "path": "src/hierarchy_probe.rs",
+      "bytes": 10210,
+      "sha256": "c2c2ec63492134fca605d87c739c75462dfba261bd96debb76fecc8f7a8ce100"
+    },
+    {
       "path": "src/kc.rs",
       "bytes": 3637,
       "sha256": "3aea2b267483ded121577274f1a3968e9a8d5de99059feeac5022ea50d36a2c1"
@@ -370,6 +380,11 @@
       "path": "tools/verify_dynamic_ovmf.py",
       "bytes": 18301,
       "sha256": "80663e056c172e2f60c770c5dd76637038fb8080f8b4230ff66e986a76977931"
+    },
+    {
+      "path": "tools/verify_hierarchy_ovmf.py",
+      "bytes": 9883,
+      "sha256": "e7c1fa02aa43f1ef572b8be6f87b2e13f8187a213b068e23f2e851c18d768068"
     },
     {
       "path": "tools/verify_picker_fallback_ovmf.py",
