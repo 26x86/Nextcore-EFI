@@ -8,7 +8,7 @@ publish = false
 uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
 nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "4ae6e9aff31be93cf570b56975b711902f3fb7e7", default-features = false }
 uefi-raw = { version = "0.16", optional = true }
-nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "5cd1e44413958450875392d8a431dba15bb76f2e", optional = true }
+nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "feb09b5f1ef5eecce60120ba39e624bb020bd071", optional = true }
 
 [features]
 config-recovery-probe = ["dep:uefi-raw"]
@@ -145,7 +145,7 @@ bench = false
 required-features = ["apfs-jumpstart", "test-child"]
 
 [build-dependencies]
-nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "5cd1e44413958450875392d8a431dba15bb76f2e" }
+nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "feb09b5f1ef5eecce60120ba39e624bb020bd071" }
 
 [[bin]]
 name = "NXWATCHDOG"
@@ -153,3 +153,10 @@ path = "src/watchdog_probe.rs"
 test = false
 bench = false
 required-features = ["watchdog-probe"]
+
+[[bin]]
+name = "NXASID"
+path = "src/asid_probe.rs"
+test = false
+bench = false
+required-features = ["arm-jit-stage1-probe"]
