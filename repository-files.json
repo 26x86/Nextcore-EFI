@@ -129,7 +129,7 @@
     {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "531a0a1ff17b423a0683bdb13798f457863d3c46135fdff45811b34857c77708"
+      "sha256": "56d6e2c6ce626729e72482c98cade57c09d545e5099dcfe2ec47e1d50d31e85e"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -174,7 +174,7 @@
     {
       "path": "src/arm_pages.rs",
       "bytes": 5113,
-      "sha256": "f07702608357e34e5078a98b095a36fb280b9b66bd1364fd300def89260b3022"
+      "sha256": "049b9d32b2129434d955b216e49d9785aed16aa439601f46f8811070b8ec1624"
     },
     {
       "path": "src/arm_transition.S",
@@ -219,7 +219,7 @@
     {
       "path": "src/firmware_io.rs",
       "bytes": 1584,
-      "sha256": "a7ab408c7bb1f14a0f04074fef18867a5759bd53d3e2576a15341236c945a78e"
+      "sha256": "16dfd60dfb4f6a67c58aa77f8aaedea404778fe57b9c6d703bc1ce3470dcae0f"
     },
     {
       "path": "src/hal_tables.rs",
