@@ -101,6 +101,13 @@ fn main() {
                 "-Werror",
                 "-c",
             ])
+            .args(
+                if env::var_os("CARGO_FEATURE_ARM_JIT_PROVIDER_UNCACHED").is_some() {
+                    &["-DNEXTCORE_DISABLE_PROVIDER_CACHE"][..]
+                } else {
+                    &[][..]
+                },
+            )
             .arg(&input)
             .arg("-o")
             .arg(&object));

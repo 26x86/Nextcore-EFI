@@ -443,6 +443,41 @@ fn run_probe(source: &[u8], arguments: &str, pac: bool) -> Result<(), Status> {
     Ok(())
 }
 
+#[cfg(all(target_arch = "x86_64", feature = "arm-jit-protection-observation"))]
+struct ProtectionObservation {
+    context: *mut core::ffi::c_void,
+    writable: u64,
+    executable: u64,
+    failures: u64,
+}
+
+#[cfg(all(target_arch = "x86_64", feature = "arm-jit-protection-observation"))]
+unsafe extern "C" fn observed_protect(
+    address: *mut core::ffi::c_void,
+    bytes: usize,
+    executable: i32,
+    owner: *mut core::ffi::c_void,
+) -> i32 {
+    if owner.is_null() || !owner.cast::<ProtectionObservation>().is_aligned() {
+        return -1;
+    }
+    // SAFETY: run_trace retains this uniquely borrowed record and its separate
+    // firmware context throughout the synchronous call; callbacks cannot reenter.
+    let observation = unsafe { &mut *owner.cast::<ProtectionObservation>() };
+    match executable {
+        0 => observation.writable = observation.writable.saturating_add(1),
+        1 => observation.executable = observation.executable.saturating_add(1),
+        _ => {}
+    }
+    // SAFETY: forward the original allocation and live firmware context exactly
+    // once. The underlying callback validates size, alignment and permissions.
+    let status = unsafe { vf_efi_jit_protect(address, bytes, executable, observation.context) };
+    if status != 0 {
+        observation.failures = observation.failures.saturating_add(1);
+    }
+    status
+}
+
 /// Explicit incomplete SPTM cold-entry diagnostic for caller-supplied kernels.
 /// No SPTM argument/service or runtime platform DT is provisioned. A returned
 /// guest halt/fault/budget is recorded, never converted into OS boot.
@@ -592,6 +627,32 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
     {
         return Err(Status::UNSUPPORTED);
     }
+    #[cfg(feature = "arm-jit-protection-observation")]
+    let mut observation = ProtectionObservation {
+        context: opaque,
+        writable: 0,
+        executable: 0,
+        failures: 0,
+    };
+    let protect_callback: unsafe extern "C" fn(
+        *mut core::ffi::c_void,
+        usize,
+        i32,
+        *mut core::ffi::c_void,
+    ) -> i32 = {
+        #[cfg(feature = "arm-jit-protection-observation")]
+        {
+            observed_protect
+        }
+        #[cfg(not(feature = "arm-jit-protection-observation"))]
+        {
+            vf_efi_jit_protect
+        }
+    };
+    #[cfg(feature = "arm-jit-protection-observation")]
+    let protect_owner = core::ptr::from_mut(&mut observation).cast();
+    #[cfg(not(feature = "arm-jit-protection-observation"))]
+    let protect_owner = opaque;
     unsafe extern "C" fn pauth_step(context: *mut core::ffi::c_void, word: u32) -> i32 {
         unsafe { pauth::vf_preos_pauth_step(context.cast(), word) }
     }
@@ -659,8 +720,8 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
                 code.bytes_mut().as_mut_ptr(),
                 code.bytes(),
                 trace.instruction_budget,
-                vf_efi_jit_protect,
-                opaque,
+                protect_callback,
+                protect_owner,
                 initial.as_ptr(),
                 pauth_step,
                 &options,
@@ -698,8 +759,8 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
                 code.bytes_mut().as_mut_ptr(),
                 code.bytes(),
                 trace.instruction_budget,
-                vf_efi_jit_protect,
-                opaque,
+                protect_callback,
+                protect_owner,
                 initial.as_ptr(),
                 pauth_step,
                 &options,
@@ -709,7 +770,13 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
         (status, result_v2)
     };
     let result = &result_v2.base;
-    let restore = unsafe { vf_efi_jit_protect(code.base() as *mut _, code.bytes(), 0, opaque) };
+    let restore =
+        unsafe { protect_callback(code.base() as *mut _, code.bytes(), 0, protect_owner) };
+    #[cfg(feature = "arm-jit-protection-observation")]
+    report(&format!(
+        "NXARMJIT: TRACE_PROTECTION_CALLS writable={} executable={} failures={} includes_restore=true",
+        observation.writable, observation.executable, observation.failures
+    ));
     report(&format!(
         "NXARMJIT: TRACE_RETURN status={status} retired={} pc={:#x} blocks={} instruction={:#x}",
         result.retired, result.pc, result.compiled_blocks, result.fault_instruction
