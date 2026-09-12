@@ -2,6 +2,7 @@
 #![no_main]
 
 extern crate alloc;
+mod watchdog;
 
 mod linux_handoff;
 mod exit_data;
@@ -52,6 +53,10 @@ static ALLOCATOR: uefi::allocator::Allocator = uefi::allocator::Allocator;
 fn efi_main() -> Status {
     uefi::helpers::init().expect("failed to initialize UEFI services");
 
+    match watchdog::disable() {
+        Ok(()) => report("NEXTCORE: WATCHDOG_DISABLED"),
+        Err(status) => report(&format!("NEXTCORE: WATCHDOG_DISABLE_FAILED status={status:?}")),
+    }
     report("NextCore");
     report("NEXTCORE: EFI_ENTRY");
     match read_config() {

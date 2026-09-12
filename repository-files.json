@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 3288,
-      "sha256": "b4df2cb1824180254d632f680090a9a20bb81806a68169a37831593b8b79248c"
+      "bytes": 3476,
+      "sha256": "0ec5245bc5ef8a90c1738142c1fe121d2c01169b18a6d8e0dc2a9cffcbf8f477"
     },
     {
       "path": "LICENSE.txt",
@@ -97,6 +97,11 @@
       "sha256": "d8d788115eaf4a2d43102a46dd65b763069492fe69d4bfbad357ebeae07c8e3f"
     },
     {
+      "path": "docs/WATCHDOG_OWNERSHIP.md",
+      "bytes": 1786,
+      "sha256": "712c0e2616a68087302f37b3b8ccbe4d31c77e007b1ab19f4a2406c0b14d747b"
+    },
+    {
       "path": "docs/fixtures/dt_ledger.S",
       "bytes": 439,
       "sha256": "c482a5c196fe872da49acfcfeb008fb3b0218b51093d49acc8d5f8274fb65da3"
@@ -129,7 +134,7 @@
     {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "ef9bce1fc7304014096865add531704ff4c8bb493ae75ca35916ddf4ce43c06b"
+      "sha256": "32fb52925384fbba4c495f100e71bfad51ebfaba36b5c686612b74754775b76d"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -168,8 +173,8 @@
     },
     {
       "path": "src/arm_jit.rs",
-      "bytes": 36915,
-      "sha256": "74fe6f25c93bb90220f8644d3244ce8c98f4be3730137e6c53c15a2c386db158"
+      "bytes": 37120,
+      "sha256": "9bdf40a74987ad75356e533cc228c506cea703fdb2859fdeaca873a0503f8923"
     },
     {
       "path": "src/arm_pages.rs",
@@ -253,8 +258,8 @@
     },
     {
       "path": "src/main.rs",
-      "bytes": 12094,
-      "sha256": "3af1c04a6c98d8e051c189877bb63f3f6b817ba51a97329015cb338b0cf38693"
+      "bytes": 12299,
+      "sha256": "4610f71e56ea2ee0affa489b6acb50cc4b7f8efa34196a12f66d18291e92e780"
     },
     {
       "path": "src/mapped_trace.rs",
@@ -290,6 +295,16 @@
       "path": "src/transition32.rs",
       "bytes": 3397,
       "sha256": "42d2204ce5a7b30d29a2db3b5899a0d016ee7640017fceddf2a9229feaef46c0"
+    },
+    {
+      "path": "src/watchdog.rs",
+      "bytes": 641,
+      "sha256": "c3135dcd2d064653a656b61a63ada4402b762d716a1c3c669ff8fe3ea7c83c9a"
+    },
+    {
+      "path": "src/watchdog_probe.rs",
+      "bytes": 1686,
+      "sha256": "c09dd04befd66b3d8da8230be90b40c344dec23dcbd0b731482003f5f7b09ac8"
     },
     {
       "path": "tools/check_dt_ledger_capture.py",
