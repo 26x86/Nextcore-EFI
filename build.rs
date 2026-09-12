@@ -18,7 +18,8 @@ fn main() {
         .unwrap_or_else(|| PathBuf::from(nextcore_ise::EFI_RUNTIME_DIR));
     let output = PathBuf::from(env::var_os("OUT_DIR").unwrap());
     let memory_provider = env::var_os("CARGO_FEATURE_ARM_JIT_MEMORY_PROVIDER").is_some();
-    let stage1_probe = env::var_os("CARGO_FEATURE_ARM_JIT_STAGE1_PROBE").is_some();
+    let stage1_probe = env::var_os("CARGO_FEATURE_ARM_JIT_STAGE1_PROBE").is_some()
+        || env::var_os("CARGO_FEATURE_ARM_JIT_MAPPED_TRACE").is_some();
     let dynamic_probe = env::var_os("CARGO_FEATURE_ARM_JIT_DYNAMIC_PROBE").is_some();
     let mut shared_modules = String::new();
     for module in ["pauth", "platform"] {

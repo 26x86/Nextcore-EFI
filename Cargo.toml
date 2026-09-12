@@ -6,9 +6,9 @@ publish = false
 
 [dependencies]
 uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
-nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "5fd905a1375e392a807e093a3b1ed608ff12fb59", default-features = false }
+nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "4ae6e9aff31be93cf570b56975b711902f3fb7e7", default-features = false }
 uefi-raw = { version = "0.16", optional = true }
-nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "bd3a8195385106ce9bdeb09160a3f1bfb447ea11", optional = true }
+nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "f102f0769fcae98597478f6738ee1a69247e5207", optional = true }
 
 [features]
 picker-fallback-probe = ["dep:uefi-raw"]
@@ -29,6 +29,7 @@ arm-jit-tiered-trace = ["arm-jit-trace", "arm-jit-probe"]
 arm-jit-deep-trace = ["arm-jit-tiered-trace", "arm-jit-memory-provider"]
 arm-jit-long-trace = ["arm-jit-deep-trace"]
 arm-jit-initialization-trace = ["arm-jit-long-trace"]
+arm-jit-mapped-trace = ["arm-jit-initialization-trace"]
 arm-jit-memory-provider = ["arm-jit-trace", "arm-jit-probe", "dep:nextcore-memory-service"]
 arm-jit-memory-observation = ["arm-jit-memory-provider"]
 arm-jit-protection-observation = ["arm-jit-trace"]
@@ -134,4 +135,4 @@ bench = false
 required-features = ["apfs-jumpstart", "test-child"]
 
 [build-dependencies]
-nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "bd3a8195385106ce9bdeb09160a3f1bfb447ea11" }
+nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "f102f0769fcae98597478f6738ee1a69247e5207" }
