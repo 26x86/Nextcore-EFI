@@ -19,7 +19,7 @@
     {
       "path": "Cargo.toml",
       "bytes": 2927,
-      "sha256": "763fc51bc246d941f5f25b11b95d2151276dc699d6d727f39ee53c6a4c4305e1"
+      "sha256": "8b24edc1568c4b8e2babb83f4ca70ebe0f61ce9a9c6014f8c3b76ffefdebf85d"
     },
     {
       "path": "LICENSE.txt",
@@ -68,8 +68,8 @@
     },
     {
       "path": "docs/PICKER_DISPLAY_FALLBACK.md",
-      "bytes": 4113,
-      "sha256": "1cfefb6ce14be8d1f68d65a8a71060ab3ad4cec0551c7b5580f5a90bd10aed33"
+      "bytes": 5112,
+      "sha256": "ee343c094892b94ad8abeab72a3ab0f93b335772e9b9ba36319cb27d56ebafbd"
     },
     {
       "path": "docs/TIERED_ARM_TRACE.md",
@@ -97,9 +97,19 @@
       "sha256": "75673c3f3b0f9525bc1146e022a5265fe779e26d995013c4b774fac7577576bd"
     },
     {
+      "path": "docs/picker-gop-confirmation-20260912/report.json",
+      "bytes": 822,
+      "sha256": "b1859086493890fea57018ba008ae2388f783f3f45030540fe3157db70bf5a0e"
+    },
+    {
+      "path": "docs/picker-gop-confirmation-20260912/serial.log",
+      "bytes": 2123,
+      "sha256": "b3419ef5fcb18a2907819bb01497de5ed57bd661261dc72851dcbe49869878c0"
+    },
+    {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "ad6e7ad9a97fa125c3b04764d250fc1cb5dbf67e5f6f287238a0e587acdd288b"
+      "sha256": "e8f6684a12884a509d92320f071347430f5795c39163744c8f4ccab2fed5dcd8"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -233,8 +243,8 @@
     },
     {
       "path": "src/picker_probe.rs",
-      "bytes": 7980,
-      "sha256": "cbaae11218ce271429d19d5eba5b1784fecc990db28672376e5b87087b2b1221"
+      "bytes": 9528,
+      "sha256": "3579cef30a9f3b8f2ba9564c19bc1b1a0535e3416143d7d4db7bb842960aebee"
     },
     {
       "path": "src/test_child.rs",
@@ -278,8 +288,8 @@
     },
     {
       "path": "tools/verify_picker_fallback_ovmf.py",
-      "bytes": 3658,
-      "sha256": "e4213af090d8cdfba0993a3f176a45269d47a8a18c1d2dc1a40ab47a947cd406"
+      "bytes": 4464,
+      "sha256": "454ed85d4e8844b97bab120aed272eb572310a1e7712155c82fd86e16ed42fdd"
     },
     {
       "path": "tools/verify_stage1_ovmf.py",
