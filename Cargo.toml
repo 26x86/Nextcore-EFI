@@ -8,7 +8,7 @@ publish = false
 uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
 nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "4ae6e9aff31be93cf570b56975b711902f3fb7e7", default-features = false }
 uefi-raw = { version = "0.16", optional = true }
-nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "50b3da2f172f67b4661336799e36bd19002ce816", optional = true }
+nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "778473fd9c43d7ba3a4721852f838be996fed45d", optional = true }
 
 [features]
 config-recovery-probe = ["dep:uefi-raw"]
@@ -72,6 +72,13 @@ required-features = ["arm-jit-dt-probe"]
 [[bin]]
 name = "NXMMU"
 path = "src/mmu_probe.rs"
+test = false
+bench = false
+required-features = ["arm-jit-stage1-probe"]
+
+[[bin]]
+name = "NXPERM"
+path = "src/hierarchy_probe.rs"
 test = false
 bench = false
 required-features = ["arm-jit-stage1-probe"]
@@ -145,7 +152,7 @@ bench = false
 required-features = ["apfs-jumpstart", "test-child"]
 
 [build-dependencies]
-nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "50b3da2f172f67b4661336799e36bd19002ce816" }
+nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "778473fd9c43d7ba3a4721852f838be996fed45d" }
 
 [[bin]]
 name = "NXWATCHDOG"
