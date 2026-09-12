@@ -50,17 +50,28 @@ def main():
                     process.kill()
                     process.wait(timeout=5)
     text = re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]', '', serial.read_text(errors='replace')) if serial.exists() else ''
-    cases = re.findall(r'NXPICKER: CASE id=(\d+) injected=(\d+) gop=(\d+) keys=(\d+) writes=(\d+) child=(true|false) passed=(true|false)', text)
-    passed = len(cases) == 4 and [c[0] for c in cases] == ['1', '2', '3', '4']
+    cases = re.findall(r'NXPICKER: CASE id=(\d+) injected=(\d+) gop=(\d+) keys=(\d+) writes=(\d+) child=(true|false) passed=(true|false) full_draws=(\d+)', text)
+    passed = len(cases) == 5 and [c[0] for c in cases] == ['1', '2', '3', '4', '5']
     passed = passed and all(int(c[1]) > 0 and c[2] == '1' and c[6] == 'true' and
                            c[3] == ('0' if c[0] == '4' else '1') and
-                           c[5] == ('false' if c[0] == '4' else 'true') for c in cases)
-    passed = passed and text.count('NXTEST: EFI_ENTRY') >= 3 and all(
+                           c[5] == ('false' if c[0] == '4' else 'true') and
+                           c[7] == ('1' if c[0] == '5' else '0') for c in cases)
+    passed = passed and text.count('NXTEST: EFI_ENTRY') >= 4 and all(
         f'PICKER_DISPLAY_WARNING operation={operation}' in text for operation in ['color', 'clear', 'confirmation'])
-    passed = passed and 'NXPICKER: PASS cases=4 physical_boot_verified=false' in text and 'NXPICKER: FAIL' not in text
+    graphical = re.search(r'NXPICKER: CASE_BEGIN id=5\n(.*?)NXPICKER: CASE id=5 ', text, re.S)
+    graphical_order = [
+        'NEXTCORE: PICKER_READY renderer=GOP selected=0',
+        'NEXTCORE: PICKER_DISPLAY_WARNING operation=confirmation status=DEVICE_ERROR',
+        'NEXTCORE: PICKER_BOOT index=0', 'NXTEST: EFI_ENTRY', 'NXTEST: OPTIONS_EMPTY']
+    graphical_ok = graphical is not None and 'renderer=TEXT' not in graphical.group(1)
+    if graphical_ok:
+        positions = [graphical.group(1).find(marker) for marker in graphical_order]
+        graphical_ok = all(at >= 0 for at in positions) and positions == sorted(positions)
+    passed = passed and graphical_ok and 'NXPICKER: PASS cases=5 physical_boot_verified=false' in text and 'NXPICKER: FAIL' not in text
     after = hashlib.sha256(probe.read_bytes()).hexdigest()
     passed = passed and before == after
     report = dict(passed=passed, cases=cases, probe_sha256=before, probe_unchanged=before == after,
+                  graphical_confirmation_verified=graphical_ok,
                   physical_boot_verified=False, macos_boot_verified=False,
                   elapsed_seconds=round(time.monotonic() - start, 3))
     (output / 'report.json').write_text(json.dumps(report, indent=2) + '\n')

@@ -20,6 +20,9 @@ static CASE: AtomicUsize = AtomicUsize::new(0);
 static KEYS: AtomicUsize = AtomicUsize::new(0);
 static INJECTED: AtomicUsize = AtomicUsize::new(0);
 static GOP_FAILURES: AtomicUsize = AtomicUsize::new(0);
+static GOP_DRAWS: AtomicUsize = AtomicUsize::new(0);
+static WIDTH: AtomicUsize = AtomicUsize::new(0);
+static HEIGHT: AtomicUsize = AtomicUsize::new(0);
 static WRITES: AtomicUsize = AtomicUsize::new(0);
 type OutputFn = unsafe extern "efiapi" fn(*mut SimpleTextOutputProtocol, *const u16) -> Status;
 type BltFn = unsafe extern "efiapi" fn(
@@ -80,16 +83,37 @@ unsafe extern "efiapi" fn key(_: *mut SimpleTextInputProtocol, key: *mut InputKe
 }
 unsafe extern "efiapi" fn blt(
     this: *mut GraphicsOutputProtocol,
-    _: *mut GraphicsOutputBltPixel,
-    _: GraphicsOutputBltOperation,
-    _: usize,
-    _: usize,
-    _: usize,
-    _: usize,
-    _: usize,
-    _: usize,
-    _: usize,
+    buffer: *mut GraphicsOutputBltPixel,
+    operation: GraphicsOutputBltOperation,
+    source_x: usize,
+    source_y: usize,
+    dest_x: usize,
+    dest_y: usize,
+    width: usize,
+    height: usize,
+    delta: usize,
 ) -> Status {
+    if CASE.load(Ordering::SeqCst) == 5 {
+        let full_frame = operation == GraphicsOutputBltOperation::BLT_BUFFER_TO_VIDEO
+            && (source_x, source_y, dest_x, dest_y) == (0, 0, 0, 0)
+            && width == WIDTH.load(Ordering::SeqCst)
+            && height == HEIGHT.load(Ordering::SeqCst);
+        if !full_frame || KEYS.load(Ordering::SeqCst) == 0 {
+            // SAFETY: Forward the original live callback's exact arguments.
+            // No protocol borrow is retained across the call or mode mutation.
+            let status = unsafe {
+                BLT.unwrap()(
+                    this, buffer, operation, source_x, source_y, dest_x, dest_y, width, height,
+                    delta,
+                )
+            };
+            if full_frame && status == Status::SUCCESS {
+                GOP_DRAWS.fetch_add(1, Ordering::SeqCst);
+            }
+            return status;
+        }
+        INJECTED.fetch_add(1, Ordering::SeqCst);
+    }
     GOP_FAILURES.fetch_add(1, Ordering::SeqCst);
     // SAFETY: This is the live located GOP, installed below without a retained
     // Rust protocol borrow. Restore immediately so firmware text can use GOP.
@@ -111,6 +135,9 @@ fn run_case(case: usize) -> Result<(), Status> {
     let gop_handle = boot::get_handle_for_protocol::<GraphicsOutput>().map_err(|e| e.status())?;
     let mut gop =
         boot::open_protocol_exclusive::<GraphicsOutput>(gop_handle).map_err(|e| e.status())?;
+    let (width, height) = gop.current_mode_info().resolution();
+    WIDTH.store(width, Ordering::SeqCst);
+    HEIGHT.store(height, Ordering::SeqCst);
     // SAFETY: GraphicsOutput is repr(transparent) over the raw UEFI protocol.
     // Save its address then drop the exclusive borrow before picker acquires it.
     let gop_ptr = (&mut *gop as *mut GraphicsOutput).cast::<GraphicsOutputProtocol>();
@@ -121,9 +148,10 @@ fn run_case(case: usize) -> Result<(), Status> {
             .map_err(|e| e.status())?;
     boot::signal_event(&event).map_err(|e| e.status())?;
     CASE.store(case, Ordering::SeqCst);
-    for counter in [&KEYS, &INJECTED, &GOP_FAILURES, &WRITES] {
+    for counter in [&KEYS, &INJECTED, &GOP_FAILURES, &GOP_DRAWS, &WRITES] {
         counter.store(0, Ordering::SeqCst);
     }
+    report(&format!("NXPICKER: CASE_BEGIN id={case}"));
     // SAFETY: This probe owns the synchronous application execution at TPL
     // APPLICATION, before ExitBootServices. Pointers come from the live system
     // table and located GOP. Only callback fields are replaced, no mode storage
@@ -150,7 +178,7 @@ fn run_case(case: usize) -> Result<(), Status> {
         if case == 2 {
             (*out).clear_screen = clear;
         }
-        if case >= 3 {
+        if case == 3 || case == 4 {
             (*out).output_string = output;
         }
         (*input).read_key_stroke = key;
@@ -170,6 +198,7 @@ fn run_case(case: usize) -> Result<(), Status> {
     let keys = KEYS.load(Ordering::SeqCst);
     let injected = INJECTED.load(Ordering::SeqCst);
     let gop = GOP_FAILURES.load(Ordering::SeqCst);
+    let full_draws = GOP_DRAWS.load(Ordering::SeqCst);
     let writes = WRITES.load(Ordering::SeqCst);
     let expected = if case == 4 {
         result == Err(Status::DEVICE_ERROR) && keys == 0 && writes > 0
@@ -189,8 +218,12 @@ fn run_case(case: usize) -> Result<(), Status> {
         .map_err(|e| e.status())?;
         child = boot::start_image(image).is_ok();
     }
-    let passed = expected && injected > 0 && gop == 1 && (child == (case != 4));
-    report(&format!("NXPICKER: CASE id={case} injected={injected} gop={gop} keys={keys} writes={writes} child={child} passed={passed}"));
+    let passed = expected
+        && injected > 0
+        && gop == 1
+        && (child == (case != 4))
+        && full_draws == usize::from(case == 5);
+    report(&format!("NXPICKER: CASE id={case} injected={injected} gop={gop} keys={keys} writes={writes} child={child} passed={passed} full_draws={full_draws}"));
     if passed {
         Ok(())
     } else {
@@ -203,12 +236,12 @@ fn efi_main() -> Status {
     if uefi::helpers::init().is_err() {
         return Status::ABORTED;
     }
-    for case in 1..=4 {
+    for case in 1..=5 {
         if let Err(status) = run_case(case) {
             report(&format!("NXPICKER: FAIL case={case} status={status:?}"));
             return status;
         }
     }
-    report("NXPICKER: PASS cases=4 physical_boot_verified=false");
+    report("NXPICKER: PASS cases=5 physical_boot_verified=false");
     Status::SUCCESS
 }
