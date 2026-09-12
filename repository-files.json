@@ -19,7 +19,7 @@
     {
       "path": "Cargo.toml",
       "bytes": 3232,
-      "sha256": "7a36883e27b60818127bf9eaca62acf2fe7821626aa3f26fef12cb4d8e43e9b7"
+      "sha256": "d4423978f9ada61b9c66d015c3350c6d51408ed1c53d569c44094cd4955f2dbd"
     },
     {
       "path": "LICENSE.txt",
@@ -129,7 +129,7 @@
     {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "a3b717de4172c650ac4f58c3205e7e9632884cec808f2b53a178678309fa0102"
+      "sha256": "531a0a1ff17b423a0683bdb13798f457863d3c46135fdff45811b34857c77708"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -174,7 +174,7 @@
     {
       "path": "src/arm_pages.rs",
       "bytes": 5113,
-      "sha256": "049b9d32b2129434d955b216e49d9785aed16aa439601f46f8811070b8ec1624"
+      "sha256": "f07702608357e34e5078a98b095a36fb280b9b66bd1364fd300def89260b3022"
     },
     {
       "path": "src/arm_transition.S",
@@ -219,7 +219,7 @@
     {
       "path": "src/firmware_io.rs",
       "bytes": 1584,
-      "sha256": "16dfd60dfb4f6a67c58aa77f8aaedea404778fe57b9c6d703bc1ce3470dcae0f"
+      "sha256": "a7ab408c7bb1f14a0f04074fef18867a5759bd53d3e2576a15341236c945a78e"
     },
     {
       "path": "src/hal_tables.rs",
@@ -263,8 +263,8 @@
     },
     {
       "path": "src/mmu_probe.rs",
-      "bytes": 20240,
-      "sha256": "f3813c51ba2c0f9fd9f89f75248b51b1a3454b815ba93cca60e67981fee9c8d7"
+      "bytes": 23985,
+      "sha256": "248c9249a892749fde73ccf4a0b3db282da6a227463c142af460153ee8b14207"
     },
     {
       "path": "src/picker.rs",
@@ -303,8 +303,8 @@
     },
     {
       "path": "tools/test_stage1_reader.py",
-      "bytes": 2583,
-      "sha256": "5fefb30f31987722cf9f5ac4fc6a3917b3bc323927ab5a0beb9384988c1f5b77"
+      "bytes": 3303,
+      "sha256": "25a58770488d8b46553dd725fa27123772631b99ef34a2f05b42d16028893667"
     },
     {
       "path": "tools/verify_dt_ledger_ovmf.py",
@@ -323,8 +323,8 @@
     },
     {
       "path": "tools/verify_stage1_ovmf.py",
-      "bytes": 8735,
-      "sha256": "0a7589f66733f0403bdd5521110f1b43420e06fb7a815eb3d8af9874fed2cff9"
+      "bytes": 9183,
+      "sha256": "abd7a75e584cf30c3685c96fd7ae3b56f2b7ac3072dc23a166b2bf40bf1c9134"
     }
   ]
 }
