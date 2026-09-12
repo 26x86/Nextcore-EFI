@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 3655,
-      "sha256": "43d152dc609a2de1a082059c257fe41398ae65bed33c392797cfb4f8e2f0ecec"
+      "bytes": 3779,
+      "sha256": "81aaf04a2aab67a6fc687cc0d7579ccf7f70fe688eca2e9518e893d6e6438a86"
     },
     {
       "path": "LICENSE.txt",
@@ -50,6 +50,11 @@
       "path": "docs/ARM_STAGE1_EFI_PROBE.md",
       "bytes": 7152,
       "sha256": "9de86ccbb32b4176329a6813e51c2c3ee62e0208767759f03bb827df81e9ad42"
+    },
+    {
+      "path": "docs/ASID8_EFI_PROBE.md",
+      "bytes": 2667,
+      "sha256": "6890494d34b68588e57acde2117df5c285f2937923d490b59c2194bb2f287c06"
     },
     {
       "path": "docs/BOOT_FAILURE_RECOVERY.md",
@@ -107,6 +112,11 @@
       "sha256": "712c0e2616a68087302f37b3b8ccbe4d31c77e007b1ab19f4a2406c0b14d747b"
     },
     {
+      "path": "docs/fixtures/asid_scalar.S",
+      "bytes": 302,
+      "sha256": "210f90f34d256c8b9fb488008c31de7a3675269342da6ae76eb1b0b1ca31023f"
+    },
+    {
       "path": "docs/fixtures/dt_ledger.S",
       "bytes": 439,
       "sha256": "c482a5c196fe872da49acfcfeb008fb3b0218b51093d49acc8d5f8274fb65da3"
@@ -139,7 +149,7 @@
     {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "9b97a75cb82c3eea20c0994b2034b14bb6b56ff2c87ae8f2743a91a78d64ef59"
+      "sha256": "5a3ffcc9b3ac8381d341d7795e2f855bd1c57db49f4f32781c0c234e23dc953f"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -195,6 +205,11 @@
       "path": "src/arm_transition.rs",
       "bytes": 2531,
       "sha256": "d3a62dbda4c2119751d6af8e115fc25d563ea3beee0ce39fe69f43652d3d30a8"
+    },
+    {
+      "path": "src/asid_probe.rs",
+      "bytes": 8309,
+      "sha256": "c2884c0eeb938c9999cb52c04dd8512ae2ccbc0d722b16755c1216907df85b92"
     },
     {
       "path": "src/boot_framebuffer.rs",
@@ -340,6 +355,11 @@
       "path": "tools/test_stage1_reader.py",
       "bytes": 3303,
       "sha256": "25a58770488d8b46553dd725fa27123772631b99ef34a2f05b42d16028893667"
+    },
+    {
+      "path": "tools/verify_asid_ovmf.py",
+      "bytes": 8006,
+      "sha256": "dbd32cf35129c7f81a424284e82cd9060d7dd9b41269efaccfc01c1b7e2bfd37"
     },
     {
       "path": "tools/verify_dt_ledger_ovmf.py",
