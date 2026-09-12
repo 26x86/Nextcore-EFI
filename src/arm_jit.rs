@@ -7,6 +7,8 @@ mod arm_pages;
 #[cfg(all(target_arch = "x86_64", feature = "arm-jit-trace"))]
 mod boot_framebuffer;
 mod firmware_io;
+#[cfg(all(target_arch = "x86_64", feature = "arm-jit-mapped-trace"))]
+mod mapped_trace;
 #[cfg(all(target_arch = "x86_64", feature = "arm-jit-memory-observation"))]
 mod memory_observation;
 #[cfg(all(
@@ -510,7 +512,10 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
         report("NXARMJIT: TRACE_LONG_DIAGNOSTIC_BUILD maximum=65536");
         nextcore_core::boot_config::parse_arm64_trace_configuration_with_long_tier(config)
     };
-    #[cfg(feature = "arm-jit-initialization-trace")]
+    #[cfg(all(
+        feature = "arm-jit-initialization-trace",
+        not(feature = "arm-jit-mapped-trace")
+    ))]
     let parsed = {
         report("NXARMJIT: TRACE_TIERED_DIAGNOSTIC maximum=4096");
         report("NXARMJIT: TRACE_DEEP_DIAGNOSTIC_BUILD maximum=16384");
@@ -518,10 +523,23 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
         report("NXARMJIT: TRACE_INITIALIZATION_DIAGNOSTIC_BUILD maximum=67108864");
         nextcore_core::boot_config::parse_arm64_trace_configuration_with_initialization_tier(config)
     };
+    #[cfg(feature = "arm-jit-mapped-trace")]
+    let parsed = {
+        report("NXARMJIT: TRACE_TIERED_DIAGNOSTIC maximum=4096");
+        report("NXARMJIT: TRACE_DEEP_DIAGNOSTIC_BUILD maximum=16384");
+        report("NXARMJIT: TRACE_LONG_DIAGNOSTIC_BUILD maximum=65536");
+        report("NXARMJIT: TRACE_INITIALIZATION_DIAGNOSTIC_BUILD maximum=67108864");
+        report("NXARMJIT: TRACE_MAPPED_DIAGNOSTIC_BUILD profile=mapped-normal-nc-v1");
+        nextcore_core::boot_config::parse_arm64_trace_configuration_with_mapped_tier(config)
+    };
     let trace = parsed.map_err(|error| {
         report(&format!("NXARMJIT: TRACE_CONFIG_INVALID reason={error}"));
         Status::INVALID_PARAMETER
     })?;
+    #[cfg(feature = "arm-jit-mapped-trace")]
+    if trace.memory_profile.is_some() {
+        report("NXARMJIT: TRACE_MAPPED_DIAGNOSTIC_SELECTED profile=mapped-normal-nc-v1");
+    }
     #[cfg(feature = "arm-jit-deep-trace")]
     if trace.instruction_budget == 16384 {
         // The distinct Core parser requires the exact explicit selector/profile.
@@ -698,67 +716,101 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
     } else {
         report("NXARMJIT: TRACE_PLATFORM_PROFILE name=absent reset_origin=unprovided");
     }
+    let entry = if trace.memory_profile.is_some() {
+        trace
+            .virtual_base
+            .checked_add(layout.entry_phys - trace.physical_base)
+            .ok_or(Status::INVALID_PARAMETER)?
+    } else {
+        layout.entry_phys
+    };
     report(&format!(
         "NXARMJIT: TRACE_ENTER entry={:#x} x0=0 x1={:#x} x2=0 x3=0 budget={}",
-        layout.entry_phys, initial[1], trace.instruction_budget
+        entry, initial[1], trace.instruction_budget
     ));
     #[cfg(feature = "arm-jit-memory-provider")]
     let mut memory_result = memory_boot::MemoryRunResultV1::default();
     #[cfg(feature = "arm-jit-memory-provider")]
     let (status, result_v2) = {
-        use nextcore_memory_service::MemoryService;
-        report("NXARMJIT: TRACE_MEMORY_PROVIDER abi=1 mode=m0-only");
-        let service = MemoryService::new(ram.bytes_mut(), trace.physical_base)
-            .map_err(|_| Status::INVALID_PARAMETER)?;
-        #[cfg(not(feature = "arm-jit-memory-observation"))]
-        let mut service = service;
-        #[cfg(feature = "arm-jit-memory-observation")]
-        let mut service = memory_observation::ObservedMemory::new(service);
-        #[cfg(feature = "arm-jit-memory-observation")]
-        let callback: nextcore_memory_service::abi::Callback = memory_observation::callback;
-        #[cfg(not(feature = "arm-jit-memory-observation"))]
-        let callback: nextcore_memory_service::abi::Callback =
-            nextcore_memory_service::vf_memory_service_step;
-        let owner = core::ptr::from_mut(&mut service).cast();
-        // SAFETY: service owns the only mutable RAM borrow until this synchronous
-        // call returns. Its address stays stable and callbacks cannot reenter.
-        // Code pages, result, options, initial registers and protection storage
-        // are separate retained allocations/stack records. Both extern C sides
-        // use Win64 on this target; no guest RAM pointer enters generated code.
-        let status = unsafe {
-            vf_boot_run_memory_v1(
+        #[cfg(feature = "arm-jit-mapped-trace")]
+        let mapped = if trace.memory_profile.is_some() {
+            Some(mapped_trace::run(
+                ram.bytes_mut(),
                 trace.physical_base,
-                trace.memory_size,
-                layout.entry_phys,
+                trace.virtual_base,
+                entry,
                 layout.boot_args_phys,
                 layout.stack_top_phys,
-                code.bytes_mut().as_mut_ptr(),
-                code.bytes(),
+                code.bytes_mut(),
                 trace.instruction_budget,
                 protect_callback,
                 protect_owner,
-                initial.as_ptr(),
-                pauth_step,
+                &initial,
                 &options,
-                callback,
-                owner,
-                &mut memory_result,
-            )
+            )?)
+        } else {
+            None
         };
-        #[cfg(feature = "arm-jit-memory-observation")]
-        {
-            report(&format!(
-                "NXARMJIT: TRACE_MEMORY_OBSERVATION total={} retained={}",
-                service.total(),
-                service.entries().count()
-            ));
-            for entry in service.entries() {
-                report(&format!("NXARMJIT: TRACE_MEMORY_REQUEST sequence={} operation={} pc={:#x} address={:#x} width={} count={} result={}",
+        #[cfg(not(feature = "arm-jit-mapped-trace"))]
+        let mapped: Option<(i32, memory_boot::MemoryRunResultV1)> = None;
+        if let Some((status, mapped_result)) = mapped {
+            memory_result = mapped_result;
+            (status, memory_result.execution)
+        } else {
+            use nextcore_memory_service::MemoryService;
+            report("NXARMJIT: TRACE_MEMORY_PROVIDER abi=1 mode=m0-only");
+            let service = MemoryService::new(ram.bytes_mut(), trace.physical_base)
+                .map_err(|_| Status::INVALID_PARAMETER)?;
+            #[cfg(not(feature = "arm-jit-memory-observation"))]
+            let mut service = service;
+            #[cfg(feature = "arm-jit-memory-observation")]
+            let mut service = memory_observation::ObservedMemory::new(service);
+            #[cfg(feature = "arm-jit-memory-observation")]
+            let callback: nextcore_memory_service::abi::Callback = memory_observation::callback;
+            #[cfg(not(feature = "arm-jit-memory-observation"))]
+            let callback: nextcore_memory_service::abi::Callback =
+                nextcore_memory_service::vf_memory_service_step;
+            let owner = core::ptr::from_mut(&mut service).cast();
+            // SAFETY: service owns the only mutable RAM borrow until this synchronous
+            // call returns. Its address stays stable and callbacks cannot reenter.
+            // Code pages, result, options, initial registers and protection storage
+            // are separate retained allocations/stack records. Both extern C sides
+            // use Win64 on this target; no guest RAM pointer enters generated code.
+            let status = unsafe {
+                vf_boot_run_memory_v1(
+                    trace.physical_base,
+                    trace.memory_size,
+                    layout.entry_phys,
+                    layout.boot_args_phys,
+                    layout.stack_top_phys,
+                    code.bytes_mut().as_mut_ptr(),
+                    code.bytes(),
+                    trace.instruction_budget,
+                    protect_callback,
+                    protect_owner,
+                    initial.as_ptr(),
+                    pauth_step,
+                    &options,
+                    callback,
+                    owner,
+                    &mut memory_result,
+                )
+            };
+            #[cfg(feature = "arm-jit-memory-observation")]
+            {
+                report(&format!(
+                    "NXARMJIT: TRACE_MEMORY_OBSERVATION total={} retained={}",
+                    service.total(),
+                    service.entries().count()
+                ));
+                for entry in service.entries() {
+                    report(&format!("NXARMJIT: TRACE_MEMORY_REQUEST sequence={} operation={} pc={:#x} address={:#x} width={} count={} result={}",
                     entry.sequence, entry.operation, entry.pc, entry.address,
                     entry.width, entry.count, entry.result));
+                }
             }
+            (status, memory_result.execution)
         }
-        (status, memory_result.execution)
     };
     #[cfg(not(feature = "arm-jit-memory-provider"))]
     let (status, result_v2) = {
@@ -875,8 +927,13 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
         return Err(Status::DEVICE_ERROR);
     }
     #[cfg(feature = "arm-jit-memory-provider")]
-    if memory_result.abi_version != 1
-        || memory_result.struct_size != core::mem::size_of_val(&memory_result) as u32
+    if memory_result.abi_version != if trace.memory_profile.is_some() { 2 } else { 1 }
+        || memory_result.struct_size
+            != if trace.memory_profile.is_some() {
+                320
+            } else {
+                core::mem::size_of_val(&memory_result) as u32
+            }
         || memory_result.reserved0 != 0
         || memory_result.reserved1 != 0
         || result_v2.base.status != status as u32

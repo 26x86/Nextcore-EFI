@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 3232,
-      "sha256": "d4423978f9ada61b9c66d015c3350c6d51408ed1c53d569c44094cd4955f2dbd"
+      "bytes": 3288,
+      "sha256": "00186ca62d622220d66c86497da16359b64f0d69a056cbc6406a426179b26d61"
     },
     {
       "path": "LICENSE.txt",
@@ -33,8 +33,8 @@
     },
     {
       "path": "build.rs",
-      "bytes": 5106,
-      "sha256": "786393fa72c4bea99e6698c3daab161dca7dcc85f4a4dc38789e1dd5207203ef"
+      "bytes": 5177,
+      "sha256": "37b1d0665cb21b116433f07ad380640252b7298a4b207e20582e1fd91de3ccf4"
     },
     {
       "path": "docs/ARM_DT_LEDGER_EFI_PROBE.md",
@@ -129,7 +129,7 @@
     {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "56d6e2c6ce626729e72482c98cade57c09d545e5099dcfe2ec47e1d50d31e85e"
+      "sha256": "fcf618c097cc76db79e3b28901c418056364ef552299eb88779f7cf0ebc66458"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -168,8 +168,8 @@
     },
     {
       "path": "src/arm_jit.rs",
-      "bytes": 34523,
-      "sha256": "ef282e4fa951a07a05bc7516505d56778656f420a7ca02d2093ff43413ba59f3"
+      "bytes": 36915,
+      "sha256": "74fe6f25c93bb90220f8644d3244ce8c98f4be3730137e6c53c15a2c386db158"
     },
     {
       "path": "src/arm_pages.rs",
@@ -255,6 +255,11 @@
       "path": "src/main.rs",
       "bytes": 12094,
       "sha256": "3af1c04a6c98d8e051c189877bb63f3f6b817ba51a97329015cb338b0cf38693"
+    },
+    {
+      "path": "src/mapped_trace.rs",
+      "bytes": 6212,
+      "sha256": "6787b959de2bd4ac570aaca4852b80fa58eddeb9892822e25d4c788b10974672"
     },
     {
       "path": "src/memory_observation.rs",
