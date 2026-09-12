@@ -8,8 +8,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 2419,
-      "sha256": "96ad0122f982d2ac77aa15af9332911f5da0670dd5be94c10fd9a40e702286f5"
+      "bytes": 3326,
+      "sha256": "719fce3d69ca559b58b7a7dded536403ee76ad93ecca3d3ce4a22149fc5238f3"
     },
     {
       "path": ".gitignore",
@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 2757,
-      "sha256": "edb268870e4e0de8dc68f516680a1fb5aa43092ab9cf29c1a17d9ea576c1e859"
+      "bytes": 2927,
+      "sha256": "3118b51fcc4ba5a280c5ad6b33428e892d1e66b03f7ecd0a20da4911869a1ca7"
     },
     {
       "path": "LICENSE.txt",
@@ -52,6 +52,11 @@
       "sha256": "9de86ccbb32b4176329a6813e51c2c3ee62e0208767759f03bb827df81e9ad42"
     },
     {
+      "path": "docs/BOOT_FAILURE_RECOVERY.md",
+      "bytes": 976,
+      "sha256": "17a07f023e52e86ea59bf845c7d89684ffe8eb577facb2576d2673594542fe5f"
+    },
+    {
       "path": "docs/DEEP_ARM_TRACE.md",
       "bytes": 2241,
       "sha256": "85d9e39d3ac28bbdae29362bfaa35b67f61d91ca789c8351dbb0770452b590d5"
@@ -60,6 +65,11 @@
       "path": "docs/EFI_MEMORY_PROVIDER_V1.md",
       "bytes": 4873,
       "sha256": "236a310904533691abdcef29db8e173a1770197a7ff4cd7d57d17faee132da3b"
+    },
+    {
+      "path": "docs/PICKER_DISPLAY_FALLBACK.md",
+      "bytes": 4113,
+      "sha256": "1cfefb6ce14be8d1f68d65a8a71060ab3ad4cec0551c7b5580f5a90bd10aed33"
     },
     {
       "path": "docs/TIERED_ARM_TRACE.md",
@@ -88,8 +98,8 @@
     },
     {
       "path": "repository.json",
-      "bytes": 1653,
-      "sha256": "d36fa1459ecac2f447f40e5847aa2445ccb452cd0e4d1fdbff24b1548bb521fe"
+      "bytes": 1673,
+      "sha256": "2fa1f6b9938d0fe286d348d10f05ce84c5270485580804e059436fa88ab96b80"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -208,8 +218,8 @@
     },
     {
       "path": "src/main.rs",
-      "bytes": 10809,
-      "sha256": "07b60d8fb531efb414ac5a9deb05f5e5293e6085bc0732001e74631730ec27ab"
+      "bytes": 12094,
+      "sha256": "3af1c04a6c98d8e051c189877bb63f3f6b817ba51a97329015cb338b0cf38693"
     },
     {
       "path": "src/mmu_probe.rs",
@@ -218,8 +228,13 @@
     },
     {
       "path": "src/picker.rs",
-      "bytes": 8357,
-      "sha256": "21559058b91cf123f5261256ec37270afecf447343d50a398d6ebd573e95f49b"
+      "bytes": 9203,
+      "sha256": "155039266c9e9bd8fa1f6feb5d3fe25980a90673249e5b5224f7d231384ec23c"
+    },
+    {
+      "path": "src/picker_probe.rs",
+      "bytes": 7980,
+      "sha256": "cbaae11218ce271429d19d5eba5b1784fecc990db28672376e5b87087b2b1221"
     },
     {
       "path": "src/test_child.rs",
@@ -260,6 +275,11 @@
       "path": "tools/verify_dynamic_ovmf.py",
       "bytes": 18301,
       "sha256": "80663e056c172e2f60c770c5dd76637038fb8080f8b4230ff66e986a76977931"
+    },
+    {
+      "path": "tools/verify_picker_fallback_ovmf.py",
+      "bytes": 3658,
+      "sha256": "e4213af090d8cdfba0993a3f176a45269d47a8a18c1d2dc1a40ab47a947cd406"
     },
     {
       "path": "tools/verify_stage1_ovmf.py",
