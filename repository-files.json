@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 3476,
-      "sha256": "c7e7cc058f07eaf849bae3bb72e4f756d4f57fc2f502658df5a87c52542e4e77"
+      "bytes": 3655,
+      "sha256": "adf682badd1fa07f1beaef392c7f800e5264f4d7261a23f7d81d7d55af0b49da"
     },
     {
       "path": "LICENSE.txt",
@@ -60,6 +60,11 @@
       "path": "docs/BOOT_FRAMEBUFFER.md",
       "bytes": 3849,
       "sha256": "285dbf2811777afa7a9a094b2c2255fb650bb7f0b5b78865fc1f2e9e422f3986"
+    },
+    {
+      "path": "docs/CONFIGURATION_RECOVERY.md",
+      "bytes": 2624,
+      "sha256": "7583dc584e94a5064679ed9eed0796d1d96f5589e1ad2f3539dd2f415a2a01a8"
     },
     {
       "path": "docs/DEEP_ARM_TRACE.md",
@@ -134,7 +139,7 @@
     {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "10c592eba1d291975bc10dab145a4020faaf41aa6f6b1dad1169d4c0dde41a93"
+      "sha256": "a378b035324a81a2e81e5a89858067f25d45a7a78c0bbd86180df1f949682a02"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -195,6 +200,16 @@
       "path": "src/boot_framebuffer.rs",
       "bytes": 6227,
       "sha256": "c92ec5c9205a280fffe061fdbef8917b2799e32ca0d09266a249157fe80d1d7c"
+    },
+    {
+      "path": "src/config_recovery_probe.rs",
+      "bytes": 7491,
+      "sha256": "eca57f103d68b88ecd32b6e40ae2c7e6b242e9bd212ba12cf24fd2932d085409"
+    },
+    {
+      "path": "src/configuration_recovery.rs",
+      "bytes": 2207,
+      "sha256": "f1f89491256a72c5e000ac484677088a48cd5fa4fe1718f4a959450b90baa41c"
     },
     {
       "path": "src/console_control.rs",
@@ -258,8 +273,8 @@
     },
     {
       "path": "src/main.rs",
-      "bytes": 12299,
-      "sha256": "4610f71e56ea2ee0affa489b6acb50cc4b7f8efa34196a12f66d18291e92e780"
+      "bytes": 13807,
+      "sha256": "aaa9ac636dac16645d7c163701af05f1457dc6f00b7418539dfc00a8c5fb1516"
     },
     {
       "path": "src/mapped_trace.rs",
