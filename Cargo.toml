@@ -11,6 +11,7 @@ uefi-raw = { version = "0.16", optional = true }
 nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "0d722886753268ec366f068823c37ea10132fb43", optional = true }
 
 [features]
+picker-fallback-probe = ["dep:uefi-raw"]
 test-child = []
 kernel-probe = []
 hal-tables = []
@@ -29,6 +30,13 @@ arm-jit-memory-provider = ["arm-jit-trace", "arm-jit-probe", "dep:nextcore-memor
 arm-jit-stage1-probe = ["arm-jit-memory-provider"]
 arm-jit-dt-probe = ["arm-jit-stage1-probe"]
 arm-jit-dynamic-probe = ["arm-jit-stage1-probe"]
+
+[[bin]]
+name = "NXPICKER"
+path = "src/picker_probe.rs"
+test = false
+bench = false
+required-features = ["picker-fallback-probe"]
 
 [[bin]]
 name = "NXDYN"
