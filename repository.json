@@ -9,7 +9,7 @@
   "development": {
     "branch": "codex/physical-display-fallback-20260912",
     "base_commit": "64a2d4ce432c2f5ccd300728309556c898317436",
-    "updated_utc": "2026-09-12T12:53:47.245686+00:00",
+    "updated_utc": "2026-09-12T12:55:09.104673+00:00",
     "dependency_revisions": {
       "https://github.com/26x86/Nextcore-Core": "5fd905a1375e392a807e093a3b1ed608ff12fb59",
       "https://github.com/26x86/Nextcore-ISE": "bd3a8195385106ce9bdeb09160a3f1bfb447ea11"
