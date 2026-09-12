@@ -3,6 +3,7 @@
 #![no_std]
 #![no_main]
 extern crate alloc;
+mod watchdog;
 mod arm_pages;
 #[cfg(all(target_arch = "x86_64", feature = "arm-jit-trace"))]
 mod boot_framebuffer;
@@ -32,6 +33,10 @@ static ALLOCATOR: uefi::allocator::Allocator = uefi::allocator::Allocator;
 fn efi_main() -> Status {
     if uefi::helpers::init().is_err() {
         return Status::NOT_READY;
+    }
+    match watchdog::disable() {
+        Ok(()) => report("NXARMJIT: WATCHDOG_DISABLED"),
+        Err(status) => report(&format!("NXARMJIT: WATCHDOG_DISABLE_FAILED status={status:?}")),
     }
     report("NXARMJIT: EFI_ENTRY host=x86_64 guest=arm64");
     if !cfg!(target_arch = "x86_64") {

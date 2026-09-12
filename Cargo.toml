@@ -11,6 +11,8 @@ uefi-raw = { version = "0.16", optional = true }
 nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "ea0a892c4d55c0c09df35c576931c5a6f65c1426", optional = true }
 
 [features]
+watchdog-probe = []
+watchdog-probe-armed = ["watchdog-probe"]
 picker-fallback-probe = ["dep:uefi-raw"]
 test-child = []
 kernel-probe = []
@@ -136,3 +138,10 @@ required-features = ["apfs-jumpstart", "test-child"]
 
 [build-dependencies]
 nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "ea0a892c4d55c0c09df35c576931c5a6f65c1426" }
+
+[[bin]]
+name = "NXWATCHDOG"
+path = "src/watchdog_probe.rs"
+test = false
+bench = false
+required-features = ["watchdog-probe"]
