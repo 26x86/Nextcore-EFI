@@ -11,6 +11,7 @@ uefi-raw = { version = "0.16", optional = true }
 nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "617a3d8355bde87da695bd92e11539dfaef2923a", optional = true }
 
 [features]
+config-recovery-probe = ["dep:uefi-raw"]
 watchdog-probe = []
 watchdog-probe-armed = ["watchdog-probe"]
 picker-fallback-probe = ["dep:uefi-raw"]
@@ -39,6 +40,13 @@ arm-jit-provider-uncached = ["arm-jit-memory-provider"]
 arm-jit-stage1-probe = ["arm-jit-memory-provider"]
 arm-jit-dt-probe = ["arm-jit-stage1-probe"]
 arm-jit-dynamic-probe = ["arm-jit-stage1-probe"]
+
+[[bin]]
+name = "NXCONFIG"
+path = "src/config_recovery_probe.rs"
+test = false
+bench = false
+required-features = ["config-recovery-probe"]
 
 [[bin]]
 name = "NXPICKER"
