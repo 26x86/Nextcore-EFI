@@ -19,7 +19,7 @@
     {
       "path": "Cargo.toml",
       "bytes": 3655,
-      "sha256": "6e252c9c3faa76de047bf586492c43a36f859ead06a82b1a23731ce33833f7f0"
+      "sha256": "26b40852574b69cc8af233a2ce92d0c8cfa3d634fe1f964551f16a7ae8d339d0"
     },
     {
       "path": "LICENSE.txt",
@@ -139,7 +139,7 @@
     {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "fe3910d2c5eb770e7b0de3192cad5c83fe139043add504f323538fea120fd940"
+      "sha256": "bec196d5593fc973224a26f7f9e0ee62328c88ea173315d33b6bf945004b2867"
     },
     {
       "path": "src/apfs_driver.rs",
