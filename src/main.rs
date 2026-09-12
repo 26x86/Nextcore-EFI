@@ -27,6 +27,7 @@ use alloc::{
     vec,
     vec::Vec,
 };
+use core::fmt::Write;
 use nextcore_core::boot_config::{parse_boot_menu, BootTarget};
 use uefi::boot::LoadImageSource;
 use uefi::mem::memory_map::MemoryType;
@@ -59,19 +60,30 @@ fn efi_main() -> Status {
             match parse_boot_menu(&bytes) {
                 Ok(menu) if !menu.entries.is_empty() => {
                     report("NEXTCORE: CONFIG_PARSED");
-                    let index = if menu.show_picker {
-                        match picker::choose(&menu.entries, report) {
+                    if !menu.show_picker {
+                        return chainload(menu.entries[0].target.clone());
+                    }
+                    loop {
+                        let index = match picker::choose(&menu.entries, report) {
                             Ok(Some(index)) => index,
                             Ok(None) => return Status::ABORTED,
                             Err(status) => {
                                 report(&format!("NEXTCORE: PICKER_ERROR status={status:?}"));
                                 return status;
                             }
+                        };
+                        let status = chainload(menu.entries[index].target.clone());
+                        if !status.is_error() {
+                            return status;
                         }
-                    } else { 0 };
-                    let target = menu.entries[index].target.clone();
-                    drop(menu);
-                    chainload(target)
+                        report(&format!("NEXTCORE: BOOT_FAILED index={index} status={status:?}"));
+                        report("Boot failed. Press any key to return to the boot menu.");
+                        if let Err(error) = acknowledge_failure() {
+                            report(&format!("NEXTCORE: RECOVERY_INPUT_ERROR status={error:?}"));
+                            return error;
+                        }
+                        report("NEXTCORE: PICKER_RETRY");
+                    }
                 }
                 Ok(_) => {
                     report("No enabled boot entries");
@@ -245,12 +257,29 @@ fn load_target(target: &BootTarget) -> core::result::Result<Handle, Status> {
 }
 
 fn report(message: &str) {
-    uefi::println!("{message}");
+    // Diagnostic output must not turn an optional console failure into panic.
+    uefi::system::with_stdout(|out| {
+        let _ = writeln!(out, "{message}");
+    });
     // Use the public Serial I/O protocol, without assuming a UART I/O address.
     if let Ok(handle) = boot::get_handle_for_protocol::<Serial>() {
         if let Ok(mut serial) = boot::open_protocol_exclusive::<Serial>(handle) {
             let _ = serial.write_exact(message.as_bytes());
             let _ = serial.write_exact(b"\r\n");
+        }
+    }
+}
+
+fn acknowledge_failure() -> core::result::Result<(), Status> {
+    loop {
+        let mut events = [uefi::system::with_stdin(|input| input.wait_for_key_event())
+            .map_err(|error| error.status())?];
+        boot::wait_for_event(&mut events).map_err(|error| error.status())?;
+        if uefi::system::with_stdin(|input| input.read_key())
+            .map_err(|error| error.status())?
+            .is_some()
+        {
+            return Ok(());
         }
     }
 }
