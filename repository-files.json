@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 2927,
-      "sha256": "8b24edc1568c4b8e2babb83f4ca70ebe0f61ce9a9c6014f8c3b76ffefdebf85d"
+      "bytes": 2970,
+      "sha256": "911a7915d4a22501ec98420c8f00142622a589db7519d260ecb9068c1c3f8a19"
     },
     {
       "path": "LICENSE.txt",
@@ -55,6 +55,11 @@
       "path": "docs/BOOT_FAILURE_RECOVERY.md",
       "bytes": 976,
       "sha256": "17a07f023e52e86ea59bf845c7d89684ffe8eb577facb2576d2673594542fe5f"
+    },
+    {
+      "path": "docs/BOOT_FRAMEBUFFER.md",
+      "bytes": 3849,
+      "sha256": "285dbf2811777afa7a9a094b2c2255fb650bb7f0b5b78865fc1f2e9e422f3986"
     },
     {
       "path": "docs/DEEP_ARM_TRACE.md",
@@ -109,7 +114,7 @@
     {
       "path": "repository.json",
       "bytes": 1673,
-      "sha256": "61d64518ceb841214126c491163fa57b45e37f5ed5b1a84e16b055e3c9cb2bc4"
+      "sha256": "6cb035a51da5dd53a41a643d9a0663ab3a3eb8fdcc64c3d1f91428c3a472e2bf"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -148,8 +153,8 @@
     },
     {
       "path": "src/arm_jit.rs",
-      "bytes": 25233,
-      "sha256": "860698c11f273ef8938218de982b7e48900b7770fbc1cde1801d353813b1c3bb"
+      "bytes": 29510,
+      "sha256": "15aa598f53e100adebd2c421ee14603230aaa20cfed9d9beb08f214f5a491cfc"
     },
     {
       "path": "src/arm_pages.rs",
@@ -165,6 +170,11 @@
       "path": "src/arm_transition.rs",
       "bytes": 2531,
       "sha256": "d3a62dbda4c2119751d6af8e115fc25d563ea3beee0ce39fe69f43652d3d30a8"
+    },
+    {
+      "path": "src/boot_framebuffer.rs",
+      "bytes": 6227,
+      "sha256": "c92ec5c9205a280fffe061fdbef8917b2799e32ca0d09266a249157fe80d1d7c"
     },
     {
       "path": "src/console_control.rs",
@@ -193,8 +203,8 @@
     },
     {
       "path": "src/firmware_io.rs",
-      "bytes": 1505,
-      "sha256": "75068605c2e793cab95a9350296c17c6f93e838bbadd8ec27b5ec7d5c4552a56"
+      "bytes": 1584,
+      "sha256": "16dfd60dfb4f6a67c58aa77f8aaedea404778fe57b9c6d703bc1ce3470dcae0f"
     },
     {
       "path": "src/hal_tables.rs",

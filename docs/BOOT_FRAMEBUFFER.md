@@ -2,7 +2,7 @@
 
 ## Current Status
 
-The delegated adapter connects a caller-owned contiguous guest image to the current GOP mode. It does not reserve guest memory, populate boot arguments, select a graphics mode or establish normal startup readiness. Root owns those integration points.
+The adapter connects a caller-owned contiguous guest image to the current GOP mode. The opt-in trace consumer reserves the buffer through Core, populates boot-video fields and presents guest writes after bounded execution. It does not establish normal startup readiness.
 
 ## Target State
 
@@ -18,6 +18,8 @@ The primary binding source is the installed, version-pinned `uefi` 0.40 implemen
 
 ## Validation
 
-Module-local host tests check geometry bounds, contiguous stride, exact buffer length, channel order and preservation of caller data. An independent scratch manifest compiles the actual module for `x86_64-unknown-uefi`. Root's authored combined boot-video fixture owns actual OVMF presentation and readback evidence using geometry and pixels obtained from encoded boot arguments. Host tests and target code generation alone are build verification, not physical hardware or macOS desktop evidence.
+Module-local host tests check geometry bounds, contiguous stride, exact buffer length, channel order and preservation of caller data. An independent scratch manifest compiles the actual module for `x86_64-unknown-uefi`. The parent repository's `verify_boot_framebuffer_ovmf.py` fixture checks actual OVMF presentation and readback using geometry and pixels obtained from encoded boot arguments. Host tests and target code generation alone are build verification, not physical hardware or macOS desktop evidence.
+
+The trace selector is `Trace.Video = gop-framebuffer`. Protocol acquisition or placement failure reports `TRACE_VIDEO_UNAVAILABLE` and continues through the existing validated headless handoff. A successful transfer reports `TRACE_VIDEO_PRESENTED`. The additional diagnostic-only `arm-jit-video-readback` build feature reads GOP pixels before subsequent console text can overwrite them and records exact RGB equality plus hashes. This is a single presentation while boot services are active; persistent display, firmware exit and physical boot remain unverified.
 
 Observed adapter checks on 2026-09-12: all four tests passed using a `#![no_std]` wrapper that imports the actual module by path. Release code generation for `x86_64-unknown-uefi` and target Clippy with `-D warnings` passed. The environment used Rust/Cargo 1.97.1, edition 2021 and exact `uefi = 0.40.0`; this module introduces no MSRV change. The scratch manifest is retained at `work/efi-adapter-check/Cargo.toml`, with target artifacts in `/tmp/nextcore-gop-adapter-target-20260912`. No physical hardware result is claimed by these checks.

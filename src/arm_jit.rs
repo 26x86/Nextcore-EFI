@@ -4,6 +4,8 @@
 #![no_main]
 extern crate alloc;
 mod arm_pages;
+#[cfg(all(target_arch = "x86_64", feature = "arm-jit-trace"))]
+mod boot_framebuffer;
 mod firmware_io;
 #[cfg(all(
     target_arch = "x86_64",
@@ -446,7 +448,7 @@ fn run_probe(source: &[u8], arguments: &str, pac: bool) -> Result<(), Status> {
 fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status> {
     use nextcore_core::{
         xnu_arm64_boot_args::Arm64BootVideo,
-        xnu_arm64_handoff::{Arm64HandoffPlan, Arm64PlacementInput},
+        xnu_arm64_handoff::{Arm64FramebufferGeometry, Arm64HandoffPlan, Arm64PlacementInput},
     };
     #[cfg(not(feature = "arm-jit-tiered-trace"))]
     let parsed = nextcore_core::boot_config::parse_arm64_trace_configuration(config);
@@ -491,22 +493,54 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
     })?;
     drop(firmware_tree);
     report("NXARMJIT: TRACE_DT_CHECKED templates=0 platform_complete=false");
-    let plan = Arm64HandoffPlan::new(
-        source,
-        Arm64PlacementInput {
-            physical_base: trace.physical_base,
-            virtual_base: trace.virtual_base,
-            memory_size: trace.memory_size,
-            actual_memory_size: trace.actual_memory_size,
-            kernel_phys: trace.kernel_phys,
-            device_tree: &dt,
-            command_line: arguments,
-            machine_type: 0,
-            boot_flags: 0,
-            video: Arm64BootVideo::default(),
-        },
-    )
-    .map_err(|error| {
+    let input = Arm64PlacementInput {
+        physical_base: trace.physical_base,
+        virtual_base: trace.virtual_base,
+        memory_size: trace.memory_size,
+        actual_memory_size: trace.actual_memory_size,
+        kernel_phys: trace.kernel_phys,
+        device_tree: &dt,
+        command_line: arguments,
+        machine_type: 0,
+        boot_flags: 0,
+        video: Arm64BootVideo::default(),
+    };
+    let mut display = if trace.video.is_some() {
+        match boot_framebuffer::CurrentGop::open() {
+            Ok(gop) => Some(gop),
+            Err(error) => {
+                report(&format!(
+                    "NXARMJIT: TRACE_VIDEO_UNAVAILABLE error={error:?}"
+                ));
+                None
+            }
+        }
+    } else {
+        None
+    };
+    let prepared = if let Some(gop) = display.as_ref() {
+        let mode = gop.geometry();
+        match Arm64HandoffPlan::new_with_framebuffer(
+            source,
+            input,
+            Arm64FramebufferGeometry {
+                width: mode.width(),
+                height: mode.height(),
+                row_bytes: mode.row_bytes(),
+            },
+        ) {
+            Ok(plan) => Ok(plan),
+            Err(_) => {
+                // Optional video capacity does not bypass validation of the base handoff.
+                report("NXARMJIT: TRACE_VIDEO_UNAVAILABLE error=FRAMEBUFFER_PLACEMENT");
+                display = None;
+                Arm64HandoffPlan::new(source, input)
+            }
+        }
+    } else {
+        Arm64HandoffPlan::new(source, input)
+    };
+    let plan = prepared.map_err(|error| {
         report(&format!("NXARMJIT: TRACE_PLACEMENT_INVALID reason={error}"));
         Status::LOAD_ERROR
     })?;
@@ -521,6 +555,16 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
     let mut ram = ArmPages::allocate_data(memory_size)?;
     plan.stage_into(&mut ram.bytes_mut()[offset..end])
         .map_err(|_| Status::COMPROMISED_DATA)?;
+    if let Some(framebuffer) = plan.framebuffer() {
+        report(&format!(
+            "NXARMJIT: TRACE_VIDEO_READY width={} height={} base={:#x} row_bytes={} bytes={}",
+            framebuffer.geometry.width,
+            framebuffer.geometry.height,
+            framebuffer.base_phys,
+            framebuffer.geometry.row_bytes,
+            framebuffer.byte_len
+        ));
+    }
     let mut code = ArmPages::allocate(64 * 1024, None)?;
     let system = uefi::table::system_table_raw().ok_or(Status::NOT_READY)?;
     let mut protection = [0usize; 2];
@@ -661,6 +705,53 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
         memory_result.data_requests,
         memory_result.completed_data_operations
     ));
+    if let (Some(gop), Some(framebuffer)) = (display.as_mut(), plan.framebuffer()) {
+        let start = usize::try_from(framebuffer.base_phys - trace.physical_base)
+            .map_err(|_| Status::INVALID_PARAMETER)?;
+        let length =
+            usize::try_from(framebuffer.byte_len).map_err(|_| Status::INVALID_PARAMETER)?;
+        let stop = start.checked_add(length).ok_or(Status::BAD_BUFFER_SIZE)?;
+        let pixels = ram
+            .bytes_mut()
+            .get(start..stop)
+            .ok_or(Status::BAD_BUFFER_SIZE)?;
+        match gop.present(pixels) {
+            Ok(()) => {
+                // Capture before diagnostic text can draw over the guest image.
+                #[cfg(feature = "arm-jit-video-readback")]
+                let readback = gop.readback();
+                report("NXARMJIT: TRACE_VIDEO_PRESENTED status=SUCCESS");
+                #[cfg(feature = "arm-jit-video-readback")]
+                match readback {
+                    Ok(observed) => {
+                        let guest_hash = framebuffer_rgb_hash(pixels);
+                        let display_hash = framebuffer_rgb_hash(&observed);
+                        let matched = pixels.len() == observed.len()
+                            && pixels
+                                .chunks_exact(4)
+                                .zip(observed.chunks_exact(4))
+                                .all(|(a, b)| a[..3] == b[..3]);
+                        let first = observed
+                            .first_chunk::<4>()
+                            .map(|p| u32::from_le_bytes(*p))
+                            .unwrap_or(0);
+                        let last = observed
+                            .last_chunk::<4>()
+                            .map(|p| u32::from_le_bytes(*p))
+                            .unwrap_or(0);
+                        report(&format!("NXARMJIT: TRACE_VIDEO_READBACK guest_rgb_hash={guest_hash:#x} display_rgb_hash={display_hash:#x} matched={matched} first={first:#x} last={last:#x}"));
+                    }
+                    Err(error) => report(&format!(
+                        "NXARMJIT: TRACE_VIDEO_READBACK_UNAVAILABLE error={error:?}"
+                    )),
+                }
+            }
+            Err(error) => report(&format!(
+                "NXARMJIT: TRACE_VIDEO_UNAVAILABLE error={error:?}"
+            )),
+        }
+    }
+    drop(display);
     report("NXARMJIT: TRACE_ONLY macos_boot_verified=false metal_verified=false");
     if restore != 0 {
         return Err(Status::DEVICE_ERROR);
@@ -676,4 +767,14 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
     }
     // A completed diagnostic is deliberately not EFI/OS launch success.
     Err(Status::ABORTED)
+}
+
+#[cfg(all(target_arch = "x86_64", feature = "arm-jit-video-readback"))]
+fn framebuffer_rgb_hash(bytes: &[u8]) -> u64 {
+    bytes
+        .chunks_exact(4)
+        .flat_map(|pixel| pixel[..3].iter())
+        .fold(0xcbf29ce484222325u64, |hash, byte| {
+            (hash ^ u64::from(*byte)).wrapping_mul(0x100000001b3)
+        })
 }
