@@ -13,7 +13,22 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - run: sudo apt-get update && sudo apt-get install -y clang lld llvm qemu-system-x86 ovmf
       - run: rustup target add x86_64-unknown-uefi
+      - name: Build authored child for the picker fault probe
+        run: |
+          cargo build --release --target x86_64-unknown-uefi --features test-child --bin NXTEST
+          echo "NEXTCORE_PICKER_CHILD=$GITHUB_WORKSPACE/target/x86_64-unknown-uefi/release/NXTEST.efi" >> "$GITHUB_ENV"
       - run: cargo check --target x86_64-unknown-uefi --all-features
+      - name: Execute production picker with injected firmware failures
+        run: |
+          cargo build --release --target x86_64-unknown-uefi --features picker-fallback-probe --bin NXPICKER
+          python3 tools/verify_picker_fallback_ovmf.py --efi-probe target/x86_64-unknown-uefi/release/NXPICKER.efi --output "$RUNNER_TEMP/picker-fallback-efi"
+      - name: Preserve picker protocol-failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: picker-fallback-efi
+          path: ${{ runner.temp }}/picker-fallback-efi
+          if-no-files-found: ignore
       - run: cargo build --target x86_64-unknown-uefi --all-features --bin NXAPFS
       - run: cargo build --release --target x86_64-unknown-uefi --features arm-jit --bin NXARMJIT
       - run: cargo build --release --target x86_64-unknown-uefi --features arm-jit-probe --bin NXARMJIT

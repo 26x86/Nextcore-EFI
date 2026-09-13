@@ -18,7 +18,13 @@ CASE_NAMES = ["strb", "ldrb", "ldrsb-w", "ldrsb-x", "strh", "ldrh", "ldrsh-w", "
               "str-w", "ldr-w", "ldrsw", "str-x", "ldr-x", "pair-offset", "pair-pre", "pair-post",
               "pair-store-translation", "pair-load-translation", "pair-store-af", "pair-load-af",
               "pair-store-backing", "pair-load-backing", "pair-store-attribute", "pair-load-attribute",
-              "pair-store-permission", "fetch-translation", "fetch-permission"]
+              "pair-store-permission", "fetch-translation", "fetch-permission",
+              "unaligned-store", "unaligned-load",
+              "unaligned-store-translation", "unaligned-load-translation",
+              "unaligned-store-af", "unaligned-load-af",
+              "unaligned-store-backing", "unaligned-load-backing",
+              "unaligned-store-attribute", "unaligned-load-attribute",
+              "unaligned-store-permission"]
 
 
 def sha(path):
@@ -55,7 +61,7 @@ def validate_case(fields):
                     completed=1, esr=0, far=0, reply=0, fsc=0)
     if name in ("pair-offset", "pair-pre", "pair-post"):
         expected.update(retired=4, blocks=4, fetch=4, data=2, completed=2)
-    elif name.startswith("pair-"):
+    elif name.startswith("pair-") or (name.startswith("unaligned-") and name.count("-") == 2):
         expected.update(status=17, retired=1, blocks=2, fetch=2, completed=0)
         failure = name.rsplit("-", 1)[-1]
         if failure in ("backing", "attribute"):
@@ -150,9 +156,9 @@ def main():
                 for granule in ["4096", "16384"] for upper in ["false", "true"]}
     validations = [validate_case(c) for c in cases]
     after = input_hashes(inputs)
-    passed = (len(cases) == 108 and set(identities) == expected
+    passed = (len(cases) == len(expected) and set(identities) == expected
               and not parse_errors and all(c["passed"] for c in validations)
-              and "NXMMU: PASS cases=108 macos_boot_verified=false" in actual
+              and f"NXMMU: PASS cases={len(expected)} macos_boot_verified=false" in actual
               and not any(line.startswith("NXMMU: FAIL") for line in actual)
               and before == after)
     report = {"schema": "nextcore.authored-stage1-efi.v1", "passed": passed,

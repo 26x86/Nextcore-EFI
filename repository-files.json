@@ -3,13 +3,13 @@
   "files": [
     {
       "path": ".gitattributes",
-      "bytes": 28,
-      "sha256": "4b0f1fc438f30f25abe421b7542e9f3803b8b5c15ca3695614222e2bc547a9fe"
+      "bytes": 86,
+      "sha256": "9c815c19e99dbe636e35eb92b530c8e120c24fdf9cf15024e007a8bbd835aec3"
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 2419,
-      "sha256": "96ad0122f982d2ac77aa15af9332911f5da0670dd5be94c10fd9a40e702286f5"
+      "bytes": 3326,
+      "sha256": "719fce3d69ca559b58b7a7dded536403ee76ad93ecca3d3ce4a22149fc5238f3"
     },
     {
       "path": ".gitignore",
@@ -18,8 +18,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 2757,
-      "sha256": "edb268870e4e0de8dc68f516680a1fb5aa43092ab9cf29c1a17d9ea576c1e859"
+      "bytes": 3908,
+      "sha256": "af45334b10913d650d6d0f68cf4254d57f11ad31352862b0faa7c07a8b262ff4"
     },
     {
       "path": "LICENSE.txt",
@@ -33,8 +33,8 @@
     },
     {
       "path": "build.rs",
-      "bytes": 4852,
-      "sha256": "2e63268f3e94ae728ff9451944b96d3c30c6b5bc6c5578f77d6a381089c3bd14"
+      "bytes": 5177,
+      "sha256": "37b1d0665cb21b116433f07ad380640252b7298a4b207e20582e1fd91de3ccf4"
     },
     {
       "path": "docs/ARM_DT_LEDGER_EFI_PROBE.md",
@@ -52,6 +52,26 @@
       "sha256": "9de86ccbb32b4176329a6813e51c2c3ee62e0208767759f03bb827df81e9ad42"
     },
     {
+      "path": "docs/ASID8_EFI_PROBE.md",
+      "bytes": 2667,
+      "sha256": "6890494d34b68588e57acde2117df5c285f2937923d490b59c2194bb2f287c06"
+    },
+    {
+      "path": "docs/BOOT_FAILURE_RECOVERY.md",
+      "bytes": 976,
+      "sha256": "17a07f023e52e86ea59bf845c7d89684ffe8eb577facb2576d2673594542fe5f"
+    },
+    {
+      "path": "docs/BOOT_FRAMEBUFFER.md",
+      "bytes": 3849,
+      "sha256": "285dbf2811777afa7a9a094b2c2255fb650bb7f0b5b78865fc1f2e9e422f3986"
+    },
+    {
+      "path": "docs/CONFIGURATION_RECOVERY.md",
+      "bytes": 2624,
+      "sha256": "7583dc584e94a5064679ed9eed0796d1d96f5589e1ad2f3539dd2f415a2a01a8"
+    },
+    {
       "path": "docs/DEEP_ARM_TRACE.md",
       "bytes": 2241,
       "sha256": "85d9e39d3ac28bbdae29362bfaa35b67f61d91ca789c8351dbb0770452b590d5"
@@ -62,9 +82,39 @@
       "sha256": "236a310904533691abdcef29db8e173a1770197a7ff4cd7d57d17faee132da3b"
     },
     {
+      "path": "docs/INITIALIZATION_ARM_TRACE.md",
+      "bytes": 1503,
+      "sha256": "2c9c6cc222de813436853e078726f99fda86ae1fbb3bdf988b1773be19bb6e23"
+    },
+    {
+      "path": "docs/MEMORY_OBSERVATION.md",
+      "bytes": 3104,
+      "sha256": "626443a1aceaa38f575f21ab4254e4468fae23f08ce1e616cafa6f1d5a566f5f"
+    },
+    {
+      "path": "docs/PICKER_DISPLAY_FALLBACK.md",
+      "bytes": 5112,
+      "sha256": "ee343c094892b94ad8abeab72a3ab0f93b335772e9b9ba36319cb27d56ebafbd"
+    },
+    {
+      "path": "docs/PROVIDER_CACHE_OBSERVATION.md",
+      "bytes": 1934,
+      "sha256": "ed1897eea37d513650cefb7fd2f499b5277065be701de1f0934463c5daf3b88d"
+    },
+    {
       "path": "docs/TIERED_ARM_TRACE.md",
       "bytes": 761,
       "sha256": "d8d788115eaf4a2d43102a46dd65b763069492fe69d4bfbad357ebeae07c8e3f"
+    },
+    {
+      "path": "docs/WATCHDOG_OWNERSHIP.md",
+      "bytes": 1786,
+      "sha256": "712c0e2616a68087302f37b3b8ccbe4d31c77e007b1ab19f4a2406c0b14d747b"
+    },
+    {
+      "path": "docs/fixtures/asid_scalar.S",
+      "bytes": 302,
+      "sha256": "210f90f34d256c8b9fb488008c31de7a3675269342da6ae76eb1b0b1ca31023f"
     },
     {
       "path": "docs/fixtures/dt_ledger.S",
@@ -77,6 +127,11 @@
       "sha256": "ac9574aaf43bfb7b764f5ba48e58cfaac91a17ac5e493acb5aaf2c1481f854ee"
     },
     {
+      "path": "docs/fixtures/hierarchy_scalar.S",
+      "bytes": 274,
+      "sha256": "195af7201a437057beaeb08c82b318110f6bd04d116616e0c128495da19a20c9"
+    },
+    {
       "path": "docs/fixtures/stage1_pair.S",
       "bytes": 114,
       "sha256": "8e1a62d2a191dfc6576a70829be21e52bc30686a3a25751f1a13f4dd321c7060"
@@ -87,9 +142,19 @@
       "sha256": "75673c3f3b0f9525bc1146e022a5265fe779e26d995013c4b774fac7577576bd"
     },
     {
+      "path": "docs/picker-gop-confirmation-20260912/report.json",
+      "bytes": 822,
+      "sha256": "b1859086493890fea57018ba008ae2388f783f3f45030540fe3157db70bf5a0e"
+    },
+    {
+      "path": "docs/picker-gop-confirmation-20260912/serial.log",
+      "bytes": 2123,
+      "sha256": "b3419ef5fcb18a2907819bb01497de5ed57bd661261dc72851dcbe49869878c0"
+    },
+    {
       "path": "repository.json",
-      "bytes": 1653,
-      "sha256": "d36fa1459ecac2f447f40e5847aa2445ccb452cd0e4d1fdbff24b1548bb521fe"
+      "bytes": 1673,
+      "sha256": "fdc18c12ff06defaab050d2a0983f71f55291e834a21e4ca5d67d321d057d219"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -128,8 +193,8 @@
     },
     {
       "path": "src/arm_jit.rs",
-      "bytes": 25233,
-      "sha256": "860698c11f273ef8938218de982b7e48900b7770fbc1cde1801d353813b1c3bb"
+      "bytes": 37120,
+      "sha256": "9bdf40a74987ad75356e533cc228c506cea703fdb2859fdeaca873a0503f8923"
     },
     {
       "path": "src/arm_pages.rs",
@@ -145,6 +210,26 @@
       "path": "src/arm_transition.rs",
       "bytes": 2531,
       "sha256": "d3a62dbda4c2119751d6af8e115fc25d563ea3beee0ce39fe69f43652d3d30a8"
+    },
+    {
+      "path": "src/asid_probe.rs",
+      "bytes": 8309,
+      "sha256": "c2884c0eeb938c9999cb52c04dd8512ae2ccbc0d722b16755c1216907df85b92"
+    },
+    {
+      "path": "src/boot_framebuffer.rs",
+      "bytes": 6227,
+      "sha256": "c92ec5c9205a280fffe061fdbef8917b2799e32ca0d09266a249157fe80d1d7c"
+    },
+    {
+      "path": "src/config_recovery_probe.rs",
+      "bytes": 7491,
+      "sha256": "eca57f103d68b88ecd32b6e40ae2c7e6b242e9bd212ba12cf24fd2932d085409"
+    },
+    {
+      "path": "src/configuration_recovery.rs",
+      "bytes": 2207,
+      "sha256": "f1f89491256a72c5e000ac484677088a48cd5fa4fe1718f4a959450b90baa41c"
     },
     {
       "path": "src/console_control.rs",
@@ -173,13 +258,18 @@
     },
     {
       "path": "src/firmware_io.rs",
-      "bytes": 1505,
-      "sha256": "75068605c2e793cab95a9350296c17c6f93e838bbadd8ec27b5ec7d5c4552a56"
+      "bytes": 1584,
+      "sha256": "16dfd60dfb4f6a67c58aa77f8aaedea404778fe57b9c6d703bc1ce3470dcae0f"
     },
     {
       "path": "src/hal_tables.rs",
       "bytes": 12808,
       "sha256": "305705ec2f9cbd67ad58037cc451dfc41035c2c3e2ae4f8f50e3cfe7679ca8dd"
+    },
+    {
+      "path": "src/hierarchy_probe.rs",
+      "bytes": 10210,
+      "sha256": "c2c2ec63492134fca605d87c739c75462dfba261bd96debb76fecc8f7a8ce100"
     },
     {
       "path": "src/kc.rs",
@@ -208,18 +298,33 @@
     },
     {
       "path": "src/main.rs",
-      "bytes": 10809,
-      "sha256": "07b60d8fb531efb414ac5a9deb05f5e5293e6085bc0732001e74631730ec27ab"
+      "bytes": 13807,
+      "sha256": "aaa9ac636dac16645d7c163701af05f1457dc6f00b7418539dfc00a8c5fb1516"
+    },
+    {
+      "path": "src/mapped_trace.rs",
+      "bytes": 6212,
+      "sha256": "6787b959de2bd4ac570aaca4852b80fa58eddeb9892822e25d4c788b10974672"
+    },
+    {
+      "path": "src/memory_observation.rs",
+      "bytes": 8740,
+      "sha256": "3ffed8c6228ff1fc8db4ab5977ce9921543b48d1a48180cb39b3155c996fbee0"
     },
     {
       "path": "src/mmu_probe.rs",
-      "bytes": 20240,
-      "sha256": "f3813c51ba2c0f9fd9f89f75248b51b1a3454b815ba93cca60e67981fee9c8d7"
+      "bytes": 23985,
+      "sha256": "248c9249a892749fde73ccf4a0b3db282da6a227463c142af460153ee8b14207"
     },
     {
       "path": "src/picker.rs",
-      "bytes": 8357,
-      "sha256": "21559058b91cf123f5261256ec37270afecf447343d50a398d6ebd573e95f49b"
+      "bytes": 9203,
+      "sha256": "155039266c9e9bd8fa1f6feb5d3fe25980a90673249e5b5224f7d231384ec23c"
+    },
+    {
+      "path": "src/picker_probe.rs",
+      "bytes": 9528,
+      "sha256": "3579cef30a9f3b8f2ba9564c19bc1b1a0535e3416143d7d4db7bb842960aebee"
     },
     {
       "path": "src/test_child.rs",
@@ -230,6 +335,16 @@
       "path": "src/transition32.rs",
       "bytes": 3397,
       "sha256": "42d2204ce5a7b30d29a2db3b5899a0d016ee7640017fceddf2a9229feaef46c0"
+    },
+    {
+      "path": "src/watchdog.rs",
+      "bytes": 641,
+      "sha256": "c3135dcd2d064653a656b61a63ada4402b762d716a1c3c669ff8fe3ea7c83c9a"
+    },
+    {
+      "path": "src/watchdog_probe.rs",
+      "bytes": 1686,
+      "sha256": "c09dd04befd66b3d8da8230be90b40c344dec23dcbd0b731482003f5f7b09ac8"
     },
     {
       "path": "tools/check_dt_ledger_capture.py",
@@ -248,8 +363,13 @@
     },
     {
       "path": "tools/test_stage1_reader.py",
-      "bytes": 2583,
-      "sha256": "5fefb30f31987722cf9f5ac4fc6a3917b3bc323927ab5a0beb9384988c1f5b77"
+      "bytes": 3303,
+      "sha256": "25a58770488d8b46553dd725fa27123772631b99ef34a2f05b42d16028893667"
+    },
+    {
+      "path": "tools/verify_asid_ovmf.py",
+      "bytes": 8006,
+      "sha256": "dbd32cf35129c7f81a424284e82cd9060d7dd9b41269efaccfc01c1b7e2bfd37"
     },
     {
       "path": "tools/verify_dt_ledger_ovmf.py",
@@ -262,9 +382,19 @@
       "sha256": "80663e056c172e2f60c770c5dd76637038fb8080f8b4230ff66e986a76977931"
     },
     {
+      "path": "tools/verify_hierarchy_ovmf.py",
+      "bytes": 9883,
+      "sha256": "e7c1fa02aa43f1ef572b8be6f87b2e13f8187a213b068e23f2e851c18d768068"
+    },
+    {
+      "path": "tools/verify_picker_fallback_ovmf.py",
+      "bytes": 4464,
+      "sha256": "454ed85d4e8844b97bab120aed272eb572310a1e7712155c82fd86e16ed42fdd"
+    },
+    {
       "path": "tools/verify_stage1_ovmf.py",
-      "bytes": 8735,
-      "sha256": "0a7589f66733f0403bdd5521110f1b43420e06fb7a815eb3d8af9874fed2cff9"
+      "bytes": 9183,
+      "sha256": "abd7a75e584cf30c3685c96fd7ae3b56f2b7ac3072dc23a166b2bf40bf1c9134"
     }
   ]
 }

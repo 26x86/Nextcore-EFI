@@ -26,6 +26,17 @@ class ReaderTests(unittest.TestCase):
                            ("reply", "1"), ("esr", "NaN")]:
             self.assertFalse(validate_case(dict(self.scalar(), **{key: value}))["passed"], key)
 
+    def test_unaligned_success_and_second_page_failure(self):
+        for name in ("unaligned-load", "unaligned-store"):
+            self.assertTrue(validate_case(dict(self.scalar(), name=name))["passed"])
+        fault = dict(self.scalar(), name="unaligned-load-translation", status="17",
+                     retired="1", blocks="2", fetch="2", completed="0",
+                     reply="1", fsc="7", far="0x20005000", esr="0x96000007")
+        self.assertTrue(validate_case(fault)["passed"])
+        for key, value in [("completed", "1"), ("far", "0x20004ffc"),
+                           ("esr", "0x96000021"), ("fsc", "33")]:
+            self.assertFalse(validate_case(dict(fault, **{key: value}))["passed"], key)
+
     def test_unknown_duplicate_shape_and_missing_fields(self):
         self.assertFalse(validate_case(dict(self.scalar(), unexpected="0"))["passed"])
         missing = self.scalar()

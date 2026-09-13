@@ -75,10 +75,17 @@ pub fn choose(entries: &[BootMenuEntry], report: fn(&str)) -> Result<Option<usiz
         match view::navigate(&mut selected, names.len(), action) {
             Update::Redraw => redraw = true,
             Update::Boot(index) => {
-                if let Some(gop) = graphics.as_mut() {
-                    let _ = draw(gop, &names, &volume, index, true);
+                // The selection was already displayed and accepted. A cosmetic
+                // confirmation failure must not discard that selection.
+                let confirmation = if let Some(gop) = graphics.as_mut() {
+                    draw(gop, &names, &volume, index, true)
                 } else {
-                    draw_text(&names, &volume, index, true)?;
+                    draw_text(&names, &volume, index, true)
+                };
+                if let Err(status) = confirmation {
+                    serial(&format!(
+                        "NEXTCORE: PICKER_DISPLAY_WARNING operation=confirmation status={status:?}"
+                    ));
                 }
                 serial(&format!("NEXTCORE: PICKER_BOOT index={index}"));
                 return Ok(Some(index));
@@ -159,9 +166,20 @@ fn draw(
 
 fn draw_text(names: &[&str], volume: &str, selected: usize, starting: bool) -> Result<(), Status> {
     system::with_stdout(|out| {
-        out.set_color(Color::LightGray, Color::Black)
-            .map_err(|e| e.status())?;
-        out.clear().map_err(|e| e.status())?;
+        // Firmware defaults and existing screen contents are usable fallbacks.
+        // Required menu writes below still propagate errors.
+        if let Err(error) = out.set_color(Color::LightGray, Color::Black) {
+            serial(&format!(
+                "NEXTCORE: PICKER_DISPLAY_WARNING operation=color status={:?}",
+                error.status()
+            ));
+        }
+        if let Err(error) = out.clear() {
+            serial(&format!(
+                "NEXTCORE: PICKER_DISPLAY_WARNING operation=clear status={:?}",
+                error.status()
+            ));
+        }
         let (columns, rows) = out
             .current_mode()
             .ok()
