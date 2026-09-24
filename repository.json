@@ -1,0 +1,16 @@
+{
+  "schema": "26x86.repository/1",
+  "name": "Nextcore-EFI",
+  "owner": "26x86",
+  "public": true,
+  "role": "nextcore-module",
+  "crate": "nextcore-efi",
+  "description": "UEFI application and controlled XNU handoff probe",
+  "source_path": "nextcore/crates/nextcore-efi",
+  "source_commit": "93e4a9ebc1a05e2cbec78125a0186ca1b71d98d6",
+  "depends_on": [
+    "26x86/Nextcore-Core"
+  ],
+  "initial_tag": "26x86-Nextcore-EFI-20260924",
+  "generated_utc": "2026-09-24T21:33:39.662141+00:00"
+}
