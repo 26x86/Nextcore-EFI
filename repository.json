@@ -1,21 +1,11 @@
 {
-  "schema": "26x86.repository/2",
+  "schema": "26x86.repository/3",
   "name": "Nextcore-EFI",
   "owner": "26x86",
   "public": true,
   "role": "nextcore-module",
   "crate": "nextcore-efi",
-  "description": "UEFI boot selection, platform services and explicit APFS Jumpstart driver loading.",
-  "development": {
-    "branch": "codex/physical-display-fallback-20260912",
-    "base_commit": "64a2d4ce432c2f5ccd300728309556c898317436",
-    "updated_utc": "2026-09-12T19:38:07.380345+00:00",
-    "dependency_revisions": {
-      "https://github.com/26x86/Nextcore-Core": "4ae6e9aff31be93cf570b56975b711902f3fb7e7",
-      "https://github.com/26x86/Nextcore-ISE": "3a0ed3dd39f78fc3c55415f898d7faa8f34699c2"
-    },
-    "integration": "Git submodule with an immutable gitlink; workspace source patches for local development"
-  },
+  "description": "UEFI applications, input staging and controlled handoff",
   "release_provenance": {
     "schema": "26x86.repository/1",
     "name": "Nextcore-EFI",
@@ -37,5 +27,31 @@
       "26x86/Nextcore-Core": "26x86-Nextcore-Core-v0.1.2"
     },
     "export_method": "immutable git objects applied to existing main; manifest dependency rewrite only"
+  },
+  "publication": {
+    "snapshot": "engineering-preview-20260930",
+    "source_revision": "11089704131eeb1a4d60c860b07eedbdb03b962b",
+    "source_path": "nextcore/crates/nextcore-efi",
+    "previous_public_revision": "be7aced4fe422ed055ab75ff214dbd2fe81e24f0",
+    "method": "Immutable reviewed Git blobs applied to existing public history",
+    "integration": "Tracked integration source; independent Git dependencies pin exact public revisions",
+    "dependencies": {
+      "nextcore-core": {
+        "repository": "26x86/Nextcore-Core",
+        "revision": "f4b921206dfff2b51449eb7b7b03200f07b445b4"
+      },
+      "nextcore-memory-service": {
+        "repository": "26x86/Nextcore-ISE",
+        "revision": "682527837486f89d8b501309f54b848614c191f2"
+      },
+      "nextcore-ise": {
+        "repository": "26x86/Nextcore-ISE",
+        "revision": "682527837486f89d8b501309f54b848614c191f2"
+      }
+    },
+    "macos_boot_verified": false,
+    "metal_verified": false,
+    "physical_installation_verified": false,
+    "device_qualification_verified": false
   }
 }
