@@ -3,7 +3,6 @@
 #![no_std]
 #![no_main]
 extern crate alloc;
-mod watchdog;
 mod arm_pages;
 #[cfg(all(target_arch = "x86_64", feature = "arm-jit-trace"))]
 mod boot_framebuffer;
@@ -12,6 +11,10 @@ mod firmware_io;
 mod mapped_trace;
 #[cfg(all(target_arch = "x86_64", feature = "arm-jit-memory-observation"))]
 mod memory_observation;
+mod selected_boot_efi;
+mod selected_bootkc_efi;
+mod selected_startup_efi;
+mod watchdog;
 #[cfg(all(
     target_arch = "x86_64",
     any(feature = "arm-jit-probe", feature = "arm-jit-trace")
@@ -36,7 +39,9 @@ fn efi_main() -> Status {
     }
     match watchdog::disable() {
         Ok(()) => report("NXARMJIT: WATCHDOG_DISABLED"),
-        Err(status) => report(&format!("NXARMJIT: WATCHDOG_DISABLE_FAILED status={status:?}")),
+        Err(status) => report(&format!(
+            "NXARMJIT: WATCHDOG_DISABLE_FAILED status={status:?}"
+        )),
     }
     report("NXARMJIT: EFI_ENTRY host=x86_64 guest=arm64");
     if !cfg!(target_arch = "x86_64") {
@@ -57,8 +62,41 @@ fn run() -> Result<(), Status> {
         Status::INVALID_PARAMETER
     })?;
     report("NXARMJIT: CONFIG_PARSED");
-    let path = CString16::try_from(target.path.as_str()).map_err(|_| Status::INVALID_PARAMETER)?;
-    let source = read_file(&path, MAX_INPUT_SIZE as u64)?;
+    let selected_required = target.profile == KernelProfile::XnuArm64Uefi
+        || (cfg!(feature = "arm-jit-selected-trace")
+            && target.profile == KernelProfile::X86EfiArm64Trace);
+    let selected_boot = if selected_required {
+        Some(selected_boot_efi::load()?)
+    } else {
+        None
+    };
+    let selected_payload = if let Some(selected) = selected_boot.as_ref() {
+        let payload = selected_boot_efi::load_payload(selected)?;
+        report(&format!(
+            "NXARMJIT: SELECTED_IBOOT_PAYLOAD_OWNED class={} signed_bytes={} decoded_bytes={} allocation_bytes={} runtime_mapped=false",
+            selected.record().device_class(),
+            selected.image().len(),
+            payload.copied_bytes(),
+            payload.allocated_bytes()
+        ));
+        Some(payload)
+    } else {
+        None
+    };
+    let _retain_ownership = (&selected_boot, &selected_payload);
+    let selected_companions = if let Some(selected) = selected_boot.as_ref() {
+        Some(selected_startup_efi::load(selected.record())?)
+    } else {
+        None
+    };
+    let _retain_companions = &selected_companions;
+    let source = if let Some(selected) = selected_boot.as_ref() {
+        selected_bootkc_efi::load(selected.record(), target.path.as_str())?
+    } else {
+        let path =
+            CString16::try_from(target.path.as_str()).map_err(|_| Status::INVALID_PARAMETER)?;
+        read_file(&path, MAX_INPUT_SIZE as u64)?
+    };
     let stage = KcStagingPlan::new_arm64(&source).map_err(|error| {
         report(&format!("NXARMJIT: KC_INVALID reason={error}"));
         Status::LOAD_ERROR
@@ -71,7 +109,15 @@ fn run() -> Result<(), Status> {
     #[cfg(all(target_arch = "x86_64", feature = "arm-jit-trace"))]
     if target.profile == KernelProfile::X86EfiArm64Trace {
         drop(stage);
-        return run_trace(&source, &target.arguments, &config);
+        if selected_boot.is_some() {
+            report("NXARMJIT: SELECTED_BOOTKC_TRACE entry_abi=false");
+        }
+        return run_trace(
+            &source,
+            &target.arguments,
+            &config,
+            selected_companions.as_ref(),
+        );
     }
     #[cfg(all(
         target_arch = "x86_64",
@@ -489,7 +535,12 @@ unsafe extern "C" fn observed_protect(
 /// No SPTM argument/service or runtime platform DT is provisioned. A returned
 /// guest halt/fault/budget is recorded, never converted into OS boot.
 #[cfg(all(target_arch = "x86_64", feature = "arm-jit-trace"))]
-fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status> {
+fn run_trace(
+    source: &[u8],
+    arguments: &str,
+    config: &[u8],
+    companions: Option<&selected_startup_efi::OwnedCompanions>,
+) -> Result<(), Status> {
     use nextcore_core::{
         xnu_arm64_boot_args::Arm64BootVideo,
         xnu_arm64_handoff::{Arm64FramebufferGeometry, Arm64HandoffPlan, Arm64PlacementInput},
@@ -541,6 +592,11 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
         report(&format!("NXARMJIT: TRACE_CONFIG_INVALID reason={error}"));
         Status::INVALID_PARAMETER
     })?;
+    #[cfg(feature = "arm-jit-selected-trace")]
+    if trace.memory_profile.is_none() {
+        report("NXARMJIT: SELECTED_TRACE_REQUIRES_MAPPED_MEMORY");
+        return Err(Status::INVALID_PARAMETER);
+    }
     #[cfg(feature = "arm-jit-mapped-trace")]
     if trace.memory_profile.is_some() {
         report("NXARMJIT: TRACE_MAPPED_DIAGNOSTIC_SELECTED profile=mapped-normal-nc-v1");
@@ -630,6 +686,7 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
         report(&format!("NXARMJIT: TRACE_PLACEMENT_INVALID reason={error}"));
         Status::LOAD_ERROR
     })?;
+    report("NXARMJIT: TRACE_PLAN_READY");
     let layout = *plan.layout();
     let offset = usize::try_from(layout.kernel_phys - trace.physical_base)
         .map_err(|_| Status::INVALID_PARAMETER)?;
@@ -639,8 +696,33 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
         .filter(|end| *end <= memory_size)
         .ok_or(Status::BAD_BUFFER_SIZE)?;
     let mut ram = ArmPages::allocate_data(memory_size)?;
-    plan.stage_into(&mut ram.bytes_mut()[offset..end])
-        .map_err(|_| Status::COMPROMISED_DATA)?;
+    report("NXARMJIT: TRACE_RAM_READY");
+    plan.stage_into_observed(&mut ram.bytes_mut()[offset..end], |phase| {
+        use nextcore_core::xnu_arm64_handoff::Arm64HandoffPhase;
+        match phase {
+            Arm64HandoffPhase::DestinationInitialized => report("NXARMJIT: TRACE_HANDOFF_ZEROED"),
+            Arm64HandoffPhase::CollectionInitialized => report("NXARMJIT: TRACE_KC_ZEROED"),
+            Arm64HandoffPhase::CollectionSegmentsCopied => report("NXARMJIT: TRACE_KC_COPIED"),
+            Arm64HandoffPhase::CollectionArenaVerified => {
+                report("NXARMJIT: TRACE_KC_ARENA_VERIFIED")
+            }
+            Arm64HandoffPhase::CollectionMemberViewsVerified => {
+                report("NXARMJIT: TRACE_KC_MEMBERS_VERIFIED")
+            }
+            Arm64HandoffPhase::CollectionVerified => report("NXARMJIT: TRACE_COLLECTION_VERIFIED"),
+            Arm64HandoffPhase::TailVerified => report("NXARMJIT: TRACE_TAIL_VERIFIED"),
+        }
+    })
+    .map_err(|_| Status::COMPROMISED_DATA)?;
+    let selected_aliases = if let Some(companions) = companions {
+        Some(companions.stage_into_guest(
+            trace.physical_base,
+            layout.occupied_end,
+            ram.bytes_mut(),
+        )?)
+    } else {
+        None
+    };
     if let Some(framebuffer) = plan.framebuffer() {
         report(&format!(
             "NXARMJIT: TRACE_VIDEO_READY width={} height={} base={:#x} row_bytes={} bytes={}",
@@ -665,6 +747,7 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
     {
         return Err(Status::UNSUPPORTED);
     }
+    report("NXARMJIT: TRACE_JIT_PROTECTION_READY");
     #[cfg(feature = "arm-jit-protection-observation")]
     let mut observation = ProtectionObservation {
         context: opaque,
@@ -752,6 +835,7 @@ fn run_trace(source: &[u8], arguments: &str, config: &[u8]) -> Result<(), Status
                 protect_owner,
                 &initial,
                 &options,
+                selected_aliases.as_ref().map_or(&[][..], |aliases| &aliases[..]),
             )?)
         } else {
             None

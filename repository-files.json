@@ -1,5 +1,6 @@
 {
-  "schema": "26x86.repository-files/1",
+  "schema": "26x86.repository-files/2",
+  "source_revision": "11089704131eeb1a4d60c860b07eedbdb03b962b",
   "files": [
     {
       "path": ".gitattributes",
@@ -8,8 +9,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 3326,
-      "sha256": "719fce3d69ca559b58b7a7dded536403ee76ad93ecca3d3ce4a22149fc5238f3"
+      "bytes": 3521,
+      "sha256": "7f63d0300482ba196f8767d71aa5ee5fe0da38f601cfaab449ed351ce22fdafe"
     },
     {
       "path": ".gitignore",
@@ -18,8 +19,8 @@
     },
     {
       "path": "Cargo.toml",
-      "bytes": 3908,
-      "sha256": "af45334b10913d650d6d0f68cf4254d57f11ad31352862b0faa7c07a8b262ff4"
+      "bytes": 4086,
+      "sha256": "b1694667cb3dac4d55c88670bef87a84403f914dd87464106098425ff18bf8fb"
     },
     {
       "path": "LICENSE.txt",
@@ -28,13 +29,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 1799,
-      "sha256": "c67921bef8bc0e2c1f8863d0044a717e5311e627d8f8ca2d00a5389b7969ea9e"
+      "bytes": 2399,
+      "sha256": "1a204e0b53ad61342b2b5e77b4807453b7d86105b16cffe2bb70f9f278483c8a"
     },
     {
       "path": "build.rs",
-      "bytes": 5177,
-      "sha256": "37b1d0665cb21b116433f07ad380640252b7298a4b207e20582e1fd91de3ccf4"
+      "bytes": 8441,
+      "sha256": "c6b1337e6b175141c75735057e0aabad380476ec613ccb775ab493ea21194d5d"
     },
     {
       "path": "docs/ARM_DT_LEDGER_EFI_PROBE.md",
@@ -153,8 +154,8 @@
     },
     {
       "path": "repository.json",
-      "bytes": 1673,
-      "sha256": "fdc18c12ff06defaab050d2a0983f71f55291e834a21e4ca5d67d321d057d219"
+      "bytes": 2183,
+      "sha256": "11a3056fb3b528a05173f7f3693ea936bdfe2bb72771b60ba9d0900930be86f3"
     },
     {
       "path": "src/apfs_driver.rs",
@@ -193,8 +194,8 @@
     },
     {
       "path": "src/arm_jit.rs",
-      "bytes": 37120,
-      "sha256": "9bdf40a74987ad75356e533cc228c506cea703fdb2859fdeaca873a0503f8923"
+      "bytes": 40345,
+      "sha256": "b59e4e0c3abefb680cc2a9e1d082799e8c12229e3f5085738ea41fd6a2a503c3"
     },
     {
       "path": "src/arm_pages.rs",
@@ -303,8 +304,8 @@
     },
     {
       "path": "src/mapped_trace.rs",
-      "bytes": 6212,
-      "sha256": "6787b959de2bd4ac570aaca4852b80fa58eddeb9892822e25d4c788b10974672"
+      "bytes": 21569,
+      "sha256": "11b79929bf7785bc49716726244ba097661c2988b085438e83cd6c9f4c944de3"
     },
     {
       "path": "src/memory_observation.rs",
@@ -325,6 +326,21 @@
       "path": "src/picker_probe.rs",
       "bytes": 9528,
       "sha256": "3579cef30a9f3b8f2ba9564c19bc1b1a0535e3416143d7d4db7bb842960aebee"
+    },
+    {
+      "path": "src/selected_boot_efi.rs",
+      "bytes": 3943,
+      "sha256": "a4d572c925d37bceed1d165586590648c768f4e3fc1ffb9a20aa36ca66f39667"
+    },
+    {
+      "path": "src/selected_bootkc_efi.rs",
+      "bytes": 2669,
+      "sha256": "e8faa8711af728a9626fefe83c0abaeb36e94136a5a146265c9c898447a165a3"
+    },
+    {
+      "path": "src/selected_startup_efi.rs",
+      "bytes": 4475,
+      "sha256": "4289632a97a1f7beb9e043d7583a9612e9ce0b82c609ba661c03c4fbe55064c2"
     },
     {
       "path": "src/test_child.rs",

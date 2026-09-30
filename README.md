@@ -30,3 +30,9 @@ unverified. Prior release provenance is preserved in `repository.json`.
 Firmware DeviceTree templates are rejected explicitly before diagnostic entry,
 with their unresolved count reported. Authored runtime trees and a native
 three-register TPIDR readback fixture are covered by the bounded prefix harness.
+
+## September 30 engineering snapshot
+
+Current Status: This module is synchronized from one reviewed immutable integration snapshot. Its source revision and exact dependency pins are recorded in `repository.json`; file sizes and SHA-256 digests are recorded in `repository-files.json`. Existing repository history and license notices are preserved.
+
+Target State: Independently reproducible source and module validation. Module tests establish the stated component behavior. macOS 27 boot and usable installed operation, guest Metal, physical installation and device qualification remain unverified.
