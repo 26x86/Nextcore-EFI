@@ -18,8 +18,13 @@ The current active source, build configuration, API and top-level license remain
 - [Exact source hash manifest](../research/handoff/legacy-uncommitted-20261001/manifest.json)
 - [Frozen license notices](../research/handoff/legacy-uncommitted-20261001/LICENSE.txt)
 
+## Local history coverage
+
+The local handoff revision `62ba8cfce9245d6d92b4db42044a8130f10fa485` contains every observed legacy branch, cached remote ref, tag target and detached HEAD for this module. 23 commit identities absent from the initial authoritative main were preserved by ordinary merges where required. The current active source tree remains byte-identical to the initial authoritative main; changes are confined to these handoff documents and research archives. This establishes local source coverage. Remote publication and coverage must be independently verified before removing any checkout.
+
+- [Older conflicting source variants and licenses](../research/handoff/legacy-history-20261001/HANDOFF.md)
+- [Commit identities and exact historical blob hashes](../research/handoff/legacy-history-20261001/manifest.json)
+
 ## Open questions
 
 OPEN_QUESTION: Verification: Historical source variants require independent reconciliation and target-bound execution in the next authorized development environment before any capability claim.
-
-OPEN_QUESTION: Preservation: Legacy source baseline `ed9ba25598a52fdf1ba55badfee0d953afdbc20e` is not present in the fresh module main object graph; independently resolve its commit-history coverage before retiring that checkout.

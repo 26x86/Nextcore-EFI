@@ -49,5 +49,50 @@
       "git_mode": "100644",
       "license_path": "LICENSE.txt"
     }
-  ]
+  ],
+  "history_preservation": {
+    "verified_local_revision": "62ba8cfce9245d6d92b4db42044a8130f10fa485",
+    "source_baseline_reachable": true,
+    "all_observed_legacy_refs_and_HEAD_reachable": true,
+    "legacy_refs": [
+      {
+        "ref": "refs/heads/main",
+        "sha": "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca",
+        "reachable": true
+      },
+      {
+        "ref": "refs/remotes/origin/HEAD",
+        "sha": "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca",
+        "reachable": true
+      },
+      {
+        "ref": "refs/remotes/origin/main",
+        "sha": "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca",
+        "reachable": true
+      },
+      {
+        "ref": "refs/tags/26x86-Nextcore-EFI-v0.1.0",
+        "sha": "4cec82e25fbfc1eeebd475adb25e2da308c2378c",
+        "reachable": true
+      },
+      {
+        "ref": "refs/tags/26x86-Nextcore-EFI-v0.1.1",
+        "sha": "c00f6fe6d6618f574ed193547837d675e6ca2da3",
+        "reachable": true
+      },
+      {
+        "ref": "refs/tags/26x86-Nextcore-EFI-v0.1.2",
+        "sha": "64a2d4ce432c2f5ccd300728309556c898317436",
+        "reachable": true
+      },
+      {
+        "ref": "HEAD",
+        "sha": "ed9ba25598a52fdf1ba55badfee0d953afdbc20e",
+        "reachable": true
+      }
+    ],
+    "missing_commit_identities_preserved": 23,
+    "remote_publication_status": "Not performed by this local handoff task"
+  },
+  "ancestry_status": "Frozen source baseline and every observed legacy ref are present in the verified local handoff ancestry; remote publication still requires independent verification."
 }
