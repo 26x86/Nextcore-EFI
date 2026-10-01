@@ -1,0 +1,122 @@
+[package]
+name = "nextcore-efi"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+uefi = { version = "0.40", features = ["alloc", "panic_handler"] }
+nextcore-core = { git = "https://github.com/26x86/Nextcore-Core.git", rev = "147f4c4e4969074c9dd12c63bf17c6e8c674dabb", default-features = false }
+uefi-raw = { version = "0.16", optional = true }
+nextcore-memory-service = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "0d722886753268ec366f068823c37ea10132fb43", optional = true }
+
+[features]
+test-child = []
+kernel-probe = []
+hal-tables = []
+kc-staging = []
+console-control = ["dep:uefi-raw"]
+console-probe = ["console-control"]
+apfs-jumpstart = ["dep:uefi-raw"]
+arm-boot = []
+arm-kernel-probe = ["arm-boot"]
+arm-jit = []
+arm-jit-probe = ["arm-jit"]
+arm-jit-trace = ["arm-jit"]
+arm-jit-tiered-trace = ["arm-jit-trace", "arm-jit-probe"]
+arm-jit-memory-provider = ["arm-jit-trace", "arm-jit-probe", "dep:nextcore-memory-service"]
+arm-jit-stage1-probe = ["arm-jit-memory-provider"]
+arm-jit-dt-probe = ["arm-jit-stage1-probe"]
+arm-jit-dynamic-probe = ["arm-jit-stage1-probe"]
+
+[[bin]]
+name = "NXDYN"
+path = "src/dynamic_probe.rs"
+test = false
+bench = false
+required-features = ["arm-jit-dynamic-probe"]
+
+[[bin]]
+name = "NXDT"
+path = "src/dt_probe.rs"
+test = false
+bench = false
+required-features = ["arm-jit-dt-probe"]
+
+[[bin]]
+name = "NXMMU"
+path = "src/mmu_probe.rs"
+test = false
+bench = false
+required-features = ["arm-jit-stage1-probe"]
+
+[[bin]]
+name = "NXARMJIT"
+path = "src/arm_jit.rs"
+test = false
+bench = false
+required-features = ["arm-jit"]
+
+[[bin]]
+name = "BOOTAA64"
+path = "src/arm64.rs"
+test = false
+bench = false
+required-features = ["arm-boot"]
+
+[[bin]]
+name = "NXKERNEL"
+path = "src/kernel.rs"
+test = false
+bench = false
+
+[[bin]]
+name = "BOOTX64"
+path = "src/main.rs"
+test = false
+bench = false
+
+[[bin]]
+name = "NXTEST"
+path = "src/test_child.rs"
+test = false
+bench = false
+required-features = ["test-child"]
+
+[[bin]]
+name = "NXHAL"
+path = "src/hal_tables.rs"
+test = false
+bench = false
+required-features = ["hal-tables"]
+
+[[bin]]
+name = "NXKC"
+path = "src/kc.rs"
+test = false
+bench = false
+required-features = ["kc-staging"]
+
+[[bin]]
+name = "NXCONSOLE"
+path = "src/console_probe.rs"
+test = false
+bench = false
+required-features = ["console-probe"]
+
+[[bin]]
+name = "NXAPFS"
+path = "src/apfs_probe.rs"
+test = false
+bench = false
+required-features = ["apfs-jumpstart"]
+
+[[bin]]
+name = "NXFSFIX"
+path = "src/apfs_fixture.rs"
+test = false
+bench = false
+required-features = ["apfs-jumpstart", "test-child"]
+
+[build-dependencies]
+nextcore-ise = { git = "https://github.com/26x86/Nextcore-ISE.git", rev = "0d722886753268ec366f068823c37ea10132fb43" }

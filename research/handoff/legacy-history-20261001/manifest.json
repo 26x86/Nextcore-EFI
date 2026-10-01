@@ -1,0 +1,423 @@
+{
+  "schema": 1,
+  "module": "nextcore-efi",
+  "public_repository": "https://github.com/26x86/Nextcore-EFI.git",
+  "authoritative_main_base": "252d9ccbd1c2920c232cff998cf0d1fba941e010",
+  "legacy_main_revision": "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca",
+  "frozen_source_HEAD": "ed9ba25598a52fdf1ba55badfee0d953afdbc20e",
+  "archive_kind": "Historical source variants from diverged public commit identities",
+  "purpose": "Preserve exact older conflicting source and license variants while the current module APIs and dependency pins remain active.",
+  "verification_boundary": "Git object ancestry and source bytes only; no compiler, runtime, guest boot or device acceptance has been executed for this handoff.",
+  "missing_commit_count": 23,
+  "missing_commits": [
+    {
+      "sha": "a8c0343df060a7eeff4ebc84bfd613aa4b706299",
+      "parents": [
+        "64a2d4ce432c2f5ccd300728309556c898317436",
+        "7f23ed3d24f8016338c30d84c5b3cbe0f82d3f19"
+      ],
+      "subject": "Merge pull request #1 from 26x86/codex/arm64e-boot-metal",
+      "commit_stats": ".github/workflows/ci.yml |   3 +\n Cargo.toml               |  33 ++-\n README.md                |  33 ++-\n build.rs                 |  92 ++++++++\n repository-files.json    |  84 ++++++-\n repository.json          |  45 ++--\n src/apfs_driver.rs       |  37 ++-\n src/apfs_filesystems.rs  | 425 ++++++++++++++++++++++++++++++++++\n src/apfs_fixture.rs      | 303 +++++++++++++++++++++++++\n src/apfs_observation.rs  | 403 +++++++++++++++++++++++++++++++++\n src/apfs_probe.rs        |  32 +--\n src/apfs_target.rs       |  85 +++++++\n src/arm64.rs             | 196 ++++++++++++++++\n src/arm_jit.rs           | 579 +++++++++++++++++++++++++++++++++++++++++++++++\n src/arm_pages.rs         | 146 ++++++++++++\n src/arm_transition.S     |  64 ++++++\n src/arm_transition.rs    |  74 ++++++\n src/linux_handoff.rs     |  38 ++++\n src/main.rs              |  22 ++\n 19 files changed, 2641 insertions(+), 53 deletions(-)"
+    },
+    {
+      "sha": "28b2e51c089b93a508ffe02e1ff32b3091ba7f4a",
+      "parents": [
+        "a8c0343df060a7eeff4ebc84bfd613aa4b706299"
+      ],
+      "subject": "Pin validated ARM pair runtime",
+      "commit_stats": "Cargo.toml            | 2 +-\n repository-files.json | 4 ++--\n repository.json       | 6 +++---\n 3 files changed, 6 insertions(+), 6 deletions(-)"
+    },
+    {
+      "sha": "f2ca77a23d09b6de3f5371861e6b8bec61577955",
+      "parents": [
+        "28b2e51c089b93a508ffe02e1ff32b3091ba7f4a"
+      ],
+      "subject": "Pin corrected MMU-off Device alignment semantics",
+      "commit_stats": "Cargo.toml            | 2 +-\n repository-files.json | 4 ++--\n repository.json       | 4 ++--\n 3 files changed, 5 insertions(+), 5 deletions(-)"
+    },
+    {
+      "sha": "954d2a0ca8fec08db9a99438fb5b1db751caf766",
+      "parents": [
+        "a8c0343df060a7eeff4ebc84bfd613aa4b706299",
+        "f2ca77a23d09b6de3f5371861e6b8bec61577955"
+      ],
+      "subject": "Merge pull request #2 from 26x86/codex/arm64e-memory-gpu",
+      "commit_stats": "Cargo.toml            | 2 +-\n repository-files.json | 4 ++--\n repository.json       | 6 +++---\n 3 files changed, 6 insertions(+), 6 deletions(-)"
+    },
+    {
+      "sha": "6feba80a9ceea22811b6bf08f98010501654375e",
+      "parents": [
+        "f2ca77a23d09b6de3f5371861e6b8bec61577955"
+      ],
+      "subject": "Link scalar ARM memory and detailed fault runtime",
+      "commit_stats": "Cargo.toml            | 2 +-\n repository-files.json | 6 +++---\n repository.json       | 6 +++---\n 3 files changed, 7 insertions(+), 7 deletions(-)"
+    },
+    {
+      "sha": "fcd77bc2b21a60122a8ba68f7bc2c3b785b83fba",
+      "parents": [
+        "954d2a0ca8fec08db9a99438fb5b1db751caf766",
+        "6feba80a9ceea22811b6bf08f98010501654375e"
+      ],
+      "subject": "Merge pull request #3 from 26x86/codex/arm64e-scalar-memory",
+      "commit_stats": "Cargo.toml            | 2 +-\n repository-files.json | 6 +++---\n repository.json       | 6 +++---\n 3 files changed, 7 insertions(+), 7 deletions(-)"
+    },
+    {
+      "sha": "24140677e8fb806f701d1cdc8cdea10fd161445f",
+      "parents": [
+        "6feba80a9ceea22811b6bf08f98010501654375e"
+      ],
+      "subject": "Connect the Rust memory service and bounded trace tiers in x86 EFI",
+      "commit_stats": ".github/workflows/ci.yml       |   1 +\n Cargo.toml                     |   7 ++-\n build.rs                       |  25 +++++++-\n docs/EFI_MEMORY_PROVIDER_V1.md |  31 ++++++++++\n docs/TIERED_ARM_TRACE.md       |  14 +++++\n repository-files.json          |  30 ++++++----\n repository.json                |   8 +--\n src/arm_jit.rs                 | 133 ++++++++++++++++++++++++++++++++++-------\n 8 files changed, 209 insertions(+), 40 deletions(-)"
+    },
+    {
+      "sha": "603033ad1c7109767a0d706c3a08c55d2fda7169",
+      "parents": [
+        "fcd77bc2b21a60122a8ba68f7bc2c3b785b83fba",
+        "24140677e8fb806f701d1cdc8cdea10fd161445f"
+      ],
+      "subject": "Merge pull request #4 from 26x86/codex/efi-memory-provider",
+      "commit_stats": ".github/workflows/ci.yml       |   1 +\n Cargo.toml                     |   7 ++-\n build.rs                       |  25 +++++++-\n docs/EFI_MEMORY_PROVIDER_V1.md |  31 ++++++++++\n docs/TIERED_ARM_TRACE.md       |  14 +++++\n repository-files.json          |  30 ++++++----\n repository.json                |   8 +--\n src/arm_jit.rs                 | 133 ++++++++++++++++++++++++++++++++++-------\n 8 files changed, 209 insertions(+), 40 deletions(-)"
+    },
+    {
+      "sha": "74956333503abe5724b13d22b1337d18a380bbf7",
+      "parents": [
+        "24140677e8fb806f701d1cdc8cdea10fd161445f"
+      ],
+      "subject": "Link the native conditional comparison runtime in x86 EFI",
+      "commit_stats": "Cargo.toml            | 4 ++--\n repository-files.json | 6 +++---\n repository.json       | 6 +++---\n 3 files changed, 8 insertions(+), 8 deletions(-)"
+    },
+    {
+      "sha": "3d0f0d5382cf9c248fad6b0b12f6ed2c9c94c280",
+      "parents": [
+        "603033ad1c7109767a0d706c3a08c55d2fda7169",
+        "74956333503abe5724b13d22b1337d18a380bbf7"
+      ],
+      "subject": "Merge pull request #5 from 26x86/codex/conditional-compare-runtime",
+      "commit_stats": "Cargo.toml            | 4 ++--\n repository-files.json | 6 +++---\n repository.json       | 6 +++---\n 3 files changed, 8 insertions(+), 8 deletions(-)"
+    },
+    {
+      "sha": "8d53dd2227cb4472e0b86813517fd1d70d166efa",
+      "parents": [
+        "74956333503abe5724b13d22b1337d18a380bbf7"
+      ],
+      "subject": "Execute authored nonidentity stage-1 transfers in x86 EFI",
+      "commit_stats": ".github/workflows/ci.yml      |   8 +-\n .gitignore                    |   4 +\n Cargo.toml                    |  12 +-\n build.rs                      |  38 ++-\n docs/ARM_STAGE1_EFI_PROBE.md  | 115 ++++++++\n docs/fixtures/stage1_pair.S   |   8 +\n docs/fixtures/stage1_scalar.S |  14 +\n repository-files.json         |  50 +++-\n repository.json               |   6 +-\n src/mmu_probe.rs              | 623 ++++++++++++++++++++++++++++++++++++++++++\n tools/test_stage1_reader.py   |  54 ++++\n tools/verify_stage1_ovmf.py   | 173 ++++++++++++\n 12 files changed, 1075 insertions(+), 30 deletions(-)"
+    },
+    {
+      "sha": "f3f7938fba5a90aea9849edd1ef932a6bf60084e",
+      "parents": [
+        "8d53dd2227cb4472e0b86813517fd1d70d166efa"
+      ],
+      "subject": "Fix parent checkout commands for the stage-1 EFI probe",
+      "commit_stats": "docs/ARM_STAGE1_EFI_PROBE.md | 8 +++++---\n repository-files.json        | 6 +++---\n repository.json              | 2 +-\n 3 files changed, 9 insertions(+), 7 deletions(-)"
+    },
+    {
+      "sha": "646bc5fc2546d23674ab69f030b515855bbd1ca8",
+      "parents": [
+        "3d0f0d5382cf9c248fad6b0b12f6ed2c9c94c280",
+        "f3f7938fba5a90aea9849edd1ef932a6bf60084e"
+      ],
+      "subject": "Merge pull request #6 from 26x86/codex/arm64e-stage1-efi-probe",
+      "commit_stats": ".github/workflows/ci.yml      |   8 +-\n .gitignore                    |   4 +\n Cargo.toml                    |  12 +-\n build.rs                      |  38 ++-\n docs/ARM_STAGE1_EFI_PROBE.md  | 117 ++++++++\n docs/fixtures/stage1_pair.S   |   8 +\n docs/fixtures/stage1_scalar.S |  14 +\n repository-files.json         |  50 +++-\n repository.json               |   6 +-\n src/mmu_probe.rs              | 623 ++++++++++++++++++++++++++++++++++++++++++\n tools/test_stage1_reader.py   |  54 ++++\n tools/verify_stage1_ovmf.py   | 173 ++++++++++++\n 12 files changed, 1077 insertions(+), 30 deletions(-)"
+    },
+    {
+      "sha": "93286527c9624d4ca8d46d2c4221fa58a4aa0854",
+      "parents": [
+        "f3f7938fba5a90aea9849edd1ef932a6bf60084e"
+      ],
+      "subject": "Execute owned guest DeviceTree staging through the EFI JIT",
+      "commit_stats": ".github/workflows/ci.yml         |   5 +\n Cargo.toml                       |  10 +-\n docs/ARM_DT_LEDGER_EFI_PROBE.md  | 133 +++++++++++\n docs/fixtures/dt_ledger.S        |  20 ++\n repository-files.json            |  37 +++-\n repository.json                  |   6 +-\n src/dt_probe.rs                  | 463 +++++++++++++++++++++++++++++++++++++++\n tools/check_dt_ledger_capture.py |  44 ++++\n tools/verify_dt_ledger_ovmf.py   | 176 +++++++++++++++\n 9 files changed, 884 insertions(+), 10 deletions(-)"
+    },
+    {
+      "sha": "e17e05979cc5c064d1465d6fbb53ee10a8c28b3b",
+      "parents": [
+        "93286527c9624d4ca8d46d2c4221fa58a4aa0854"
+      ],
+      "subject": "Validate full DeviceTree capture envelopes and host address bounds",
+      "commit_stats": "docs/ARM_DT_LEDGER_EFI_PROBE.md  |   9 +++\n repository-files.json            |  14 ++---\n repository.json                  |   2 +-\n tools/check_dt_ledger_capture.py | 124 ++++++++++++++++++++++++++++++---------\n tools/verify_dt_ledger_ovmf.py   |  82 +++++++++++++++++++++++++-\n 5 files changed, 195 insertions(+), 36 deletions(-)"
+    },
+    {
+      "sha": "7e7a08b2f8ac555503a95c023427c6b2fb27477c",
+      "parents": [
+        "e17e05979cc5c064d1465d6fbb53ee10a8c28b3b"
+      ],
+      "subject": "Select Core firmware-compatible software hashing",
+      "commit_stats": "Cargo.toml                      | 2 +-\n docs/ARM_DT_LEDGER_EFI_PROBE.md | 6 ++++++\n repository-files.json           | 8 ++++----\n repository.json                 | 4 ++--\n 4 files changed, 13 insertions(+), 7 deletions(-)"
+    },
+    {
+      "sha": "53329bfee3ec818d59331da2c63c0676c49ff4ad",
+      "parents": [
+        "646bc5fc2546d23674ab69f030b515855bbd1ca8",
+        "7e7a08b2f8ac555503a95c023427c6b2fb27477c"
+      ],
+      "subject": "Merge pull request #7 from 26x86/codex/guest-dt-efi",
+      "commit_stats": ".github/workflows/ci.yml         |   5 +\n Cargo.toml                       |  10 +-\n docs/ARM_DT_LEDGER_EFI_PROBE.md  | 148 +++++++++++++\n docs/fixtures/dt_ledger.S        |  20 ++\n repository-files.json            |  37 +++-\n repository.json                  |   6 +-\n src/dt_probe.rs                  | 463 +++++++++++++++++++++++++++++++++++++++\n tools/check_dt_ledger_capture.py | 114 ++++++++++\n tools/verify_dt_ledger_ovmf.py   | 256 ++++++++++++++++++++++\n 9 files changed, 1049 insertions(+), 10 deletions(-)"
+    },
+    {
+      "sha": "d0a8d18929d3d5998a0c9d51dee9a9fa0beed345",
+      "parents": [
+        "93286527c9624d4ca8d46d2c4221fa58a4aa0854"
+      ],
+      "subject": "Execute authored one-way MMU enable through actual x86 EFI callbacks",
+      "commit_stats": "Cargo.toml                      |   8 +\n build.rs                        |  17 ++\n docs/ARM_DYNAMIC_EFI_PROBE.md   | 227 +++++++++++++++++\n docs/fixtures/dynamic_enable.S  |  20 ++\n repository-files.json           |  42 ++-\n repository.json                 |   4 +-\n src/dynamic_probe.rs            | 550 ++++++++++++++++++++++++++++++++++++++++\n tools/check_dynamic_capture.py  |  65 +++++\n tools/check_dynamic_omission.py |  70 +++++\n tools/verify_dynamic_ovmf.py    | 248 ++++++++++++++++++\n 10 files changed, 1243 insertions(+), 8 deletions(-)"
+    },
+    {
+      "sha": "ed9ba25598a52fdf1ba55badfee0d953afdbc20e",
+      "parents": [
+        "d0a8d18929d3d5998a0c9d51dee9a9fa0beed345",
+        "7e7a08b2f8ac555503a95c023427c6b2fb27477c"
+      ],
+      "subject": "Integrate canonical dynamic runtime and firmware hashing dependencies",
+      "commit_stats": ".github/workflows/ci.yml         |   5 ++\n Cargo.toml                       |   6 +-\n docs/ARM_DT_LEDGER_EFI_PROBE.md  |  15 +++++\n docs/ARM_DYNAMIC_EFI_PROBE.md    |   6 ++\n repository-files.json            |  24 ++++----\n repository.json                  |   6 +-\n tools/check_dt_ledger_capture.py | 124 ++++++++++++++++++++++++++++++---------\n tools/verify_dt_ledger_ovmf.py   |  82 +++++++++++++++++++++++++-\n 8 files changed, 222 insertions(+), 46 deletions(-)"
+    },
+    {
+      "sha": "c4e987ed1742e48ab43114aa7fdfb8f9c4b119f2",
+      "parents": [
+        "93286527c9624d4ca8d46d2c4221fa58a4aa0854"
+      ],
+      "subject": "Add explicitly selected 16384-instruction EFI trace capability",
+      "commit_stats": "Cargo.toml             |  1 +\n docs/DEEP_ARM_TRACE.md | 11 +++++++++++\n repository-files.json  | 17 +++++++++++------\n repository.json        |  4 ++--\n src/arm_jit.rs         | 13 ++++++++++++-\n 5 files changed, 37 insertions(+), 9 deletions(-)"
+    },
+    {
+      "sha": "03a376d6652fdaabe8b567c047dad9d41926dc84",
+      "parents": [
+        "c4e987ed1742e48ab43114aa7fdfb8f9c4b119f2",
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "subject": "Integrate deep diagnostics with canonical firmware and dynamic-memory dependencies",
+      "commit_stats": ".github/workflows/ci.yml         |   7 +\n Cargo.toml                       |  14 +-\n build.rs                         |  17 ++\n docs/ARM_DT_LEDGER_EFI_PROBE.md  |  15 ++\n docs/ARM_DYNAMIC_EFI_PROBE.md    | 233 +++++++++++++++++\n docs/DEEP_ARM_TRACE.md           |   6 +\n docs/fixtures/dynamic_enable.S   |  20 ++\n repository-files.json            |  60 +++--\n repository.json                  |   6 +-\n src/dynamic_probe.rs             | 550 +++++++++++++++++++++++++++++++++++++++\n tools/check_dt_ledger_capture.py | 124 +++++++--\n tools/check_dynamic_capture.py   |  65 +++++\n tools/check_dynamic_omission.py  |  70 +++++\n tools/verify_dt_ledger_ovmf.py   |  82 +++++-\n tools/verify_dynamic_ovmf.py     | 248 ++++++++++++++++++\n 15 files changed, 1468 insertions(+), 49 deletions(-)"
+    },
+    {
+      "sha": "cfc8af91cc6c35dc79b2220f2b81f90d46475137",
+      "parents": [
+        "53329bfee3ec818d59331da2c63c0676c49ff4ad",
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "subject": "Merge pull request #8 from 26x86/codex/arm64e-dynamic-efi-probe",
+      "commit_stats": ".github/workflows/ci.yml        |   5 +\n Cargo.toml                      |  12 +-\n build.rs                        |  17 ++\n docs/ARM_DYNAMIC_EFI_PROBE.md   | 233 +++++++++++++++++\n docs/fixtures/dynamic_enable.S  |  20 ++\n repository-files.json           |  46 +++-\n repository.json                 |   6 +-\n src/dynamic_probe.rs            | 550 ++++++++++++++++++++++++++++++++++++++++\n tools/check_dynamic_capture.py  |  65 +++++\n tools/check_dynamic_omission.py |  70 +++++\n tools/verify_dynamic_ovmf.py    | 248 ++++++++++++++++++\n 11 files changed, 1259 insertions(+), 13 deletions(-)"
+    },
+    {
+      "sha": "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca",
+      "parents": [
+        "cfc8af91cc6c35dc79b2220f2b81f90d46475137",
+        "03a376d6652fdaabe8b567c047dad9d41926dc84"
+      ],
+      "subject": "Merge pull request #9 from 26x86/codex/deep-arm-trace",
+      "commit_stats": ".github/workflows/ci.yml |  2 ++\n Cargo.toml               |  3 ++-\n docs/DEEP_ARM_TRACE.md   | 17 +++++++++++++++++\n repository-files.json    | 21 +++++++++++++--------\n repository.json          |  6 +++---\n src/arm_jit.rs           | 13 ++++++++++++-\n 6 files changed, 49 insertions(+), 13 deletions(-)"
+    }
+  ],
+  "conflict_paths": [
+    ".github/workflows/ci.yml",
+    "Cargo.toml",
+    "build.rs",
+    "repository-files.json",
+    "repository.json",
+    "src/arm_jit.rs",
+    "src/mmu_probe.rs",
+    "tools/test_stage1_reader.py",
+    "tools/verify_stage1_ovmf.py"
+  ],
+  "files": [
+    {
+      "original_path": ".github/workflows/ci.yml",
+      "archive_path": "76964c0f779d/.github/workflows/ci.yml",
+      "source_revisions": [
+        "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca"
+      ],
+      "bytes": 2419,
+      "sha256": "96ad0122f982d2ac77aa15af9332911f5da0670dd5be94c10fd9a40e702286f5",
+      "git_blob_sha1": "ba0cab4a03e54aff77982af84a3b390f719a8173",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": ".github/workflows/ci.yml"
+    },
+    {
+      "original_path": "Cargo.toml",
+      "archive_path": "76964c0f779d/Cargo.toml",
+      "source_revisions": [
+        "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca"
+      ],
+      "bytes": 2757,
+      "sha256": "edb268870e4e0de8dc68f516680a1fb5aa43092ab9cf29c1a17d9ea576c1e859",
+      "git_blob_sha1": "d6e7daaed3a43c6af7626be0f23e868a224846a4",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "Cargo.toml"
+    },
+    {
+      "original_path": "build.rs",
+      "archive_path": "76964c0f779d/build.rs",
+      "source_revisions": [
+        "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca",
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "bytes": 4852,
+      "sha256": "2e63268f3e94ae728ff9451944b96d3c30c6b5bc6c5578f77d6a381089c3bd14",
+      "git_blob_sha1": "09d038124d051db074a5f08b5f3d63284cbcce6b",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "build.rs"
+    },
+    {
+      "original_path": "repository-files.json",
+      "archive_path": "76964c0f779d/repository-files.json",
+      "source_revisions": [
+        "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca"
+      ],
+      "bytes": 8300,
+      "sha256": "c892cf87c69f1ce3404733af3a527c1ae0d1d2a7d3ff52d7f57fcd02b88d7c7a",
+      "git_blob_sha1": "a52ddd546b919d74077b6b549495d8a8d12bb70e",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "repository-files.json"
+    },
+    {
+      "original_path": "repository.json",
+      "archive_path": "76964c0f779d/repository.json",
+      "source_revisions": [
+        "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca"
+      ],
+      "bytes": 1653,
+      "sha256": "d36fa1459ecac2f447f40e5847aa2445ccb452cd0e4d1fdbff24b1548bb521fe",
+      "git_blob_sha1": "bd8263817979fe7b4c2d6d78b8d3e30c34d313f8",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "repository.json"
+    },
+    {
+      "original_path": "src/arm_jit.rs",
+      "archive_path": "76964c0f779d/src/arm_jit.rs",
+      "source_revisions": [
+        "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca"
+      ],
+      "bytes": 25233,
+      "sha256": "860698c11f273ef8938218de982b7e48900b7770fbc1cde1801d353813b1c3bb",
+      "git_blob_sha1": "f8318e052059d3d589b7bf58e7f1da8ac5d493c8",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "src/arm_jit.rs"
+    },
+    {
+      "original_path": "src/mmu_probe.rs",
+      "archive_path": "76964c0f779d/src/mmu_probe.rs",
+      "source_revisions": [
+        "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca",
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "bytes": 20240,
+      "sha256": "f3813c51ba2c0f9fd9f89f75248b51b1a3454b815ba93cca60e67981fee9c8d7",
+      "git_blob_sha1": "a008fce53f8003aa3619886975a33e070ba19568",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "src/mmu_probe.rs"
+    },
+    {
+      "original_path": "tools/test_stage1_reader.py",
+      "archive_path": "76964c0f779d/tools/test_stage1_reader.py",
+      "source_revisions": [
+        "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca",
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "bytes": 2583,
+      "sha256": "5fefb30f31987722cf9f5ac4fc6a3917b3bc323927ab5a0beb9384988c1f5b77",
+      "git_blob_sha1": "0d059d90b036b1aa519077d6819af0922b8fc47d",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "tools/test_stage1_reader.py"
+    },
+    {
+      "original_path": "tools/verify_stage1_ovmf.py",
+      "archive_path": "76964c0f779d/tools/verify_stage1_ovmf.py",
+      "source_revisions": [
+        "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca",
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "bytes": 8735,
+      "sha256": "0a7589f66733f0403bdd5521110f1b43420e06fb7a815eb3d8af9874fed2cff9",
+      "git_blob_sha1": "805c07f61ec1a06b7afd1ed8e8075aaec8b95ae1",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "tools/verify_stage1_ovmf.py"
+    },
+    {
+      "original_path": "LICENSE.txt",
+      "archive_path": "76964c0f779d/LICENSE.txt",
+      "source_revisions": [
+        "76964c0f779dbd7f0716c2db2f5aaabd3d5a9cca",
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "bytes": 1851,
+      "sha256": "77c458ccb6116400cf960f8951630bc3b8b34731b56ffbd736b95c2b78449104",
+      "git_blob_sha1": "f7389913f3fd1cb41276bb098a352b0e27e7e879",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "LICENSE.txt"
+    },
+    {
+      "original_path": ".github/workflows/ci.yml",
+      "archive_path": "ed9ba25598a5/.github/workflows/ci.yml",
+      "source_revisions": [
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "bytes": 2244,
+      "sha256": "ac25a4cc1dfa109b14b067013a83249d5064e70bbe670c1f3b468f3ed2b29241",
+      "git_blob_sha1": "10b41d9156f5f32ba20e1bf590581a8a1852061f",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": ".github/workflows/ci.yml"
+    },
+    {
+      "original_path": "Cargo.toml",
+      "archive_path": "ed9ba25598a5/Cargo.toml",
+      "source_revisions": [
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "bytes": 2684,
+      "sha256": "30e1415178dc32456ef13a99b817dd89f2169a154fc17502f412b5e91dd81fbe",
+      "git_blob_sha1": "00092f8fcc8bf3be0d93a75cbb31375afb4ac424",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "Cargo.toml"
+    },
+    {
+      "original_path": "repository-files.json",
+      "archive_path": "ed9ba25598a5/repository-files.json",
+      "source_revisions": [
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "bytes": 8143,
+      "sha256": "a8965541e683a1d3cd5009362dc757ed776631b9d7e7a464c150c06edd9efa29",
+      "git_blob_sha1": "f64bf2bfa30bd8e3a5d32a7d54bbbfd40433ae73",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "repository-files.json"
+    },
+    {
+      "original_path": "repository.json",
+      "archive_path": "ed9ba25598a5/repository.json",
+      "source_revisions": [
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "bytes": 1663,
+      "sha256": "0e6e624fe3756c969667c9ff375591f63b37833caf9cc3f128abfd92b18e11ca",
+      "git_blob_sha1": "5beaa0d89c58b507928a8a6814ebb06f23a373df",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "repository.json"
+    },
+    {
+      "original_path": "src/arm_jit.rs",
+      "archive_path": "ed9ba25598a5/src/arm_jit.rs",
+      "source_revisions": [
+        "ed9ba25598a52fdf1ba55badfee0d953afdbc20e"
+      ],
+      "bytes": 24649,
+      "sha256": "a78cb5be834863e4a8278be038bbd888bd0d118f3162ca336f5a6fcbe7ced7ea",
+      "git_blob_sha1": "2a18f663f7dcde28d23d0118b316416136e1c618",
+      "original_git_mode": "100644",
+      "archive_git_mode": "100644",
+      "retained_active_path": "src/arm_jit.rs"
+    }
+  ],
+  "absent_paths": []
+}

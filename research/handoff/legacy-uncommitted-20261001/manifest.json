@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "module": "nextcore-efi",
+  "public_repository": "https://github.com/26x86/Nextcore-EFI",
+  "authoritative_main_base": "252d9ccbd1c2920c232cff998cf0d1fba941e010",
+  "source_baseline_revision": "ed9ba25598a52fdf1ba55badfee0d953afdbc20e",
+  "source_baseline_reachable_from_main_base": false,
+  "source_baseline_ancestry_status": "requires_independent_history_review",
+  "capture_date_utc": "2026-10-01",
+  "variant_count": 3,
+  "archive_kind": "historical unfinished public UTF-8 variants",
+  "active_api_modified": false,
+  "original_relative_paths_retained": true,
+  "current_module_license_sha256": "77c458ccb6116400cf960f8951630bc3b8b34731b56ffbd736b95c2b78449104",
+  "frozen_license_path": "LICENSE.txt",
+  "frozen_license_sha256": "1c31492338d47ae600de8147203fa991a0a308853ffb3598ac7d48f3a3b819e9",
+  "verification_boundary": "Exact byte/hash preservation only. No compiler, test, EFI, guest, OS boot, Metal or physical-device acceptance result is claimed.",
+  "files": [
+    {
+      "original_relative_path": "LICENSE.txt",
+      "archive_relative_path": "LICENSE.txt",
+      "source_baseline_revision": "ed9ba25598a52fdf1ba55badfee0d953afdbc20e",
+      "bytes": 1860,
+      "sha256": "1c31492338d47ae600de8147203fa991a0a308853ffb3598ac7d48f3a3b819e9",
+      "git_blob_sha1": "a565bc320ed72af8b179b2b0f418915e2fb5bd4f",
+      "original_filesystem_mode": "0o640",
+      "git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "repository-files.json",
+      "archive_relative_path": "repository-files.json",
+      "source_baseline_revision": "ed9ba25598a52fdf1ba55badfee0d953afdbc20e",
+      "bytes": 8146,
+      "sha256": "da73c0f9adf2e9ae46e91069e735417b15c6d1c99b57ea28bb2dcfcfd2b4f2f1",
+      "git_blob_sha1": "115ab4b488f26a7161a453b6b9adf0d86db41f38",
+      "original_filesystem_mode": "0o640",
+      "git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    },
+    {
+      "original_relative_path": "repository.json",
+      "archive_relative_path": "repository.json",
+      "source_baseline_revision": "ed9ba25598a52fdf1ba55badfee0d953afdbc20e",
+      "bytes": 1678,
+      "sha256": "7e55d8049b958f79adfdf8af8e6cef6eff9e362bc077d0a8e9682ab528d88665",
+      "git_blob_sha1": "49baea3bc7b1742a0b7d8e46c261a3f3268c7d5e",
+      "original_filesystem_mode": "0o640",
+      "git_mode": "100644",
+      "license_path": "LICENSE.txt"
+    }
+  ]
+}
